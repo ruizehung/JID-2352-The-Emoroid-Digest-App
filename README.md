@@ -1,6 +1,8 @@
 # emoroid_digest_app
 
-A new Flutter project.
+See https://firebase.google.com/docs/flutter/setup?platform=ios
+
+Do `flutter run` to start the app.
 
 ## Getting Started
 

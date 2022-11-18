@@ -1,6 +1,18 @@
-import 'package:flutter/material.dart';
+import 'dart:typed_data';
 
-void main() {
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+
+final firestore = FirebaseFirestore.instance;
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
@@ -54,6 +66,35 @@ class _MyHomePageState extends State<MyHomePage> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+
+  Future<void> readVisualSummariesFromFirestore() async {
+    CollectionReference visualSummariesRef =
+        FirebaseFirestore.instance.collection('Visual Summaries');
+
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await visualSummariesRef.get();
+    // Get data from docs and convert map to List
+    final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+
+    for (var visualSummary in allData) {
+      print(visualSummary);
+    }
+  }
+
+  // Pass in "link_summary_storage" or "link_thumbnail_storage" field
+  Future<void> downloadFileFromStorage(String path) async {
+    // Create a storage reference from our app
+    final storageRef = FirebaseStorage.instance.ref();
+
+    final fileRef = storageRef.child(path);
+
+    try {
+      final Uint8List? data = await fileRef.getData();
+      // Data for "images/island.jpg" is returned, use this as needed.
+    } on FirebaseException catch (e) {
+      // Handle any errors.
+    }
   }
 
   @override
