@@ -1,13 +1,8 @@
-import 'dart:typed_data';
-
+import 'package:emoroid_digest_app/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'dart:convert';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import 'package:mime/mime.dart';
 
 final firestore = FirebaseFirestore.instance;
 
@@ -28,6 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSwatch().copyWith(
           primary: Colors.blue[800],
@@ -57,154 +53,11 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.title, required this.image});
-
-  final String title;
-  final String image;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          print("clicked $title summary");
-        },
-        child: Card(
-            child: Row(
-          children: <Widget>[
-            Expanded(
-                child: Column(
-              children: [
-                Text(
-                  title,
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-                FutureBuilder<List?>(
-                    future: downloadFileFromStorage(image),
-                    builder: (BuildContext context, AsyncSnapshot future) {
-                      if (!future.hasData) {
-                        return Container(child: Text("No image"));
-                      } else {
-                        if (future.data != null &&
-                            future.data[1] == 'application/pdf') {
-                          return SizedBox(
-                              height: 240.0,
-                              child: SfPdfViewer.memory(future.data[0],
-                                  enableDoubleTapZooming: false));
-                        } else if (future.data != null &&
-                            (future.data[1] == 'image/jpeg' ||
-                                future.data[1] == 'image/png')) {
-                          return Image.memory(future.data[0]);
-                        } else {
-                          return Text("no image data");
-                        }
-                      }
-                    })
-                // Image(image: image)
-              ],
-            ))
-          ],
-        )));
-  }
-}
-
-// class UseCard extends StatelessWidget {
-//   const UseCard({super.key, required this.title});
-
-//   final String title;
-
-//   @override
-//   Widget build(BuildContext context) {
-//     /// Usage
-//     return CustomCard(
-//       title: title,
-//       // onPress: () {
-//       //   print('Card $index');
-//       // },
-//     );
-//   }
-// }
-
-// final List summaryList = readVisualSummariesFromFirestore();
-Future<List<Object>> readVisualSummariesFromFirestore() async {
-  CollectionReference visualSummariesRef =
-      FirebaseFirestore.instance.collection('Visual Summaries');
-
-  // Get docs from collection reference
-  QuerySnapshot querySnapshot = await visualSummariesRef.get();
-  // Get data from docs and convert map to List
-  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
-  List<Object> cards = [];
-
-  for (var visualSummary in allData) {
-    if (visualSummary != null) {
-      cards.add(visualSummary);
-    }
-    // print(visualSummary);
-  }
-  return cards;
-}
-
-// Pass in "link_summary_storage" or "link_thumbnail_storage" field
-Future<List?> downloadFileFromStorage(String path) async {
-  // Create a storage reference from our app
-  final storageRef = FirebaseStorage.instance.ref();
-
-  final fileRef = storageRef.child(path);
-
-  try {
-    final Uint8List? data = await fileRef.getData();
-    final mime = lookupMimeType('', headerBytes: data);
-    // Uint8List? _imageBytesDecoded = base64.decode(data);
-    return [data, mime];
-    // Data for "images/island.jpg" is returned, use this as needed.
-  } on FirebaseException catch (e) {
-    // Handle any errors.
-  }
-  return null;
-}
-
-class VisualSummariesList extends StatelessWidget {
-  // const VisualSummariesList();
-
-  // Future<List<Widget>> summaryList = readVisualSummariesFromFirestore();
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-        child: FutureBuilder<List<Object>>(
-            future: readVisualSummariesFromFirestore(),
-            builder:
-                (BuildContext context, AsyncSnapshot<List<Object>> future) {
-              if (!future.hasData) {
-                return Container(
-                  child: new Text('loading'),
-                );
-              } else {
-                return ListView(
-                    cacheExtent: 9999,
-                    // UseCard card = UseCard(title: "w");
-                    children: List<Widget>.generate(
-                        future.data!.length,
-                        (index) => CustomCard(
-                            image: (future.data![index] as Map<String,
-                                    dynamic>)['link_thumbnail_storage']
-                                .toString(),
-                            title: (future.data![index]
-                                    as Map<String, dynamic>)['title']
-                                .toString()))
-                    // children: [],
-                    );
-              }
-            }));
-  }
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   int _selectedIndex = 1;
 
   List<Widget> _widgetOptions = <Widget>[
-    VisualSummariesList(),
+    VisualSummaryPage(),
     Text('Index 1: Home'),
     Text('Index 2: Podcasts'),
   ];
