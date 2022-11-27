@@ -1,17 +1,15 @@
-# emoroid_digest_app
+# The Emoroid Digest App
 
-See https://firebase.google.com/docs/flutter/setup?platform=ios
+The Emoroid Digest App is a mobile app available on both iOS and Android that users can use to access the
+content released by [The Emoroid Digest](https://med.emory.edu/departments/medicine/divisions/digestive-diseases/education/emoroid-digest.html), including both the visual summaries and podcasts.
 
-Do `flutter run` to start the app.
+The app is written in Flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+The backend of this app is backed by a Firebase project. To set up the Firebase access, see https://firebase.google.com/docs/flutter/setup?platform=ios.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+`flutter run` to start the app.
 
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
