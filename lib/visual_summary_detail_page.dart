@@ -43,7 +43,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
             Image.network(widget.visualSummary.linkSummaryOriginal)
           else
             SizedBox(
-                height: 250,
+                height: 240,
                 child: SfPdfViewer.network(
                     widget.visualSummary.linkSummaryOriginal)),
           const Divider(),
