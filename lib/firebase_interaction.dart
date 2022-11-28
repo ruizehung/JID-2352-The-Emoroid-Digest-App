@@ -24,6 +24,7 @@ Future<List<VisualSummary>> readVisualSummariesFromFirestore() async {
       visualSummaries.add(VisualSummary.fromJson(json));
     }
   }
+  visualSummaries.sort((a, b) => -a.dateReleased.compareTo(b.dateReleased));
   return visualSummaries;
 }
 
