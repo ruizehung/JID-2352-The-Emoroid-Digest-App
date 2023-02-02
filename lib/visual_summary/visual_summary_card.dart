@@ -1,9 +1,6 @@
-import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import 'package:emoroid_digest_app/firebase/utils.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
+import 'thumbnail.dart';
 
 class VisualSummaryCard extends StatelessWidget {
   const VisualSummaryCard(
@@ -16,10 +13,6 @@ class VisualSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isJpegOrPng =
-        visualSummary.linkVisualInfographicsSource.endsWith('jpg') ||
-            visualSummary.linkVisualInfographicsSource.endsWith('png');
-
     return InkWell(
         onTap: () {
           setVisualSummarySelected(visualSummary);
@@ -27,47 +20,31 @@ class VisualSummaryCard extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8),
           child: Card(
+              elevation: 3,
               child: Row(
-            children: <Widget>[
-              Expanded(
-                  child: Column(
-                children: [
-                  Text(
-                    visualSummary.title,
-                    style: const TextStyle(
-                        fontSize: 20, fontWeight: FontWeight.bold),
+                children: <Widget>[
+                  Expanded(
+                    flex: 7,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Text(visualSummary.title,
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 5,
+                          style: const TextStyle(
+                            fontSize: 18,
+                          )),
+                    ),
                   ),
-                  if (isJpegOrPng)
-                    Image.network(
-                        visualSummary.linkVisualSummaryThumbnailSource)
-                  else
-                    FutureBuilder<List?>(
-                        future: downloadFileFromStorage(
-                            visualSummary.linkVisualSummaryThumbnailStorage),
-                        builder: (BuildContext context, AsyncSnapshot future) {
-                          if (!future.hasData) {
-                            return const Text("No image");
-                          } else {
-                            if (future.data != null &&
-                                future.data[1] == 'application/pdf') {
-                              return SizedBox(
-                                  height: 240.0,
-                                  child: SfPdfViewer.memory(future.data[0],
-                                      enableDoubleTapZooming: false));
-                            } else if (future.data != null &&
-                                (future.data[1] == 'image/jpeg' ||
-                                    future.data[1] == 'image/png')) {
-                              return Image.memory(future.data[0]);
-                            } else {
-                              return const Text("no image data");
-                            }
-                          }
-                        })
-                  // Image(image: image)
+                  Expanded(
+                    flex: 3,
+                    child: SizedBox(
+                      width: 100,
+                      height: 100,
+                      child: Thumbnail(visualSummary: visualSummary),
+                    ),
+                  )
                 ],
-              ))
-            ],
-          )),
+              )),
         ));
   }
 }

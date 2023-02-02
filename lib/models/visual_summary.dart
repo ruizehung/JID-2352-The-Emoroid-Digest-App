@@ -14,15 +14,20 @@ class VisualSummary {
   final String linkOriginalManuscript;
   final String linkTwitter;
 
+  final String mimeTypeVisualSummary;
+  final String mimeTypeVisualSummaryThumbnail;
+  final String mimeTypeVisualInfographic;
+  final String mimeTypeVisualInfographicThumbnail;
+
   final String linkVisualSummaryStorage;
   final String linkVisualSummarySource;
   final String linkVisualSummaryThumbnailStorage;
   final String linkVisualSummaryThumbnailSource;
 
-  final String linkVisualInfographicsStorage;
-  final String linkVisualInfographicsSource;
-  final String linkVisualInfographicsThumbnailStorage;
-  final String linkVisualInfographicsThumbnailSource;
+  final String linkVisualInfographicStorage;
+  final String linkVisualInfographicSource;
+  final String linkVisualInfographicThumbnailStorage;
+  final String linkVisualInfographicThumbnailSource;
 
   const VisualSummary(
       {required this.title,
@@ -36,14 +41,18 @@ class VisualSummary {
       required this.recordedPodcastTitle,
       required this.linkOriginalManuscript,
       required this.linkTwitter,
+      required this.mimeTypeVisualSummary,
+      required this.mimeTypeVisualSummaryThumbnail,
+      required this.mimeTypeVisualInfographic,
+      required this.mimeTypeVisualInfographicThumbnail,
       required this.linkVisualSummaryStorage,
       required this.linkVisualSummarySource,
       required this.linkVisualSummaryThumbnailStorage,
       required this.linkVisualSummaryThumbnailSource,
-      required this.linkVisualInfographicsStorage,
-      required this.linkVisualInfographicsSource,
-      required this.linkVisualInfographicsThumbnailStorage,
-      required this.linkVisualInfographicsThumbnailSource});
+      required this.linkVisualInfographicStorage,
+      required this.linkVisualInfographicSource,
+      required this.linkVisualInfographicThumbnailStorage,
+      required this.linkVisualInfographicThumbnailSource});
 
   factory VisualSummary.fromJson(Map<String, dynamic> json) {
     return VisualSummary(
@@ -59,17 +68,22 @@ class VisualSummary {
         recordedPodcastTitle: json['recordedPodcastTitle'],
         linkOriginalManuscript: json['linkOriginalManuscript'],
         linkTwitter: json['linkTwitter'],
+        mimeTypeVisualSummary: json['mimeTypeVisualSummary'],
+        mimeTypeVisualSummaryThumbnail: json['mimeTypeVisualSummaryThumbnail'],
+        mimeTypeVisualInfographic: json['mimeTypeVisualInfographic'],
+        mimeTypeVisualInfographicThumbnail:
+            json['mimeTypeVisualInfographicThumbnail'],
         linkVisualSummaryStorage: json['linkVisualSummaryStorage'],
         linkVisualSummarySource: json['linkVisualSummarySource'],
         linkVisualSummaryThumbnailStorage:
             json['linkVisualSummaryThumbnailStorage'],
         linkVisualSummaryThumbnailSource:
             json['linkVisualSummaryThumbnailSource'],
-        linkVisualInfographicsStorage: json['linkVisualInfographicsStorage'],
-        linkVisualInfographicsSource: json['linkVisualInfographicsSource'],
-        linkVisualInfographicsThumbnailStorage:
-            json['linkVisualInfographicsThumbnailStorage'],
-        linkVisualInfographicsThumbnailSource:
-            json['linkVisualInfographicsThumbnailSource']);
+        linkVisualInfographicStorage: json['linkVisualInfographicStorage'],
+        linkVisualInfographicSource: json['linkVisualInfographicSource'],
+        linkVisualInfographicThumbnailStorage:
+            json['linkVisualInfographicThumbnailStorage'],
+        linkVisualInfographicThumbnailSource:
+            json['linkVisualInfographicThumbnailSource']);
   }
 }
