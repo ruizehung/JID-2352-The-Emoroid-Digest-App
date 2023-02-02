@@ -1,10 +1,13 @@
-import 'package:emoroid_digest_app/visual_summaries_page.dart';
+import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 final firestore = FirebaseFirestore.instance;
+FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -12,6 +15,9 @@ Future<void> main() async {
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  FirebaseAuth.instance.signInAnonymously();
+
   runApp(const MyApp());
 }
 
@@ -53,18 +59,45 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _selectedIndex = 1;
+class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
+  int _pageIndex = 1;
 
-  List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _widgetOptions = <Widget>[
     VisualSummaryPage(),
     Text('Index 1: Home'),
     Text('Index 2: Podcasts'),
   ];
 
-  void _onItemTapped(int index) {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.inactive ||
+        state == AppLifecycleState.detached) return;
+
+    final isBackground = state == AppLifecycleState.paused;
+    if (isBackground) {
+      // app is now moved to background
+    } else {
+      analytics.logAppOpen();
+    }
+  }
+
+  void _onNavButtonTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      _pageIndex = index;
     });
   }
 
@@ -119,7 +152,9 @@ class _MyHomePageState extends State<MyHomePage> {
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[_widgetOptions.elementAt(_selectedIndex)],
+          children: <Widget>[
+            _widgetOptions.elementAt(_pageIndex),
+          ],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -137,11 +172,23 @@ class _MyHomePageState extends State<MyHomePage> {
             label: "Podcasts",
           ),
         ],
-        currentIndex: _selectedIndex,
+        currentIndex: _pageIndex,
         selectedItemColor: Colors.blue[800],
-        onTap: _onItemTapped,
+        onTap: _onNavButtonTapped,
       ),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 80),
+            child: TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+              },
+              child: const Text("Sign out"),
+            ),
+          )
+        ]),
+      ),
     );
   }
 }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import 'model/visual_summary.dart';
+import 'package:emoroid_digest_app/models/visual_summary.dart';
 
 class VisualSummaryDetailPage extends StatefulWidget {
   const VisualSummaryDetailPage(
@@ -23,8 +23,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
   @override
   Widget build(BuildContext context) {
     bool isJpegOrPng =
-        widget.visualSummary.linkSummaryStorage.endsWith('jpg') ||
-            widget.visualSummary.linkSummaryStorage.endsWith('png');
+        widget.visualSummary.linkVisualSummarySource.endsWith('jpg') ||
+            widget.visualSummary.linkVisualSummarySource.endsWith('png');
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
@@ -45,12 +45,12 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             if (isJpegOrPng)
-              Image.network(widget.visualSummary.linkSummaryOriginal)
+              Image.network(widget.visualSummary.linkVisualSummarySource)
             else
               SizedBox(
                   height: 240,
                   child: SfPdfViewer.network(
-                      widget.visualSummary.linkSummaryOriginal)),
+                      widget.visualSummary.linkVisualSummarySource)),
             Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Column(

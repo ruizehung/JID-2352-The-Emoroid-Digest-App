@@ -1,8 +1,8 @@
-import 'package:emoroid_digest_app/model/visual_summary.dart';
+import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:flutter/material.dart';
 
 import 'visual_summary_card.dart';
-import 'firebase_interaction.dart';
+import 'package:emoroid_digest_app/firebase/utils.dart';
 import 'visual_summary_detail_page.dart';
 
 class VisualSummaryPage extends StatefulWidget {
