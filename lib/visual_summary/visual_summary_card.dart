@@ -1,9 +1,9 @@
-import 'package:emoroid_digest_app/visual_summaries_page.dart';
+import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import 'firebase_interaction.dart';
-import 'model/visual_summary.dart';
+import 'package:emoroid_digest_app/firebase/utils.dart';
+import 'package:emoroid_digest_app/models/visual_summary.dart';
 
 class VisualSummaryCard extends StatelessWidget {
   const VisualSummaryCard(
@@ -16,8 +16,9 @@ class VisualSummaryCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isJpegOrPng = visualSummary.linkThumbnailStorage.endsWith('jpg') ||
-        visualSummary.linkThumbnailStorage.endsWith('png');
+    bool isJpegOrPng =
+        visualSummary.linkVisualInfographicsSource.endsWith('jpg') ||
+            visualSummary.linkVisualInfographicsSource.endsWith('png');
 
     return InkWell(
         onTap: () {
@@ -37,11 +38,12 @@ class VisualSummaryCard extends StatelessWidget {
                         fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                   if (isJpegOrPng)
-                    Image.network(visualSummary.linkThumbnailOriginal)
+                    Image.network(
+                        visualSummary.linkVisualSummaryThumbnailSource)
                   else
                     FutureBuilder<List?>(
                         future: downloadFileFromStorage(
-                            visualSummary.linkThumbnailStorage),
+                            visualSummary.linkVisualSummaryThumbnailStorage),
                         builder: (BuildContext context, AsyncSnapshot future) {
                           if (!future.hasData) {
                             return const Text("No image");

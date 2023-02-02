@@ -2,7 +2,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:emoroid_digest_app/model/visual_summary.dart';
+import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
@@ -15,13 +15,16 @@ Future<List<VisualSummary>> readVisualSummariesFromFirestore() async {
   // Get docs from collection reference
   QuerySnapshot querySnapshot = await visualSummariesRef.get();
   // Get data from docs and convert map to List
-  final allData = querySnapshot.docs.map((doc) => doc.data()).toList();
+  final visualSummariesFromFirestore =
+      querySnapshot.docs.map((doc) => doc.data()).toList();
   List<VisualSummary> visualSummaries = [];
 
-  for (var json in allData) {
-    if (json != null &&
-        (json as Map<String, dynamic>)["link_thumbnail_original"] != "") {
-      visualSummaries.add(VisualSummary.fromJson(json));
+  for (var visualSummary in visualSummariesFromFirestore) {
+    if (visualSummary != null &&
+        (visualSummary
+                as Map<String, dynamic>)["linkVisualSummaryThumbnailSource"] !=
+            "") {
+      visualSummaries.add(VisualSummary.fromJson(visualSummary));
     }
   }
   visualSummaries.sort((a, b) => -a.dateReleased.compareTo(b.dateReleased));
