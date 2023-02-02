@@ -41,23 +41,98 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                 visualSummary: visualSummarySelected!,
                 setVisualSummarySelected: setVisualSummarySelected,
               )
-            : FutureBuilder<List<VisualSummary>>(
-                future: futureVisualSummaries,
-                builder: (BuildContext context,
-                    AsyncSnapshot<List<VisualSummary>> future) {
-                  if (!future.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      cacheExtent: 999,
-                      itemCount: future.data!.length,
-                      itemBuilder: (context, index) => VisualSummaryCard(
-                        visualSummary: future.data![index],
-                        setVisualSummarySelected: setVisualSummarySelected,
+            : Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10, left: 15),
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          OutlinedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: const BorderSide(color: Colors.blue)))),
+                              onPressed: () {},
+                              child: Row(
+                                children: const [
+                                  Text("Organ Systems"),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Icon(Icons.arrow_drop_down_circle_outlined),
+                                ],
+                              )),
+                          OutlinedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: const BorderSide(color: Colors.blue)))),
+                              onPressed: () {},
+                              child: Row(
+                                children: const [
+                                  Text("GI Society"),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Icon(Icons.arrow_drop_down_circle_outlined),
+                                ],
+                              )),
+                          OutlinedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: const BorderSide(color: Colors.blue)))),
+                              onPressed: () {},
+                              child: Row(
+                                children: const [
+                                  Text("Year Guideline Published"),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Icon(Icons.arrow_drop_down_circle_outlined),
+                                ],
+                              )),
+                          OutlinedButton(
+                              style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                      side: const BorderSide(color: Colors.blue)))),
+                              onPressed: () {},
+                              child: Row(
+                                children: const [
+                                  Text("Keywords"),
+                                  SizedBox(
+                                    width: 6,
+                                  ),
+                                  Icon(Icons.arrow_drop_down_circle_outlined),
+                                ],
+                              )),
+                        ],
                       ),
-                    );
-                  }
-                }));
+                    ),
+                  ),
+                  Flexible(
+                      fit: FlexFit.loose,
+                      child: FutureBuilder<List<VisualSummary>>(
+                          future: futureVisualSummaries,
+                          builder: (BuildContext context, AsyncSnapshot<List<VisualSummary>> future) {
+                            if (!future.hasData) {
+                              return const Center(child: CircularProgressIndicator());
+                            } else {
+                              return ListView.builder(
+                                scrollDirection: Axis.vertical,
+                                cacheExtent: 999,
+                                itemCount: future.data!.length,
+                                itemBuilder: (context, index) => VisualSummaryCard(
+                                  visualSummary: future.data![index],
+                                  setVisualSummarySelected: setVisualSummarySelected,
+                                ),
+                              );
+                            }
+                          })),
+                ],
+              ));
   }
 }

@@ -33,6 +33,7 @@ Future<List<VisualSummary>> readVisualSummariesFromFirestore() async {
 
 // Pass in "link_summary_storage" or "link_thumbnail_storage" field
 Future<List?> downloadFileFromStorage(String path) async {
+  // Get storage reference
   // Create a storage reference from our app
   final storageRef = FirebaseStorage.instance.ref();
 
