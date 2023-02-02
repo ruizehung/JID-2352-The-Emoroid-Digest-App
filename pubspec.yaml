@@ -43,6 +43,7 @@ dependencies:
   mime: ^1.0.2
   firebase_auth: ^4.2.5
   firebase_analytics: ^10.1.0
+  url_launcher: ^6.1.8
 
 dev_dependencies:
   flutter_test:
