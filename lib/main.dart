@@ -1,6 +1,8 @@
+import 'package:emoroid_digest_app/isar_service.dart';
 import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:isar/isar.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,6 +19,17 @@ Future<void> main() async {
   );
 
   FirebaseAuth.instance.signInAnonymously();
+
+  IsarService.init();
+  // todo: Listen for update on last change
+  // CollectionReference reference = FirebaseFirestore.instance.collection('Visual Summaries');
+  // reference.snapshots().listen((querySnapshot) {
+  //   print(querySnapshot.docChanges.length);
+  //   for (var change in querySnapshot.docChanges) {
+  //     // Do something with change
+  //     print(change.doc.data());
+  //   }
+  // });
 
   runApp(const MyApp());
 }
@@ -84,8 +97,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
 
-    if (state == AppLifecycleState.inactive ||
-        state == AppLifecycleState.detached) return;
+    if (state == AppLifecycleState.inactive || state == AppLifecycleState.detached) return;
 
     final isBackground = state == AppLifecycleState.paused;
     if (isBackground) {
@@ -119,16 +131,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             icon: const Icon(Icons.notifications),
             tooltip: 'Notifications',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Notifications clicked!')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notifications clicked!')));
             },
           ),
           IconButton(
             icon: const Icon(Icons.search),
             tooltip: 'Search',
             onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Search clicked!')));
+              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Search clicked!')));
             },
           ),
         ],
