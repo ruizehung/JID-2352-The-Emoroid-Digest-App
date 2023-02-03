@@ -1,8 +1,10 @@
-import 'package:emoroid_digest_app/models/visual_summary.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emoroid_digest_app/models/last_update.dart';
 import 'package:flutter/material.dart';
-
+import '../isar_service.dart';
+import '../models/visual_summary.dart';
 import 'visual_summary_card.dart';
-import 'package:emoroid_digest_app/firebase/utils.dart';
+import 'package:emoroid_digest_app/firebase.dart';
 import 'visual_summary_detail_page.dart';
 
 class VisualSummaryPage extends StatefulWidget {
@@ -13,14 +15,24 @@ class VisualSummaryPage extends StatefulWidget {
 }
 
 class _VisualSummaryPageState extends State<VisualSummaryPage> {
-  late Future<List<VisualSummary>> futureVisualSummaries;
-
   VisualSummary? visualSummarySelected;
+
+  Future<List<VisualSummary>> _getUpdateVisualSummaries() async {
+    final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();
+    final visualSummariesLastUpdateTime = (lastUpdateCloud.data()!["visualSummaries"] as Timestamp).toDate();
+    var lastUpdateLocal = await IsarService().getLastUpdate();
+    if (lastUpdateLocal!.visualSummaries == null ||
+        lastUpdateLocal.visualSummaries!.compareTo(visualSummariesLastUpdateTime) < 0) {
+      await syncVisualSummariesFromFirestore();
+      lastUpdateLocal.visualSummaries = visualSummariesLastUpdateTime;
+      IsarService().saveLastUpdate(lastUpdateLocal);
+    }
+    return IsarService().getAllVisualSummariesWithThumbnail();
+  }
 
   @override
   void initState() {
     super.initState();
-    futureVisualSummaries = readVisualSummariesFromFirestore();
   }
 
   void setVisualSummarySelected(VisualSummary? v) {
@@ -35,6 +47,8 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
       debugPrint("visualSummarySelected: ${visualSummarySelected!.title}");
     }
 
+    // todo: add pull to refresh
+    // https://stackoverflow.com/questions/65682460/how-to-use-refreshindicator-to-update-futurebuilder-state
     return Expanded(
         child: visualSummarySelected != null
             ? VisualSummaryDetailPage(
@@ -116,7 +130,7 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                   Flexible(
                       fit: FlexFit.loose,
                       child: FutureBuilder<List<VisualSummary>>(
-                          future: futureVisualSummaries,
+                          future: _getUpdateVisualSummaries(),
                           builder: (BuildContext context, AsyncSnapshot<List<VisualSummary>> future) {
                             if (!future.hasData) {
                               return const Center(child: CircularProgressIndicator());
