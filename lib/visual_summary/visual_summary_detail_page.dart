@@ -1,22 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../models/visual_summary.dart';
+
 class VisualSummaryDetailPage extends StatefulWidget {
-  const VisualSummaryDetailPage(
-      {super.key,
-      required this.visualSummary,
-      required this.setVisualSummarySelected});
+  const VisualSummaryDetailPage({super.key, required this.visualSummary, required this.setVisualSummarySelected});
 
   final VisualSummary visualSummary;
   final Function(VisualSummary? v) setVisualSummarySelected;
 
   @override
-  State<VisualSummaryDetailPage> createState() =>
-      _VisualSummaryDetailPageState();
+  State<VisualSummaryDetailPage> createState() => _VisualSummaryDetailPageState();
 }
 
 class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
@@ -82,12 +78,9 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf")
-              SizedBox(
-                  height: 240,
-                  child: SfPdfViewer.network(
-                      widget.visualSummary.linkVisualSummarySource))
+              SizedBox(height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!))
             else
-              Image.network(widget.visualSummary.linkVisualSummarySource),
+              Image.network(widget.visualSummary.linkVisualSummarySource!),
             Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Column(
@@ -100,8 +93,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                             CupertinoIcons.heart,
                             color: Colors.black,
                             size: iconSize,
-                            semanticLabel:
-                                'Text to announce in accessibility modes',
+                            semanticLabel: 'Text to announce in accessibility modes',
                           ),
                           iconSize: iconSize,
                         ),
@@ -114,8 +106,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                         const SizedBox(width: 10),
                         IconButton(
                           onPressed: () async {
-                            final uri = Uri.parse(
-                                widget.visualSummary.linkOriginalManuscript);
+                            final uri = Uri.parse(widget.visualSummary.linkOriginalManuscript);
                             if (await canLaunchUrl(uri)) {
                               await launchUrl(uri);
                             } else {
@@ -136,26 +127,20 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                     const SizedBox(
                       height: 8,
                     ),
-                    detailField("Year Guideline Published",
-                        "${widget.visualSummary.yearGuidelinePublished}"),
-                    detailField(
-                        "Society", widget.visualSummary.giSocietyJournal),
-                    detailField("Organ Systems",
-                        widget.visualSummary.organSystems.join(", ")),
-                    detailField(
-                        "Keywords", widget.visualSummary.keywords.join(", ")),
-                    detailField(
-                        "Guideline Authors (First two and last listed author)",
+                    detailField("Year Guideline Published", "${widget.visualSummary.yearGuidelinePublished}"),
+                    detailField("Society", widget.visualSummary.giSocietyJournal),
+                    detailField("Organ Systems", widget.visualSummary.organSystems.join(", ")),
+                    detailField("Keywords", widget.visualSummary.keywords.join(", ")),
+                    detailField("Guideline Authors (First two and last listed author)",
                         widget.visualSummary.guidelineAuthors.join(", ")),
                     detailField(
                         "Recorded Podcast",
-                        widget.visualSummary.recordedPodcastTitle == ""
+                        widget.visualSummary.recordedPodcastTitle == null
                             ? "N/A"
-                            : widget.visualSummary.recordedPodcastTitle),
-                    detailField("Visual Summary Fellow Author",
-                        widget.visualSummary.fellowAuthor),
+                            : widget.visualSummary.recordedPodcastTitle!),
+                    detailField("Visual Summary Fellow Author", widget.visualSummary.fellowAuthor!),
                     detailField("Visual Summary Release Date",
-                        "${widget.visualSummary.dateReleased.toDate().year.toString()}-${widget.visualSummary.dateReleased.toDate().month.toString().padLeft(2, '0')}-${widget.visualSummary.dateReleased.toDate().day.toString().padLeft(2, '0')}"),
+                        "${widget.visualSummary.dateReleased.year.toString()}-${widget.visualSummary.dateReleased.month.toString().padLeft(2, '0')}-${widget.visualSummary.dateReleased.day.toString().padLeft(2, '0')}"),
                   ],
                 )),
           ],
