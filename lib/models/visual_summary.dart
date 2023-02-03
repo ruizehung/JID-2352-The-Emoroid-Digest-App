@@ -1,89 +1,49 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:isar/isar.dart';
+part 'visual_summary.g.dart';
 
+@collection
 class VisualSummary {
-  final String title;
-  final String fellowAuthor;
-  final Timestamp dateReleased;
-  final List<String> guidelineAuthors;
-  final int yearGuidelinePublished;
-  final String giSocietyJournal;
-  final List<String> organSystems;
-  final List<String> keywords;
+  String? id;
+  Id get isarId => fastHash(id!);
 
-  final String recordedPodcastTitle;
-  final String linkOriginalManuscript;
-  final String linkTwitter;
+  late String title;
+  late String fellowAuthor;
+  late DateTime dateReleased;
+  late List<String> guidelineAuthors;
+  late int yearGuidelinePublished;
+  late String giSocietyJournal;
+  late List<String> organSystems;
+  late List<String> keywords;
+  String? recordedPodcastTitle;
+  late String linkOriginalManuscript;
+  String? linkTwitter;
+  String? mimeTypeVisualSummary;
+  String? mimeTypeVisualSummaryThumbnail;
+  String? mimeTypeVisualInfographic;
+  String? mimeTypeVisualInfographicThumbnail;
+  String? linkVisualSummaryStorage;
+  String? linkVisualSummarySource;
+  String? linkVisualSummaryThumbnailStorage;
+  String? linkVisualSummaryThumbnailSource;
+  String? linkVisualInfographicStorage;
+  String? linkVisualInfographicSource;
+  String? linkVisualInfographicThumbnailStorage;
+  String? linkVisualInfographicThumbnailSource;
+}
 
-  final String mimeTypeVisualSummary;
-  final String mimeTypeVisualSummaryThumbnail;
-  final String mimeTypeVisualInfographic;
-  final String mimeTypeVisualInfographicThumbnail;
+/// FNV-1a 64bit hash algorithm optimized for Dart Strings
+/// https://isar.dev/recipes/string_ids.html
+int fastHash(String string) {
+  var hash = 0xcbf29ce484222325;
 
-  final String linkVisualSummaryStorage;
-  final String linkVisualSummarySource;
-  final String linkVisualSummaryThumbnailStorage;
-  final String linkVisualSummaryThumbnailSource;
-
-  final String linkVisualInfographicStorage;
-  final String linkVisualInfographicSource;
-  final String linkVisualInfographicThumbnailStorage;
-  final String linkVisualInfographicThumbnailSource;
-
-  const VisualSummary(
-      {required this.title,
-      required this.fellowAuthor,
-      required this.dateReleased,
-      required this.guidelineAuthors,
-      required this.yearGuidelinePublished,
-      required this.giSocietyJournal,
-      required this.organSystems,
-      required this.keywords,
-      required this.recordedPodcastTitle,
-      required this.linkOriginalManuscript,
-      required this.linkTwitter,
-      required this.mimeTypeVisualSummary,
-      required this.mimeTypeVisualSummaryThumbnail,
-      required this.mimeTypeVisualInfographic,
-      required this.mimeTypeVisualInfographicThumbnail,
-      required this.linkVisualSummaryStorage,
-      required this.linkVisualSummarySource,
-      required this.linkVisualSummaryThumbnailStorage,
-      required this.linkVisualSummaryThumbnailSource,
-      required this.linkVisualInfographicStorage,
-      required this.linkVisualInfographicSource,
-      required this.linkVisualInfographicThumbnailStorage,
-      required this.linkVisualInfographicThumbnailSource});
-
-  factory VisualSummary.fromJson(Map<String, dynamic> json) {
-    return VisualSummary(
-        title: json['title'],
-        fellowAuthor: json['fellowAuthor'],
-        dateReleased: json['dateReleased'],
-        guidelineAuthors:
-            (json['guidelineAuthors'] as List<dynamic>).cast<String>(),
-        yearGuidelinePublished: json['yearGuidelinePublished'],
-        giSocietyJournal: json['giSocietyJournal'],
-        organSystems: (json['organSystems'] as List<dynamic>).cast<String>(),
-        keywords: (json['keywords'] as List<dynamic>).cast<String>(),
-        recordedPodcastTitle: json['recordedPodcastTitle'],
-        linkOriginalManuscript: json['linkOriginalManuscript'],
-        linkTwitter: json['linkTwitter'],
-        mimeTypeVisualSummary: json['mimeTypeVisualSummary'],
-        mimeTypeVisualSummaryThumbnail: json['mimeTypeVisualSummaryThumbnail'],
-        mimeTypeVisualInfographic: json['mimeTypeVisualInfographic'],
-        mimeTypeVisualInfographicThumbnail:
-            json['mimeTypeVisualInfographicThumbnail'],
-        linkVisualSummaryStorage: json['linkVisualSummaryStorage'],
-        linkVisualSummarySource: json['linkVisualSummarySource'],
-        linkVisualSummaryThumbnailStorage:
-            json['linkVisualSummaryThumbnailStorage'],
-        linkVisualSummaryThumbnailSource:
-            json['linkVisualSummaryThumbnailSource'],
-        linkVisualInfographicStorage: json['linkVisualInfographicStorage'],
-        linkVisualInfographicSource: json['linkVisualInfographicSource'],
-        linkVisualInfographicThumbnailStorage:
-            json['linkVisualInfographicThumbnailStorage'],
-        linkVisualInfographicThumbnailSource:
-            json['linkVisualInfographicThumbnailSource']);
+  var i = 0;
+  while (i < string.length) {
+    final codeUnit = string.codeUnitAt(i++);
+    hash ^= codeUnit >> 8;
+    hash *= 0x100000001b3;
+    hash ^= codeUnit & 0xFF;
+    hash *= 0x100000001b3;
   }
+
+  return hash;
 }
