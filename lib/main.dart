@@ -19,6 +19,15 @@ Future<void> main() async {
   );
 
   FirebaseAuth.instance.signInAnonymously();
+  // todo: Listen for update on last change
+  // CollectionReference reference = FirebaseFirestore.instance.collection('Visual Summaries');
+  // reference.snapshots().listen((querySnapshot) {
+  //   print(querySnapshot.docChanges.length);
+  //   for (var change in querySnapshot.docChanges) {
+  //     // Do something with change
+  //     print(change.doc.data());
+  //   }
+  // });
 
   IsarService.init();
   // todo: Listen for update on last change
