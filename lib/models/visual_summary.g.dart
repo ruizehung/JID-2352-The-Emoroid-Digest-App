@@ -27,20 +27,20 @@ const VisualSummarySchema = CollectionSchema(
       name: r'fellowAuthor',
       type: IsarType.string,
     ),
-    r'firestoreDocID': PropertySchema(
-      id: 2,
-      name: r'firestoreDocID',
-      type: IsarType.string,
-    ),
     r'giSocietyJournal': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'giSocietyJournal',
       type: IsarType.string,
     ),
     r'guidelineAuthors': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'guidelineAuthors',
       type: IsarType.stringList,
+    ),
+    r'id': PropertySchema(
+      id: 4,
+      name: r'id',
+      type: IsarType.string,
     ),
     r'keywords': PropertySchema(
       id: 5,
@@ -142,7 +142,7 @@ const VisualSummarySchema = CollectionSchema(
   serialize: _visualSummarySerialize,
   deserialize: _visualSummaryDeserialize,
   deserializeProp: _visualSummaryDeserializeProp,
-  idName: r'id',
+  idName: r'isarId',
   indexes: {},
   links: {},
   embeddedSchemas: {},
@@ -159,18 +159,18 @@ int _visualSummaryEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.fellowAuthor.length * 3;
-  {
-    final value = object.firestoreDocID;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
   bytesCount += 3 + object.giSocietyJournal.length * 3;
   bytesCount += 3 + object.guidelineAuthors.length * 3;
   {
     for (var i = 0; i < object.guidelineAuthors.length; i++) {
       final value = object.guidelineAuthors[i];
       bytesCount += value.length * 3;
+    }
+  }
+  {
+    final value = object.id;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
     }
   }
   bytesCount += 3 + object.keywords.length * 3;
@@ -284,9 +284,9 @@ void _visualSummarySerialize(
 ) {
   writer.writeDateTime(offsets[0], object.dateReleased);
   writer.writeString(offsets[1], object.fellowAuthor);
-  writer.writeString(offsets[2], object.firestoreDocID);
-  writer.writeString(offsets[3], object.giSocietyJournal);
-  writer.writeStringList(offsets[4], object.guidelineAuthors);
+  writer.writeString(offsets[2], object.giSocietyJournal);
+  writer.writeStringList(offsets[3], object.guidelineAuthors);
+  writer.writeString(offsets[4], object.id);
   writer.writeStringList(offsets[5], object.keywords);
   writer.writeString(offsets[6], object.linkOriginalManuscript);
   writer.writeString(offsets[7], object.linkTwitter);
@@ -317,10 +317,9 @@ VisualSummary _visualSummaryDeserialize(
   final object = VisualSummary();
   object.dateReleased = reader.readDateTime(offsets[0]);
   object.fellowAuthor = reader.readString(offsets[1]);
-  object.firestoreDocID = reader.readStringOrNull(offsets[2]);
-  object.giSocietyJournal = reader.readString(offsets[3]);
-  object.guidelineAuthors = reader.readStringList(offsets[4]) ?? [];
-  object.id = id;
+  object.giSocietyJournal = reader.readString(offsets[2]);
+  object.guidelineAuthors = reader.readStringList(offsets[3]) ?? [];
+  object.id = reader.readStringOrNull(offsets[4]);
   object.keywords = reader.readStringList(offsets[5]) ?? [];
   object.linkOriginalManuscript = reader.readString(offsets[6]);
   object.linkTwitter = reader.readStringOrNull(offsets[7]);
@@ -360,11 +359,11 @@ P _visualSummaryDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readStringOrNull(offset)) as P;
-    case 3:
       return (reader.readString(offset)) as P;
-    case 4:
+    case 3:
       return (reader.readStringList(offset) ?? []) as P;
+    case 4:
+      return (reader.readStringOrNull(offset)) as P;
     case 5:
       return (reader.readStringList(offset) ?? []) as P;
     case 6:
@@ -409,7 +408,7 @@ P _visualSummaryDeserializeProp<P>(
 }
 
 Id _visualSummaryGetId(VisualSummary object) {
-  return object.id;
+  return object.isarId;
 }
 
 List<IsarLinkBase<dynamic>> _visualSummaryGetLinks(VisualSummary object) {
@@ -417,13 +416,11 @@ List<IsarLinkBase<dynamic>> _visualSummaryGetLinks(VisualSummary object) {
 }
 
 void _visualSummaryAttach(
-    IsarCollection<dynamic> col, Id id, VisualSummary object) {
-  object.id = id;
-}
+    IsarCollection<dynamic> col, Id id, VisualSummary object) {}
 
 extension VisualSummaryQueryWhereSort
     on QueryBuilder<VisualSummary, VisualSummary, QWhere> {
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhere> anyId() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
     });
@@ -432,70 +429,69 @@ extension VisualSummaryQueryWhereSort
 
 extension VisualSummaryQueryWhere
     on QueryBuilder<VisualSummary, VisualSummary, QWhereClause> {
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> idEqualTo(
-      Id id) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdEqualTo(
+      Id isarId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
-        lower: id,
-        upper: id,
+        lower: isarId,
+        upper: isarId,
       ));
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> idNotEqualTo(
-      Id id) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause>
+      isarIdNotEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
             .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
+              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
             )
             .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
+              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
             );
       } else {
         return query
             .addWhereClause(
-              IdWhereClause.greaterThan(lower: id, includeLower: false),
+              IdWhereClause.greaterThan(lower: isarId, includeLower: false),
             )
             .addWhereClause(
-              IdWhereClause.lessThan(upper: id, includeUpper: false),
+              IdWhereClause.lessThan(upper: isarId, includeUpper: false),
             );
       }
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> idGreaterThan(
-      Id id,
-      {bool include = false}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause>
+      isarIdGreaterThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        IdWhereClause.greaterThan(lower: id, includeLower: include),
+        IdWhereClause.greaterThan(lower: isarId, includeLower: include),
       );
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> idLessThan(
-      Id id,
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdLessThan(
+      Id isarId,
       {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
-        IdWhereClause.lessThan(upper: id, includeUpper: include),
+        IdWhereClause.lessThan(upper: isarId, includeUpper: include),
       );
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> idBetween(
-    Id lowerId,
-    Id upperId, {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdBetween(
+    Id lowerIsarId,
+    Id upperIsarId, {
     bool includeLower = true,
     bool includeUpper = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
-        lower: lowerId,
+        lower: lowerIsarId,
         includeLower: includeLower,
-        upper: upperId,
+        upper: upperIsarId,
         includeUpper: includeUpper,
       ));
     });
@@ -691,160 +687,6 @@ extension VisualSummaryQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'fellowAuthor',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'firestoreDocID',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'firestoreDocID',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'firestoreDocID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'firestoreDocID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'firestoreDocID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'firestoreDocID',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'firestoreDocID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'firestoreDocID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'firestoreDocID',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'firestoreDocID',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'firestoreDocID',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      firestoreDocIDIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'firestoreDocID',
         value: '',
       ));
     });
@@ -1213,44 +1055,197 @@ extension VisualSummaryQueryFilter
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'id',
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      idIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'id',
+      ));
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idEqualTo(
-      Id value) {
+    String? value, {
+    bool caseSensitive = true,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
       idGreaterThan(
-    Id value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         include: include,
         property: r'id',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idLessThan(
-    Id value, {
+    String? value, {
     bool include = false,
+    bool caseSensitive = true,
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.lessThan(
         include: include,
         property: r'id',
         value: value,
+        caseSensitive: caseSensitive,
       ));
     });
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'id',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      idStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'id',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'id',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      idIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'id',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      idIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'id',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      isarIdEqualTo(Id value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      isarIdGreaterThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      isarIdLessThan(
+    Id value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'isarId',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      isarIdBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -1258,7 +1253,7 @@ extension VisualSummaryQueryFilter
   }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.between(
-        property: r'id',
+        property: r'isarId',
         lower: lower,
         includeLower: includeLower,
         upper: upper,
@@ -4264,20 +4259,6 @@ extension VisualSummaryQuerySortBy
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByFirestoreDocID() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firestoreDocID', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByFirestoreDocIDDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firestoreDocID', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       sortByGiSocietyJournal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'giSocietyJournal', Sort.asc);
@@ -4288,6 +4269,18 @@ extension VisualSummaryQuerySortBy
       sortByGiSocietyJournalDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'giSocietyJournal', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortById() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'id', Sort.desc);
     });
   }
 
@@ -4561,20 +4554,6 @@ extension VisualSummaryQuerySortThenBy
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByFirestoreDocID() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firestoreDocID', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByFirestoreDocIDDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'firestoreDocID', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       thenByGiSocietyJournal() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'giSocietyJournal', Sort.asc);
@@ -4597,6 +4576,18 @@ extension VisualSummaryQuerySortThenBy
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIsarId() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isarId', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIsarIdDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isarId', Sort.desc);
     });
   }
 
@@ -4856,14 +4847,6 @@ extension VisualSummaryQueryWhereDistinct
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByFirestoreDocID({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'firestoreDocID',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
       distinctByGiSocietyJournal({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'giSocietyJournal',
@@ -4875,6 +4858,13 @@ extension VisualSummaryQueryWhereDistinct
       distinctByGuidelineAuthors() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'guidelineAuthors');
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctById(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
     });
   }
 
@@ -5030,9 +5020,9 @@ extension VisualSummaryQueryWhereDistinct
 
 extension VisualSummaryQueryProperty
     on QueryBuilder<VisualSummary, VisualSummary, QQueryProperty> {
-  QueryBuilder<VisualSummary, int, QQueryOperations> idProperty() {
+  QueryBuilder<VisualSummary, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'id');
+      return query.addPropertyName(r'isarId');
     });
   }
 
@@ -5049,13 +5039,6 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      firestoreDocIDProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'firestoreDocID');
-    });
-  }
-
   QueryBuilder<VisualSummary, String, QQueryOperations>
       giSocietyJournalProperty() {
     return QueryBuilder.apply(this, (query) {
@@ -5067,6 +5050,12 @@ extension VisualSummaryQueryProperty
       guidelineAuthorsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'guidelineAuthors');
+    });
+  }
+
+  QueryBuilder<VisualSummary, String?, QQueryOperations> idProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'id');
     });
   }
 

@@ -3,46 +3,72 @@ import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
 
 class IsarService {
-  static final IsarService _instance = IsarService._internal();
-  late Future<Isar> db;
+  static late IsarService _instance;
+  static late Isar _db;
+
+  static void init() async {
+    _db = await _openDB();
+    _instance = IsarService._internal();
+  }
 
   factory IsarService() {
     return _instance;
   }
 
-  IsarService._internal() {
-    // initialization logic
-    db = openDB();
-  }
+  IsarService._internal() {}
 
   Future<void> saveLastUpdate(LastUpdate lastUpdate) async {
-    final isar = await db;
-    isar.writeTxnSync<int>(() => isar.lastUpdates.putSync(lastUpdate));
+    _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }
 
   Future<void> saveVisualSummary(VisualSummary visualSummary) async {
-    final isar = await db;
-    final vs = await isar.visualSummarys.filter().firestoreDocIDEqualTo(visualSummary.firestoreDocID).findFirst();
-    if (vs != null) {
-      visualSummary.id = vs.id;
-    }
-    isar.writeTxnSync<int>(() => isar.visualSummarys.putSync(visualSummary));
+    _db.writeTxnSync<int>(() => _db.visualSummarys.putSync(visualSummary));
   }
 
   Future<LastUpdate?> getLastUpdate() async {
-    final isar = await db;
-    if (await isar.lastUpdates.filter().idEqualTo(0).findFirst() == null) {
-      isar.writeTxnSync<int>(() => isar.lastUpdates.putSync(LastUpdate()));
+    if (await _db.lastUpdates.filter().idEqualTo(0).findFirst() == null) {
+      _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(LastUpdate()));
     }
-    return await isar.lastUpdates.filter().idEqualTo(0).findFirst();
+    return await _db.lastUpdates.filter().idEqualTo(0).findFirst();
   }
 
   Future<List<VisualSummary>> getAllVisualSummariesWithThumbnail() async {
-    final isar = await db;
-    return await isar.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+    return await _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
   }
 
-  Future<Isar> openDB() async {
+  List<String> getUniqueOrganSystems() {
+    final set = <String>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.addAll(vs.organSystems);
+    }
+    return set.toList();
+  }
+
+  List<String> getUniqueGISocietyJournal() {
+    final set = <String>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.add(vs.giSocietyJournal);
+    }
+    return set.toList();
+  }
+
+  List<String> getUniqueKeywords() {
+    final set = <String>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.addAll(vs.keywords);
+    }
+    return set.toList();
+  }
+
+  List<int> getUniqueYearGuidelinePublished() {
+    final set = <int>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.add(vs.yearGuidelinePublished);
+    }
+    return set.toList();
+  }
+
+  static Future<Isar> _openDB() async {
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
         [VisualSummarySchema, LastUpdateSchema],

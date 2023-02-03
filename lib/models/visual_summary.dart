@@ -3,8 +3,8 @@ part 'visual_summary.g.dart';
 
 @collection
 class VisualSummary {
-  Id id = Isar.autoIncrement; // you can also use id = null to auto increment
-  String? firestoreDocID;
+  String? id;
+  Id get isarId => fastHash(id!);
 
   late String title;
   late String fellowAuthor;
@@ -29,4 +29,21 @@ class VisualSummary {
   String? linkVisualInfographicSource;
   String? linkVisualInfographicThumbnailStorage;
   String? linkVisualInfographicThumbnailSource;
+}
+
+/// FNV-1a 64bit hash algorithm optimized for Dart Strings
+/// https://isar.dev/recipes/string_ids.html
+int fastHash(String string) {
+  var hash = 0xcbf29ce484222325;
+
+  var i = 0;
+  while (i < string.length) {
+    final codeUnit = string.codeUnitAt(i++);
+    hash ^= codeUnit >> 8;
+    hash *= 0x100000001b3;
+    hash ^= codeUnit & 0xFF;
+    hash *= 0x100000001b3;
+  }
+
+  return hash;
 }
