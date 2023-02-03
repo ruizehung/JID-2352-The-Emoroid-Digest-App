@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:emoroid_digest_app/models/visual_summary.dart';
+import '../models/visual_summary.dart';
 import 'visual_summaries_thumbnail.dart';
 
 class VisualSummaryCard extends StatelessWidget {

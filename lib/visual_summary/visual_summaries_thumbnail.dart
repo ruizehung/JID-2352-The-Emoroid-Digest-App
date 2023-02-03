@@ -15,9 +15,9 @@ class Thumbnail extends StatelessWidget {
     if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
       return SizedBox(
           height: 240.0,
-          child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource, enableDoubleTapZooming: false));
+          child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!, enableDoubleTapZooming: false));
     }
-    return Image.network(visualSummary.linkVisualSummaryThumbnailSource,
+    return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
         loadingBuilder: (context, child, loadingProgress) {
           if (loadingProgress == null) {
