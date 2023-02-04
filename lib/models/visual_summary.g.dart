@@ -30,7 +30,7 @@ const VisualSummarySchema = CollectionSchema(
     r'giSocietyJournal': PropertySchema(
       id: 2,
       name: r'giSocietyJournal',
-      type: IsarType.string,
+      type: IsarType.stringList,
     ),
     r'guidelineAuthors': PropertySchema(
       id: 3,
@@ -160,6 +160,12 @@ int _visualSummaryEstimateSize(
   var bytesCount = offsets.last;
   bytesCount += 3 + object.fellowAuthor.length * 3;
   bytesCount += 3 + object.giSocietyJournal.length * 3;
+  {
+    for (var i = 0; i < object.giSocietyJournal.length; i++) {
+      final value = object.giSocietyJournal[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.guidelineAuthors.length * 3;
   {
     for (var i = 0; i < object.guidelineAuthors.length; i++) {
@@ -284,7 +290,7 @@ void _visualSummarySerialize(
 ) {
   writer.writeDateTime(offsets[0], object.dateReleased);
   writer.writeString(offsets[1], object.fellowAuthor);
-  writer.writeString(offsets[2], object.giSocietyJournal);
+  writer.writeStringList(offsets[2], object.giSocietyJournal);
   writer.writeStringList(offsets[3], object.guidelineAuthors);
   writer.writeString(offsets[4], object.id);
   writer.writeStringList(offsets[5], object.keywords);
@@ -317,7 +323,7 @@ VisualSummary _visualSummaryDeserialize(
   final object = VisualSummary();
   object.dateReleased = reader.readDateTime(offsets[0]);
   object.fellowAuthor = reader.readString(offsets[1]);
-  object.giSocietyJournal = reader.readString(offsets[2]);
+  object.giSocietyJournal = reader.readStringList(offsets[2]) ?? [];
   object.guidelineAuthors = reader.readStringList(offsets[3]) ?? [];
   object.id = reader.readStringOrNull(offsets[4]);
   object.keywords = reader.readStringList(offsets[5]) ?? [];
@@ -359,7 +365,7 @@ P _visualSummaryDeserializeProp<P>(
     case 1:
       return (reader.readString(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 3:
       return (reader.readStringList(offset) ?? []) as P;
     case 4:
@@ -693,7 +699,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalEqualTo(
+      giSocietyJournalElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -707,7 +713,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalGreaterThan(
+      giSocietyJournalElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -723,7 +729,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalLessThan(
+      giSocietyJournalElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -739,7 +745,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalBetween(
+      giSocietyJournalElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -759,7 +765,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalStartsWith(
+      giSocietyJournalElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -773,7 +779,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalEndsWith(
+      giSocietyJournalElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -787,7 +793,8 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalContains(String value, {bool caseSensitive = true}) {
+      giSocietyJournalElementContains(String value,
+          {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'giSocietyJournal',
@@ -798,7 +805,8 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalMatches(String pattern, {bool caseSensitive = true}) {
+      giSocietyJournalElementMatches(String pattern,
+          {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'giSocietyJournal',
@@ -809,7 +817,7 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalIsEmpty() {
+      giSocietyJournalElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'giSocietyJournal',
@@ -819,12 +827,101 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalIsNotEmpty() {
+      giSocietyJournalElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'giSocietyJournal',
         value: '',
       ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      giSocietyJournalLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      giSocietyJournalIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      giSocietyJournalIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      giSocietyJournalLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      giSocietyJournalLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      giSocietyJournalLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -4258,20 +4355,6 @@ extension VisualSummaryQuerySortBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByGiSocietyJournal() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByGiSocietyJournalDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.desc);
-    });
-  }
-
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -4550,20 +4633,6 @@ extension VisualSummaryQuerySortThenBy
       thenByFellowAuthorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByGiSocietyJournal() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByGiSocietyJournalDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.desc);
     });
   }
 
@@ -4847,10 +4916,9 @@ extension VisualSummaryQueryWhereDistinct
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByGiSocietyJournal({bool caseSensitive = true}) {
+      distinctByGiSocietyJournal() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'giSocietyJournal',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'giSocietyJournal');
     });
   }
 
@@ -5039,7 +5107,7 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, String, QQueryOperations>
+  QueryBuilder<VisualSummary, List<String>, QQueryOperations>
       giSocietyJournalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'giSocietyJournal');
