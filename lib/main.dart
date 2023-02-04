@@ -2,7 +2,7 @@ import 'package:emoroid_digest_app/isar_service.dart';
 import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:isar/isar.dart';
+import 'firebase.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -17,19 +17,8 @@ Future<void> main() async {
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  FirebaseAuth.instance.signInAnonymously();
-  // todo: Listen for update on last change
-  // CollectionReference reference = FirebaseFirestore.instance.collection('Visual Summaries');
-  // reference.snapshots().listen((querySnapshot) {
-  //   print(querySnapshot.docChanges.length);
-  //   for (var change in querySnapshot.docChanges) {
-  //     // Do something with change
-  //     print(change.doc.data());
-  //   }
-  // });
-
   IsarService.init();
+  FirebaseAuth.instance.signInAnonymously();
   // todo: Listen for update on last change
   // CollectionReference reference = FirebaseFirestore.instance.collection('Visual Summaries');
   // reference.snapshots().listen((querySnapshot) {
@@ -116,7 +105,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     }
   }
 
-  void _onNavButtonTapped(int index) {
+  Future<void> _onNavButtonTapped(int index) async {
     setState(() {
       _pageIndex = index;
     });

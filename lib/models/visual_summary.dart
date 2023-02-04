@@ -11,7 +11,7 @@ class VisualSummary {
   late DateTime dateReleased;
   late List<String> guidelineAuthors;
   late int yearGuidelinePublished;
-  late String giSocietyJournal;
+  late List<String> giSocietyJournal;
   late List<String> organSystems;
   late List<String> keywords;
   String? recordedPodcastTitle;

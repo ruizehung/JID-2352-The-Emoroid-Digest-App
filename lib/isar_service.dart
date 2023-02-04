@@ -15,7 +15,7 @@ class IsarService {
     return _instance;
   }
 
-  IsarService._internal() {}
+  IsarService._internal();
 
   Future<void> saveLastUpdate(LastUpdate lastUpdate) async {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
@@ -36,36 +36,36 @@ class IsarService {
     return await _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
   }
 
-  List<String> getUniqueOrganSystems() {
+  Set<String> getUniqueOrganSystems() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.addAll(vs.organSystems);
     }
-    return set.toList();
+    return set;
   }
 
-  List<String> getUniqueGISocietyJournal() {
+  Set<String> getUniqueGISocietyJournal() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
-      set.add(vs.giSocietyJournal);
+      set.addAll(vs.giSocietyJournal);
     }
-    return set.toList();
+    return set;
   }
 
-  List<String> getUniqueKeywords() {
+  Set<String> getUniqueKeywords() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.addAll(vs.keywords);
     }
-    return set.toList();
+    return set;
   }
 
-  List<int> getUniqueYearGuidelinePublished() {
+  Set<int> getUniqueYearGuidelinePublished() {
     final set = <int>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.add(vs.yearGuidelinePublished);
     }
-    return set.toList();
+    return set;
   }
 
   static Future<Isar> _openDB() async {
