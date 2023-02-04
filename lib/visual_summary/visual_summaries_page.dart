@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:emoroid_digest_app/models/last_update.dart';
 import 'package:flutter/material.dart';
 import '../isar_service.dart';
 import '../models/visual_summary.dart';
 import 'visual_summary_card.dart';
 import 'package:emoroid_digest_app/firebase.dart';
 import 'visual_summary_detail_page.dart';
+
+const showAll = "Show all";
+const clearAll = "Clear all";
 
 class VisualSummaryPage extends StatefulWidget {
   const VisualSummaryPage({super.key});
@@ -16,44 +18,47 @@ class VisualSummaryPage extends StatefulWidget {
 
 class _VisualSummaryPageState extends State<VisualSummaryPage> {
   final double filterTitleFontSize = 20;
-
+  bool isLoading = false;
   VisualSummary? visualSummarySelected;
-  final selectedOrganSystems = <String, bool>{};
-  final selectedGISocietyJournal = <String, bool>{};
-  final selectedKeywords = <String, bool>{};
-  final selectedYearGuidelinePublished = <int, bool>{};
+  String? selectedOrganSystem;
+  String? selectedGISocietyJournal;
+  String? selectedYearGuidelinePublished;
+  Set<String> selectedKeywords = {};
 
   @override
   void initState() {
     super.initState();
-    for (var organSystem in IsarService().getUniqueOrganSystems()) {
-      selectedOrganSystems.addAll({organSystem: true});
-    }
-    for (var giSocietyJournal in IsarService().getUniqueGISocietyJournal()) {
-      selectedGISocietyJournal.addAll({giSocietyJournal: true});
-    }
-    for (var keyword in IsarService().getUniqueKeywords()) {
-      selectedKeywords.addAll({keyword: true});
-    }
-    for (var year in IsarService().getUniqueYearGuidelinePublished()) {
-      selectedYearGuidelinePublished.addAll({year: true});
-    }
+    Future.delayed(Duration.zero, () async {
+      setState(() {
+        isLoading = true;
+      });
+      await syncVisualSummariesFromFirestore();
+      setState(() {
+        selectedKeywords = IsarService().getUniqueKeywords();
+        isLoading = false;
+      });
+    });
   }
 
-  Future<List<VisualSummary>> _getUpdateVisualSummaries() async {
-    final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();
-    final visualSummariesLastUpdateTime = (lastUpdateCloud.data()!["visualSummaries"] as Timestamp).toDate();
-    var lastUpdateLocal = await IsarService().getLastUpdate();
-    if (lastUpdateLocal!.visualSummaries == null ||
-        lastUpdateLocal.visualSummaries!.compareTo(visualSummariesLastUpdateTime) < 0) {
-      await syncVisualSummariesFromFirestore();
-      lastUpdateLocal.visualSummaries = visualSummariesLastUpdateTime;
-      IsarService().saveLastUpdate(lastUpdateLocal);
+  Future<List<VisualSummary>> _getFilteredVisualSummaries() async {
+    List<VisualSummary> list = [];
+    for (var vs in await IsarService().getAllVisualSummariesWithThumbnail()) {
+      if (selectedOrganSystem != null && !vs.organSystems.contains(selectedOrganSystem)) {
+        continue;
+      }
+      if (selectedGISocietyJournal != null && !vs.giSocietyJournal.contains(selectedGISocietyJournal)) {
+        continue;
+      }
+      if (selectedYearGuidelinePublished != null &&
+          vs.yearGuidelinePublished != int.parse(selectedYearGuidelinePublished!)) {
+        continue;
+      }
+      if (selectedKeywords.intersection(vs.keywords.toSet()).isEmpty) {
+        continue;
+      }
+      list.add(vs);
     }
-
-    // filter
-
-    return IsarService().getAllVisualSummariesWithThumbnail();
+    return list;
   }
 
   void setVisualSummarySelected(VisualSummary? v) {
@@ -106,23 +111,27 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                                               ),
                                             ),
                                             Expanded(
-                                              child: StatefulBuilder(
-                                                  builder: (context, setListState) => ListView.builder(
-                                                        scrollDirection: Axis.vertical,
-                                                        itemCount: selectedOrganSystems.length,
-                                                        itemBuilder: (context, index) => CheckboxListTile(
-                                                          value: selectedOrganSystems[
-                                                              selectedOrganSystems.keys.elementAt(index)],
-                                                          onChanged: (val) {
-                                                            setListState(() {
-                                                              selectedOrganSystems.addAll(
-                                                                  {selectedOrganSystems.keys.elementAt(index): val!});
-                                                            });
-                                                          },
-                                                          activeColor: Colors.blue,
-                                                          title: Text(selectedOrganSystems.keys.elementAt(index)),
-                                                        ),
-                                                      )),
+                                              child: StatefulBuilder(builder: (context, setListState) {
+                                                final organSystems = IsarService().getUniqueOrganSystems().toList();
+                                                organSystems.sort();
+                                                organSystems.insert(0, showAll);
+                                                return ListView.builder(
+                                                  scrollDirection: Axis.vertical,
+                                                  itemCount: organSystems.length,
+                                                  itemBuilder: (context, index) => RadioListTile(
+                                                    value: organSystems[index],
+                                                    onChanged: (val) {
+                                                      setState(() => setListState(() {
+                                                            selectedOrganSystem = val != showAll ? val : null;
+                                                          }));
+                                                    },
+                                                    activeColor: Colors.blue,
+                                                    title: Text(organSystems[index]),
+                                                    groupValue: selectedOrganSystem ?? showAll,
+                                                    controlAffinity: ListTileControlAffinity.trailing,
+                                                  ),
+                                                );
+                                              }),
                                             ),
                                           ],
                                         ),
@@ -141,7 +150,48 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                       side: const BorderSide(color: Colors.blue)))),
-                              onPressed: () {},
+                              onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: ((context) => FractionallySizedBox(
+                                        heightFactor: 1,
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                "GI Society",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: filterTitleFontSize,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: StatefulBuilder(builder: (context, setListState) {
+                                                final societies = IsarService().getUniqueGISocietyJournal().toList();
+                                                societies.sort();
+                                                societies.insert(0, showAll);
+                                                return ListView.builder(
+                                                  scrollDirection: Axis.vertical,
+                                                  itemCount: societies.length,
+                                                  itemBuilder: (context, index) => RadioListTile(
+                                                    value: societies[index],
+                                                    onChanged: (val) {
+                                                      setState(() => setListState(() {
+                                                            selectedGISocietyJournal = val != showAll ? val : null;
+                                                          }));
+                                                    },
+                                                    activeColor: Colors.blue,
+                                                    title: Text(societies[index]),
+                                                    groupValue: selectedGISocietyJournal ?? showAll,
+                                                    controlAffinity: ListTileControlAffinity.trailing,
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ],
+                                        ),
+                                      ))),
                               child: Row(
                                 children: const [
                                   Text("GI Society"),
@@ -156,7 +206,52 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                       side: const BorderSide(color: Colors.blue)))),
-                              onPressed: () {},
+                              onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: ((context) => FractionallySizedBox(
+                                        heightFactor: 1,
+                                        child: Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                "Year Guideline Published",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: filterTitleFontSize,
+                                                ),
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: StatefulBuilder(builder: (context, setListState) {
+                                                final societies = IsarService()
+                                                    .getUniqueYearGuidelinePublished()
+                                                    .map((e) => e.toString())
+                                                    .toList();
+                                                societies.sort((a, b) => b.compareTo(a));
+                                                societies.insert(0, showAll);
+                                                return ListView.builder(
+                                                  scrollDirection: Axis.vertical,
+                                                  itemCount: societies.length,
+                                                  itemBuilder: (context, index) => RadioListTile(
+                                                    value: societies[index],
+                                                    onChanged: (val) {
+                                                      setState(() => setListState(() {
+                                                            selectedYearGuidelinePublished =
+                                                                val != showAll ? val : null;
+                                                          }));
+                                                    },
+                                                    activeColor: Colors.blue,
+                                                    title: Text(societies[index]),
+                                                    groupValue: selectedYearGuidelinePublished ?? showAll,
+                                                    controlAffinity: ListTileControlAffinity.trailing,
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ],
+                                        ),
+                                      ))),
                               child: Row(
                                 children: const [
                                   Text("Year Guideline Published"),
@@ -171,7 +266,72 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(18.0),
                                       side: const BorderSide(color: Colors.blue)))),
-                              onPressed: () {},
+                              onPressed: () => showModalBottomSheet(
+                                  context: context,
+                                  builder: ((context) => FractionallySizedBox(
+                                      heightFactor: 1,
+                                      child: StatefulBuilder(builder: (context, setListState) {
+                                        final keywords = IsarService().getUniqueKeywords().toList();
+                                        keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
+                                        return Column(
+                                          children: [
+                                            Padding(
+                                              padding: const EdgeInsets.all(12.0),
+                                              child: Text(
+                                                "Keywords",
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: filterTitleFontSize,
+                                                ),
+                                              ),
+                                            ),
+                                            SingleChildScrollView(
+                                              child: Row(children: [
+                                                Padding(
+                                                  padding: const EdgeInsets.only(left: 8, right: 8),
+                                                  child: OutlinedButton(
+                                                    onPressed: () {
+                                                      setState(() => setListState(() {
+                                                            selectedKeywords.addAll(IsarService().getUniqueKeywords());
+                                                          }));
+                                                    },
+                                                    child: const Text(showAll),
+                                                  ),
+                                                ),
+                                                OutlinedButton(
+                                                  onPressed: () {
+                                                    setState(() => setListState(() {
+                                                          selectedKeywords.clear();
+                                                        }));
+                                                  },
+                                                  child: const Text(clearAll),
+                                                ),
+                                              ]),
+                                            ),
+                                            Expanded(
+                                              child: ListView.builder(
+                                                scrollDirection: Axis.vertical,
+                                                itemCount: keywords.length,
+                                                itemBuilder: (context, index) => CheckboxListTile(
+                                                  value: selectedKeywords.contains(keywords[index]),
+                                                  onChanged: (val) {
+                                                    setState(() => setListState(() {
+                                                          if (val!) {
+                                                            selectedKeywords.add(keywords[index]);
+                                                          } else {
+                                                            selectedKeywords.remove(keywords[index]);
+                                                          }
+                                                        }));
+                                                  },
+                                                  activeColor: Colors.blue,
+                                                  title: Text(keywords[index]),
+                                                  controlAffinity: ListTileControlAffinity.trailing,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        );
+                                      })))),
                               child: Row(
                                 children: const [
                                   Text("Keywords"),
@@ -188,9 +348,9 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
                   Flexible(
                       fit: FlexFit.loose,
                       child: FutureBuilder<List<VisualSummary>>(
-                          future: _getUpdateVisualSummaries(),
+                          future: _getFilteredVisualSummaries(),
                           builder: (BuildContext context, AsyncSnapshot<List<VisualSummary>> future) {
-                            if (!future.hasData) {
+                            if (isLoading || !future.hasData) {
                               return const Center(child: CircularProgressIndicator());
                             } else {
                               return ListView.builder(
