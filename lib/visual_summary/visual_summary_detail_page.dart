@@ -128,7 +128,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                       height: 8,
                     ),
                     detailField("Year Guideline Published", "${widget.visualSummary.yearGuidelinePublished}"),
-                    detailField("Society", widget.visualSummary.giSocietyJournal),
+                    detailField("Society", widget.visualSummary.giSocietyJournal.join(", ")),
                     detailField("Organ Systems", widget.visualSummary.organSystems.join(", ")),
                     detailField("Keywords", widget.visualSummary.keywords.join(", ")),
                     detailField("Guideline Authors (First two and last listed author)",
