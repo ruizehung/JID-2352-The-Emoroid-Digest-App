@@ -5,6 +5,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../models/visual_summary.dart';
 
+import '../isar_service.dart';
+
 class VisualSummaryDetailPage extends StatefulWidget {
   const VisualSummaryDetailPage({super.key, required this.visualSummary, required this.setVisualSummarySelected});
 
@@ -92,6 +94,46 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                           icon: Icon(
                             CupertinoIcons.heart,
                             color: Colors.black,
+                            size: iconSize,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                          ),
+                          iconSize: iconSize,
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (widget.visualSummary.readStatus) {
+                                widget.visualSummary.readStatus = false;
+                              } else {
+                                widget.visualSummary.readStatus = true;
+                              }
+                            });
+                            IsarService().saveVisualSummary(widget.visualSummary);
+                          },
+                          icon: Icon(
+                            CupertinoIcons.eye,
+                            color: widget.visualSummary.readStatus ? Colors.green : Colors.black,
+                            size: iconSize,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                          ),
+                          iconSize: iconSize,
+                        ),
+                        const SizedBox(width: 10),
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              if (widget.visualSummary.starStatus) {
+                                widget.visualSummary.starStatus = false;
+                              } else {
+                                widget.visualSummary.starStatus = true;
+                              }
+                            });
+                            IsarService().saveVisualSummary(widget.visualSummary);
+                          },
+                          icon: Icon(
+                            widget.visualSummary.starStatus ? CupertinoIcons.star_fill : CupertinoIcons.star,
+                            color: widget.visualSummary.starStatus ? Colors.yellow : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
