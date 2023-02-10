@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/visual_summary.dart';
 
@@ -163,7 +164,23 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                           onPressed: () {},
                           icon: const Icon(Icons.share_outlined),
                           iconSize: iconSize,
-                        )
+                        ),
+                        const SizedBox(width: 10),
+                        if (widget.visualSummary.linkTwitter != null)
+                          IconButton(
+                            //Button to jump to twitter for discussion
+                            onPressed: () async {
+                              final url = widget.visualSummary.linkTwitter.toString();
+                              final uri = Uri.parse(url);
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
+                              } else {
+                                throw "Could not launch $url";
+                              }
+                            },
+                            icon: const Icon(FontAwesomeIcons.twitter, color: Colors.blue),
+                            iconSize: iconSize,
+                          )
                       ],
                     ),
                     const SizedBox(
