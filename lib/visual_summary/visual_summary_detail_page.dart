@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import '../models/visual_summary.dart';
 
@@ -121,7 +122,32 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                           onPressed: () {},
                           icon: const Icon(Icons.share_outlined),
                           iconSize: iconSize,
-                        )
+                        ),
+                        /*If link ? blue button : gray button */
+                        const SizedBox(width: 10),
+                        if (widget.visualSummary.linkTwitter != null)
+                          IconButton(
+                            //Button to jump to twitter for discussion
+                            onPressed: () async {
+                              print(widget.visualSummary.linkTwitter.toString());
+                              final url = widget.visualSummary.linkTwitter.toString();
+                              final uri = Uri.parse(widget.visualSummary.linkTwitter.toString());
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
+                              } else {
+                                // can't launch url, there is some error
+                                throw "Could not launch $url";
+                              }
+                            },
+                            icon: const Icon(FontAwesomeIcons.squareTwitter, color: Colors.blue),
+                            iconSize: iconSize,
+                          )
+                        // else
+                        //   IconButton(
+                        //     onPressed: () {},
+                        //     icon: const Icon(FontAwesomeIcons.squareTwitter, color: Colors.grey),
+                        //     iconSize: iconSize,
+                        //   ),
                       ],
                     ),
                     const SizedBox(
