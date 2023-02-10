@@ -122,18 +122,28 @@ const VisualSummarySchema = CollectionSchema(
       name: r'organSystems',
       type: IsarType.stringList,
     ),
-    r'recordedPodcastTitle': PropertySchema(
+    r'readStatus': PropertySchema(
       id: 21,
+      name: r'readStatus',
+      type: IsarType.bool,
+    ),
+    r'recordedPodcastTitle': PropertySchema(
+      id: 22,
       name: r'recordedPodcastTitle',
       type: IsarType.string,
     ),
+    r'starStatus': PropertySchema(
+      id: 23,
+      name: r'starStatus',
+      type: IsarType.bool,
+    ),
     r'title': PropertySchema(
-      id: 22,
+      id: 24,
       name: r'title',
       type: IsarType.string,
     ),
     r'yearGuidelinePublished': PropertySchema(
-      id: 23,
+      id: 25,
       name: r'yearGuidelinePublished',
       type: IsarType.long,
     )
@@ -309,9 +319,11 @@ void _visualSummarySerialize(
   writer.writeString(offsets[18], object.mimeTypeVisualSummary);
   writer.writeString(offsets[19], object.mimeTypeVisualSummaryThumbnail);
   writer.writeStringList(offsets[20], object.organSystems);
-  writer.writeString(offsets[21], object.recordedPodcastTitle);
-  writer.writeString(offsets[22], object.title);
-  writer.writeLong(offsets[23], object.yearGuidelinePublished);
+  writer.writeBool(offsets[21], object.readStatus);
+  writer.writeString(offsets[22], object.recordedPodcastTitle);
+  writer.writeBool(offsets[23], object.starStatus);
+  writer.writeString(offsets[24], object.title);
+  writer.writeLong(offsets[25], object.yearGuidelinePublished);
 }
 
 VisualSummary _visualSummaryDeserialize(
@@ -347,9 +359,11 @@ VisualSummary _visualSummaryDeserialize(
   object.mimeTypeVisualSummary = reader.readStringOrNull(offsets[18]);
   object.mimeTypeVisualSummaryThumbnail = reader.readStringOrNull(offsets[19]);
   object.organSystems = reader.readStringList(offsets[20]) ?? [];
-  object.recordedPodcastTitle = reader.readStringOrNull(offsets[21]);
-  object.title = reader.readString(offsets[22]);
-  object.yearGuidelinePublished = reader.readLong(offsets[23]);
+  object.readStatus = reader.readBool(offsets[21]);
+  object.recordedPodcastTitle = reader.readStringOrNull(offsets[22]);
+  object.starStatus = reader.readBool(offsets[23]);
+  object.title = reader.readString(offsets[24]);
+  object.yearGuidelinePublished = reader.readLong(offsets[25]);
   return object;
 }
 
@@ -403,10 +417,14 @@ P _visualSummaryDeserializeProp<P>(
     case 20:
       return (reader.readStringList(offset) ?? []) as P;
     case 21:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 22:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 23:
+      return (reader.readBool(offset)) as P;
+    case 24:
+      return (reader.readString(offset)) as P;
+    case 25:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -3973,6 +3991,16 @@ extension VisualSummaryQueryFilter
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      readStatusEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'readStatus',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
       recordedPodcastTitleIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -4122,6 +4150,16 @@ extension VisualSummaryQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'recordedPodcastTitle',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      starStatusEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'starStatus',
+        value: value,
       ));
     });
   }
@@ -4565,6 +4603,19 @@ extension VisualSummaryQuerySortBy
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByReadStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readStatus', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      sortByReadStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readStatus', Sort.desc);
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       sortByRecordedPodcastTitle() {
     return QueryBuilder.apply(this, (query) {
@@ -4576,6 +4627,19 @@ extension VisualSummaryQuerySortBy
       sortByRecordedPodcastTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recordedPodcastTitle', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByStarStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starStatus', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      sortByStarStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starStatus', Sort.desc);
     });
   }
 
@@ -4858,6 +4922,19 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByReadStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readStatus', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      thenByReadStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'readStatus', Sort.desc);
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       thenByRecordedPodcastTitle() {
     return QueryBuilder.apply(this, (query) {
@@ -4869,6 +4946,19 @@ extension VisualSummaryQuerySortThenBy
       thenByRecordedPodcastTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recordedPodcastTitle', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByStarStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starStatus', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      thenByStarStatusDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'starStatus', Sort.desc);
     });
   }
 
@@ -5063,11 +5153,23 @@ extension VisualSummaryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByReadStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'readStatus');
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QDistinct>
       distinctByRecordedPodcastTitle({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'recordedPodcastTitle',
           caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByStarStatus() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'starStatus');
     });
   }
 
@@ -5238,10 +5340,22 @@ extension VisualSummaryQueryProperty
     });
   }
 
+  QueryBuilder<VisualSummary, bool, QQueryOperations> readStatusProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'readStatus');
+    });
+  }
+
   QueryBuilder<VisualSummary, String?, QQueryOperations>
       recordedPodcastTitleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'recordedPodcastTitle');
+    });
+  }
+
+  QueryBuilder<VisualSummary, bool, QQueryOperations> starStatusProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'starStatus');
     });
   }
 
