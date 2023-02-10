@@ -91,17 +91,6 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            CupertinoIcons.heart,
-                            color: Colors.black,
-                            size: iconSize,
-                            semanticLabel: 'Text to announce in accessibility modes',
-                          ),
-                          iconSize: iconSize,
-                        ),
-                        const SizedBox(width: 10),
-                        IconButton(
                           onPressed: () {
                             setState(() {
                               if (widget.visualSummary.readStatus) {
@@ -124,17 +113,13 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              if (widget.visualSummary.starStatus) {
-                                widget.visualSummary.starStatus = false;
-                              } else {
-                                widget.visualSummary.starStatus = true;
-                              }
+                              widget.visualSummary.starStatus = !widget.visualSummary.starStatus;
                             });
                             IsarService().saveVisualSummary(widget.visualSummary);
                           },
                           icon: Icon(
-                            widget.visualSummary.starStatus ? CupertinoIcons.star_fill : CupertinoIcons.star,
-                            color: widget.visualSummary.starStatus ? Colors.yellow : Colors.black,
+                            widget.visualSummary.starStatus ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                            color: widget.visualSummary.starStatus ? Colors.pink : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
