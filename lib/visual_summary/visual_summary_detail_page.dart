@@ -112,7 +112,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                             IsarService().saveVisualSummary(widget.visualSummary);
                           },
                           icon: Icon(
-                            CupertinoIcons.check_mark_circled,
+                            CupertinoIcons.eye,
                             color: widget.visualSummary.readStatus ? Colors.green : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
@@ -132,8 +132,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                             IsarService().saveVisualSummary(widget.visualSummary);
                           },
                           icon: Icon(
-                            CupertinoIcons.star,
-                            color: widget.visualSummary.starStatus ? Colors.green : Colors.black,
+                            widget.visualSummary.starStatus ? CupertinoIcons.star_fill : CupertinoIcons.star,
+                            color: widget.visualSummary.starStatus ? Colors.yellow : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
