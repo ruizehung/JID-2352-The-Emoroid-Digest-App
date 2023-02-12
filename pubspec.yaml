@@ -46,6 +46,8 @@ dependencies:
   url_launcher: ^6.1.8
   isar: ^3.0.5
   isar_flutter_libs: ^3.0.5
+  path_provider: ^2.0.12
+  flutter_downloader: ^1.10.1+2
 
 dev_dependencies:
   flutter_test:

@@ -1,8 +1,12 @@
+import 'package:emoroid_digest_app/visual_summary/visual_summary_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import '../models/visual_summary.dart';
 
@@ -18,9 +22,63 @@ class VisualSummaryDetailPage extends StatefulWidget {
   State<VisualSummaryDetailPage> createState() => _VisualSummaryDetailPageState();
 }
 
-class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
+class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with LocalDocument {
   final double iconSize = 30;
   final double fieldFontSize = 16;
+  Future<File?> getVisualSummary(String fileName, String? fileType) async {
+    if (fileType == null) {
+      return null;
+    }
+    final exists = await File((await getFilePath("visual_summaries/$fileName.${fileType.split("/").last}"))).exists();
+    if (!exists) {
+      return null;
+    }
+    return File(await getFilePath("visual_summaries/$fileName.${fileType.split("/").last}"));
+  }
+
+  Future<void> downloadVisualSummary(String? linkVisualSummarySource, String? linkVisualSummaryThumbnailSource,
+      String fileName, String? fileType, String? fileTypeThumb) async {
+    if (fileType == null ||
+        linkVisualSummarySource == null ||
+        linkVisualSummaryThumbnailSource == null ||
+        fileTypeThumb == null) {
+      return;
+    }
+    List<String> filesToDownload = [];
+    filesToDownload.add(await getFilePath("visual_summaries/"));
+    filesToDownload.add(await getFilePath("visual_summaries_thumb/"));
+    for (var i = 0; i < filesToDownload.length; i++) {
+      final savedDir = Directory(filesToDownload[i]);
+      bool hasExisted = await savedDir.exists();
+      if (!hasExisted) {
+        await savedDir.create();
+      }
+      final taskId = await FlutterDownloader.enqueue(
+        url: i == 0 ? linkVisualSummarySource : linkVisualSummaryThumbnailSource,
+        fileName: "$fileName.${(i == 0 ? fileType : fileTypeThumb).split("/").last}",
+        savedDir: filesToDownload[i],
+      );
+    }
+    return;
+  }
+
+  Future<void> deleteVisualSummary(String fileName, String? fileType, String? fileTypeThumb) async {
+    if (fileType == null || fileTypeThumb == null) {
+      return;
+    }
+    List<File> filesToDelete = [];
+    filesToDelete.add(File(await getFilePath("visual_summaries/$fileName.${fileType.split("/").last}")));
+    filesToDelete.add(File(await getFilePath("visual_summaries_thumb/$fileName.${fileTypeThumb.split("/").last}")));
+    for (var i = 0; i < filesToDelete.length; i++) {
+      try {
+        if (await filesToDelete[i].exists()) {
+          await filesToDelete[i].delete();
+        }
+      } catch (error) {
+        print(error);
+      }
+    }
+  }
 
   Widget detailField(String title, String value) {
     return Column(
@@ -80,10 +138,24 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf")
-              SizedBox(height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!))
-            else
-              Image.network(widget.visualSummary.linkVisualSummarySource!),
+            FutureBuilder(
+                future: getVisualSummary(widget.visualSummary.title, widget.visualSummary.mimeTypeVisualSummary),
+                builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+                  if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf") {
+                    if (snapshot.data == null) {
+                      return SizedBox(
+                          height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!));
+                    } else {
+                      return SizedBox(height: 240, child: SfPdfViewer.file(snapshot.data!));
+                    }
+                  } else {
+                    if (snapshot.data == null) {
+                      return Image.network(widget.visualSummary.linkVisualSummarySource!);
+                    } else {
+                      return Image.file(snapshot.data!);
+                    }
+                  }
+                }),
             Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Column(
@@ -126,11 +198,36 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                           iconSize: iconSize,
                         ),
                         const SizedBox(width: 10),
-                        IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.file_download_outlined),
-                          iconSize: iconSize,
-                        ),
+                        FutureBuilder(
+                            future: getVisualSummary(
+                                widget.visualSummary.title, widget.visualSummary.mimeTypeVisualSummary),
+                            builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+                              if (snapshot.data == null) {
+                                return IconButton(
+                                  onPressed: () async {
+                                    downloadVisualSummary(
+                                        widget.visualSummary.linkVisualSummarySource,
+                                        widget.visualSummary.linkVisualSummaryThumbnailSource,
+                                        widget.visualSummary.title,
+                                        widget.visualSummary.mimeTypeVisualSummary,
+                                        widget.visualSummary.mimeTypeVisualSummaryThumbnail);
+                                  },
+                                  icon: const Icon(Icons.file_download_outlined),
+                                  iconSize: iconSize,
+                                );
+                              } else {
+                                return IconButton(
+                                  onPressed: () async {
+                                    deleteVisualSummary(
+                                        widget.visualSummary.title,
+                                        widget.visualSummary.mimeTypeVisualSummary,
+                                        widget.visualSummary.mimeTypeVisualSummaryThumbnail);
+                                  },
+                                  icon: const Icon(Icons.delete),
+                                  iconSize: iconSize,
+                                );
+                              }
+                            }),
                         const SizedBox(width: 10),
                         IconButton(
                           onPressed: () async {
