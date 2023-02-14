@@ -81,7 +81,7 @@ class VisualSummaryCard extends StatelessWidget {
                                 padding: const EdgeInsets.all(0),
                                 icon: Icon(
                                   CupertinoIcons.eye,
-                                  color: visualSummary.readStatus ? Colors.green : Colors.black,
+                                  color: visualSummary.read ? Colors.green : Colors.black,
                                   size: iconSize,
                                 ),
                               ),
@@ -90,8 +90,8 @@ class VisualSummaryCard extends StatelessWidget {
                                 alignment: const Alignment(0, -1),
                                 padding: const EdgeInsets.all(0),
                                 icon: Icon(
-                                  visualSummary.starStatus ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-                                  color: visualSummary.starStatus ? Colors.pink : Colors.black,
+                                  visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                                  color: visualSummary.isFavorite ? Colors.pink : Colors.black,
                                   size: iconSize,
                                 ),
                               ),
