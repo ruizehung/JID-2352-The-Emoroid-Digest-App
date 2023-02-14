@@ -29,9 +29,9 @@ class VisualSummary {
   String? linkVisualInfographicSource;
   String? linkVisualInfographicThumbnailStorage;
   String? linkVisualInfographicThumbnailSource;
-  late bool readStatus = false;
-  late bool starStatus = false;
   late bool downloadStatus = false;
+  late bool read = false;
+  late bool isFavorite = false;
 }
 
 /// FNV-1a 64bit hash algorithm optimized for Dart Strings

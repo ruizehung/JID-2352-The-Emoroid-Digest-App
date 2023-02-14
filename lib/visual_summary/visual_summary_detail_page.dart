@@ -179,37 +179,35 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              if (widget.visualSummary.readStatus) {
-                                widget.visualSummary.readStatus = false;
+                              if (widget.visualSummary.read) {
+                                widget.visualSummary.read = false;
                               } else {
-                                widget.visualSummary.readStatus = true;
+                                widget.visualSummary.read = true;
                               }
                             });
                             IsarService().saveVisualSummary(widget.visualSummary);
                           },
                           icon: Icon(
                             CupertinoIcons.eye,
-                            color: widget.visualSummary.readStatus ? Colors.green : Colors.black,
+                            color: widget.visualSummary.read ? Colors.green : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
-                          iconSize: iconSize,
                         ),
                         const SizedBox(width: 10),
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              widget.visualSummary.starStatus = !widget.visualSummary.starStatus;
+                              widget.visualSummary.isFavorite = !widget.visualSummary.isFavorite;
                             });
                             IsarService().saveVisualSummary(widget.visualSummary);
                           },
                           icon: Icon(
-                            widget.visualSummary.starStatus ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-                            color: widget.visualSummary.starStatus ? Colors.pink : Colors.black,
+                            widget.visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                            color: widget.visualSummary.isFavorite ? Colors.pink : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
-                          iconSize: iconSize,
                         ),
                         SizedBox(width: _isDownloading ? 21.5 : 10),
                         if (_isDownloading == true)
