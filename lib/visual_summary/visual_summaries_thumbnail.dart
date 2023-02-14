@@ -12,22 +12,18 @@ class Thumbnail extends StatelessWidget with LocalDocument {
 
   final VisualSummary visualSummary;
 
-  Future<File?> getVisualSummaryThumb(String fileName, String? fileType) async {
-    if (fileType == null) {
-      return null;
-    }
-    final exists =
-        await File((await getFilePath("visual_summaries_thumb/$fileName.${fileType.split("/").last}"))).exists();
+  Future<File?> getVisualSummaryThumb(String fileName) async {
+    final exists = await File((await getFilePath("$fileName"))).exists();
     if (!exists) {
       return null;
     }
-    return File(await getFilePath("visual_summaries_thumb/$fileName.${fileType.split("/").last}"));
+    return File((await getFilePath("$fileName")));
   }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: getVisualSummaryThumb(visualSummary.title, visualSummary.mimeTypeVisualSummaryThumbnail),
+        future: getVisualSummaryThumb(visualSummary.linkVisualSummaryThumbnailStorage!),
         builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
           if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
             if (snapshot.data == null) {

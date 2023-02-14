@@ -26,28 +26,19 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
   final double iconSize = 30;
   final double fieldFontSize = 16;
   var _isDownloading = false;
-  Future<File?> getVisualSummary(String fileName, String? fileType) async {
-    if (fileType == null) {
-      return null;
-    }
-    final exists = await File((await getFilePath("visual_summaries/$fileName.${fileType.split("/").last}"))).exists();
+  Future<File?> getVisualSummary(String linkVisualSummaryStorage) async {
+    final exists = await File((await getFilePath("$linkVisualSummaryStorage"))).exists();
     if (!exists) {
       return null;
     }
-    return File(await getFilePath("visual_summaries/$fileName.${fileType.split("/").last}"));
+    return File((await getFilePath("$linkVisualSummaryStorage")));
   }
 
-  Future<void> downloadVisualSummary(String? linkVisualSummarySource, String? linkVisualSummaryThumbnailSource,
-      String fileName, String? fileType, String? fileTypeThumb) async {
-    if (fileType == null ||
-        linkVisualSummarySource == null ||
-        linkVisualSummaryThumbnailSource == null ||
-        fileTypeThumb == null) {
-      return;
-    }
+  Future<void> downloadVisualSummary(String linkVisualSummarySource, String linkVisualSummaryThumbnailSource,
+      String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
     List<String> filesToDownload = [];
-    filesToDownload.add(await getFilePath("visual_summaries/"));
-    filesToDownload.add(await getFilePath("visual_summaries_thumb/"));
+    filesToDownload.add(await getFilePath("${linkVisualSummaryStorage.split("/").first}"));
+    filesToDownload.add(await getFilePath("${linkVisualSummaryThumbnailStorage.split("/").first}"));
     for (var i = 0; i < filesToDownload.length; i++) {
       final savedDir = Directory(filesToDownload[i]);
       bool hasExisted = await savedDir.exists();
@@ -56,7 +47,9 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
       }
       final taskId = await FlutterDownloader.enqueue(
         url: i == 0 ? linkVisualSummarySource : linkVisualSummaryThumbnailSource,
-        fileName: "$fileName.${(i == 0 ? fileType : fileTypeThumb).split("/").last}",
+        fileName: i == 0
+            ? linkVisualSummaryStorage.substring(linkVisualSummaryStorage.indexOf('/'))
+            : linkVisualSummaryThumbnailStorage.substring(linkVisualSummaryThumbnailStorage.indexOf('/')),
         savedDir: filesToDownload[i],
       );
     }
@@ -72,13 +65,10 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
     return;
   }
 
-  Future<void> deleteVisualSummary(String fileName, String? fileType, String? fileTypeThumb) async {
-    if (fileType == null || fileTypeThumb == null) {
-      return;
-    }
+  Future<void> deleteVisualSummary(String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
     List<File> filesToDelete = [];
-    filesToDelete.add(File(await getFilePath("visual_summaries/$fileName.${fileType.split("/").last}")));
-    filesToDelete.add(File(await getFilePath("visual_summaries_thumb/$fileName.${fileTypeThumb.split("/").last}")));
+    filesToDelete.add(File(await getFilePath("$linkVisualSummaryStorage")));
+    filesToDelete.add(File(await getFilePath("$linkVisualSummaryThumbnailStorage")));
     for (var i = 0; i < filesToDelete.length; i++) {
       try {
         if (await filesToDelete[i].exists()) {
@@ -153,7 +143,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             FutureBuilder(
-                future: getVisualSummary(widget.visualSummary.title, widget.visualSummary.mimeTypeVisualSummary),
+                future: getVisualSummary(widget.visualSummary.linkVisualSummaryStorage!),
                 builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
                   if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf") {
                     if (snapshot.data == null) {
@@ -223,11 +213,10 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 _isDownloading = true;
                               });
                               downloadVisualSummary(
-                                  widget.visualSummary.linkVisualSummarySource,
-                                  widget.visualSummary.linkVisualSummaryThumbnailSource,
-                                  widget.visualSummary.title,
-                                  widget.visualSummary.mimeTypeVisualSummary,
-                                  widget.visualSummary.mimeTypeVisualSummaryThumbnail);
+                                  widget.visualSummary.linkVisualSummarySource!,
+                                  widget.visualSummary.linkVisualSummaryThumbnailSource!,
+                                  widget.visualSummary.linkVisualSummaryStorage!,
+                                  widget.visualSummary.linkVisualSummaryThumbnailStorage!);
                             },
                             icon: const Icon(Icons.file_download_outlined),
                             iconSize: iconSize,
@@ -235,10 +224,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         if (widget.visualSummary.downloadStatus == true && _isDownloading == false)
                           IconButton(
                             onPressed: () async {
-                              deleteVisualSummary(
-                                  widget.visualSummary.title,
-                                  widget.visualSummary.mimeTypeVisualSummary,
-                                  widget.visualSummary.mimeTypeVisualSummaryThumbnail);
+                              deleteVisualSummary(widget.visualSummary.linkVisualSummaryStorage!,
+                                  widget.visualSummary.linkVisualSummaryThumbnailStorage!);
                             },
                             icon: const Icon(Icons.delete),
                             iconSize: iconSize,
