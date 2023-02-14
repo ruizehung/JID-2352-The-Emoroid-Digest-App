@@ -107,7 +107,6 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
-                          iconSize: iconSize,
                         ),
                         const SizedBox(width: 10),
                         IconButton(
@@ -123,7 +122,6 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
-                          iconSize: iconSize,
                         ),
                         const SizedBox(width: 10),
                         IconButton(
