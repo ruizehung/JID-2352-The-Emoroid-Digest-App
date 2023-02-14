@@ -1,13 +1,13 @@
+import 'package:emoroid_digest_app/home/home.dart';
 import 'package:emoroid_digest_app/isar_service.dart';
 import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 
 final firestore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -21,15 +21,6 @@ Future<void> main() async {
   );
   IsarService.init();
   FirebaseAuth.instance.signInAnonymously();
-  // todo: Listen for update on last change
-  // CollectionReference reference = FirebaseFirestore.instance.collection('Visual Summaries');
-  // reference.snapshots().listen((querySnapshot) {
-  //   print(querySnapshot.docChanges.length);
-  //   for (var change in querySnapshot.docChanges) {
-  //     // Do something with change
-  //     print(change.doc.data());
-  //   }
-  // });
 
   runApp(const MyApp());
 }
@@ -76,9 +67,9 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _pageIndex = 1;
 
   final List<Widget> _widgetOptions = <Widget>[
-    VisualSummaryPage(),
-    Text('Index 1: Home'),
-    Text('Index 2: Podcasts'),
+    const VisualSummaryPage(),
+    const HomePage(),
+    const Text('Index 2: Podcasts'),
   ];
 
   @override
