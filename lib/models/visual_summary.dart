@@ -29,6 +29,7 @@ class VisualSummary {
   String? linkVisualInfographicSource;
   String? linkVisualInfographicThumbnailStorage;
   String? linkVisualInfographicThumbnailSource;
+  late bool downloadStatus = false;
   late bool read = false;
   late bool isFavorite = false;
 }
