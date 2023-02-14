@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import '../isar_service.dart';
 import '../models/visual_summary.dart';
@@ -58,6 +57,7 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
       }
       list.add(vs);
     }
+    list.sort((a, b) => -a.dateReleased.compareTo(b.dateReleased));
     return list;
   }
 
