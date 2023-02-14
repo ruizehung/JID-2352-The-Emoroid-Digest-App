@@ -25,6 +25,7 @@ class VisualSummaryDetailPage extends StatefulWidget {
 class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with LocalDocument {
   final double iconSize = 30;
   final double fieldFontSize = 16;
+  var _isDownloading = false;
   Future<File?> getVisualSummary(String fileName, String? fileType) async {
     if (fileType == null) {
       return null;
@@ -59,6 +60,15 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
         savedDir: filesToDownload[i],
       );
     }
+    setState(() {
+      widget.visualSummary.downloadStatus = true;
+    });
+    IsarService().saveVisualSummary(widget.visualSummary);
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      setState(() {
+        _isDownloading = false;
+      });
+    });
     return;
   }
 
@@ -78,6 +88,10 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
         print(error);
       }
     }
+    setState(() {
+      widget.visualSummary.downloadStatus = false;
+    });
+    IsarService().saveVisualSummary(widget.visualSummary);
   }
 
   Widget detailField(String title, String value) {
@@ -197,38 +211,41 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                           ),
                           iconSize: iconSize,
                         ),
-                        const SizedBox(width: 10),
-                        FutureBuilder(
-                            future: getVisualSummary(
-                                widget.visualSummary.title, widget.visualSummary.mimeTypeVisualSummary),
-                            builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
-                              if (snapshot.data == null) {
-                                return IconButton(
-                                  onPressed: () async {
-                                    downloadVisualSummary(
-                                        widget.visualSummary.linkVisualSummarySource,
-                                        widget.visualSummary.linkVisualSummaryThumbnailSource,
-                                        widget.visualSummary.title,
-                                        widget.visualSummary.mimeTypeVisualSummary,
-                                        widget.visualSummary.mimeTypeVisualSummaryThumbnail);
-                                  },
-                                  icon: const Icon(Icons.file_download_outlined),
-                                  iconSize: iconSize,
-                                );
-                              } else {
-                                return IconButton(
-                                  onPressed: () async {
-                                    deleteVisualSummary(
-                                        widget.visualSummary.title,
-                                        widget.visualSummary.mimeTypeVisualSummary,
-                                        widget.visualSummary.mimeTypeVisualSummaryThumbnail);
-                                  },
-                                  icon: const Icon(Icons.delete),
-                                  iconSize: iconSize,
-                                );
-                              }
-                            }),
-                        const SizedBox(width: 10),
+                        SizedBox(width: _isDownloading ? 21.5 : 10),
+                        if (_isDownloading == true)
+                          const SizedBox(
+                            child: CircularProgressIndicator(),
+                            height: 25.0,
+                            width: 25.0,
+                          ),
+                        if (widget.visualSummary.downloadStatus == false && _isDownloading == false)
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isDownloading = true;
+                              });
+                              downloadVisualSummary(
+                                  widget.visualSummary.linkVisualSummarySource,
+                                  widget.visualSummary.linkVisualSummaryThumbnailSource,
+                                  widget.visualSummary.title,
+                                  widget.visualSummary.mimeTypeVisualSummary,
+                                  widget.visualSummary.mimeTypeVisualSummaryThumbnail);
+                            },
+                            icon: const Icon(Icons.file_download_outlined),
+                            iconSize: iconSize,
+                          ),
+                        if (widget.visualSummary.downloadStatus == true && _isDownloading == false)
+                          IconButton(
+                            onPressed: () async {
+                              deleteVisualSummary(
+                                  widget.visualSummary.title,
+                                  widget.visualSummary.mimeTypeVisualSummary,
+                                  widget.visualSummary.mimeTypeVisualSummaryThumbnail);
+                            },
+                            icon: const Icon(Icons.delete),
+                            iconSize: iconSize,
+                          ),
+                        SizedBox(width: _isDownloading ? 21.5 : 10),
                         IconButton(
                           onPressed: () async {
                             final uri = Uri.parse(widget.visualSummary.linkOriginalManuscript);
