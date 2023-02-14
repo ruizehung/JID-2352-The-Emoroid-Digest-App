@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../isar_service.dart';
 import '../models/visual_summary.dart';
@@ -35,7 +35,10 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
       setState(() {
         isLoading = true;
       });
-      await syncVisualSummariesFromFirestore();
+      final connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult != ConnectivityResult.none) {
+        await syncVisualSummariesFromFirestore();
+      }
       setState(() {
         selectedKeywords = IsarService().getUniqueKeywords();
         isLoading = false;
@@ -44,8 +47,16 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
   }
 
   Future<List<VisualSummary>> _getFilteredVisualSummaries() async {
-    List<VisualSummary> list = [];
-    for (var vs in await IsarService().getAllVisualSummariesWithThumbnail()) {
+    List<VisualSummary> sourceList;
+    List<VisualSummary> toRender = [];
+
+    if (await (Connectivity().checkConnectivity()) == ConnectivityResult.none) {
+      sourceList = await IsarService().getDownloadedVisualSummaries();
+    } else {
+      sourceList = await IsarService().getVisualSummariesWithThumbnail();
+    }
+
+    for (var vs in sourceList) {
       if (selectedOrganSystem != null && !vs.organSystems.contains(selectedOrganSystem)) {
         continue;
       }
@@ -59,16 +70,16 @@ class _VisualSummaryPageState extends State<VisualSummaryPage> {
       if (selectedKeywords.intersection(vs.keywords.toSet()).isEmpty) {
         continue;
       }
-      if (selectRead != null && vs.read != selectRead) {
+      if (selectRead != null && vs.hasRead != selectRead) {
         continue;
       }
       if (selectFavorite != null && vs.isFavorite != selectFavorite) {
         continue;
       }
-      list.add(vs);
+      toRender.add(vs);
     }
-    list.sort((a, b) => -a.dateReleased.compareTo(b.dateReleased));
-    return list;
+    toRender.sort((a, b) => -a.dateReleased.compareTo(b.dateReleased));
+    return toRender;
   }
 
   void setVisualSummarySelected(VisualSummary? v) {
