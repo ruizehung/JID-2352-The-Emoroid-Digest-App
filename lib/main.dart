@@ -1,8 +1,11 @@
 import 'package:emoroid_digest_app/isar_service.dart';
 import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase.dart';
+import 'package:flutter_app_badger/flutter_app_badger.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,12 +14,22 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 final firestore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
+// Notifications
+Future<void> backgroundHandler(RemoteMessage message) async {
+  print('Handling a background message ${message.messageId}');
+}
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
+  // Notifications
+  await FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
   IsarService.init();
   FirebaseAuth.instance.signInAnonymously();
   // todo: Listen for update on last change
@@ -73,6 +86,11 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _pageIndex = 1;
 
+  // Notifications
+  String? mtoken = "";
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  int notificationCount = 0;
+
   final List<Widget> _widgetOptions = <Widget>[
     VisualSummaryPage(),
     Text('Index 1: Home'),
@@ -83,6 +101,94 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    // Notifications
+    requestPermission();
+    getToken();
+    initInfo();
+  }
+
+  // Notifications
+  void requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      // Look into this
+      print('User granted provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  // Notifications
+  void getToken() async {
+    await FirebaseMessaging.instance.getToken().then((token) {
+      setState(() {
+        mtoken = token;
+        print('My token is $mtoken');
+      });
+      saveToken(token!);
+    });
+  }
+
+  void saveToken(String token) async {
+    await FirebaseFirestore.instance.collection('User Tokens').doc('Test Device').set({
+      'token': token,
+    });
+  }
+
+  // Notifications
+  initInfo() {
+    var androidInitialize = const AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOSInitialize = const DarwinInitializationSettings();
+    var initializationSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+    flutterLocalNotificationsPlugin.initialize(initializationSettings,
+        onDidReceiveNotificationResponse: (NotificationResponse payload) async {
+      try {
+        if (payload != null) {
+        } else {}
+      } catch (e) {}
+      return;
+    });
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+      print('onMessage: ${message.notification?.title}/${message.notification?.body}');
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+
+      AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('dbfood', 'dbfood',
+          importance: Importance.max,
+          styleInformation: bigTextStyleInformation,
+          priority: Priority.max,
+          playSound: true);
+
+      NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
+      await flutterLocalNotificationsPlugin.show(
+          0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
+          payload: message.data['body']);
+
+      setState(() {
+        notificationCount++;
+      });
+    });
   }
 
   @override
@@ -125,13 +231,44 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.notifications),
-            tooltip: 'Notifications',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notifications clicked!')));
-            },
-          ),
+          // Notifications
+          Stack(children: <Widget>[
+            IconButton(
+                icon: const Icon(Icons.notifications),
+                tooltip: 'Notifications',
+                onPressed: () {
+                  setState(() {
+                    notificationCount = 0;
+                  });
+                  // Add functionality ---> Display Notifications
+                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notifications clicked!')));
+                }),
+            notificationCount != 0
+                ? Positioned(
+                    right: 11,
+                    top: 11,
+                    child: Container(
+                      padding: const EdgeInsets.all(2),
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 14,
+                        minHeight: 14,
+                      ),
+                      child: Text(
+                        '$notificationCount',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  )
+                : Container()
+          ]),
           IconButton(
             icon: const Icon(Icons.search),
             tooltip: 'Search',
