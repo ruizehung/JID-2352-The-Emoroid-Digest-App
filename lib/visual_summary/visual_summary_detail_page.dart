@@ -1,9 +1,16 @@
+import 'package:emoroid_digest_app/visual_summary/visual_summary_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:async';
+import 'dart:io';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import '../models/visual_summary.dart';
+
+import '../isar_service.dart';
 
 class VisualSummaryDetailPage extends StatefulWidget {
   const VisualSummaryDetailPage({super.key, required this.visualSummary, required this.setVisualSummarySelected});
@@ -15,9 +22,67 @@ class VisualSummaryDetailPage extends StatefulWidget {
   State<VisualSummaryDetailPage> createState() => _VisualSummaryDetailPageState();
 }
 
-class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
+class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with LocalDocument {
   final double iconSize = 30;
   final double fieldFontSize = 16;
+  var _isDownloading = false;
+  Future<File?> getVisualSummary(String linkVisualSummaryStorage) async {
+    final exists = await File((await getFilePath("$linkVisualSummaryStorage"))).exists();
+    if (!exists) {
+      return null;
+    }
+    return File((await getFilePath("$linkVisualSummaryStorage")));
+  }
+
+  Future<void> downloadVisualSummary(String linkVisualSummarySource, String linkVisualSummaryThumbnailSource,
+      String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
+    List<String> filesToDownload = [];
+    filesToDownload.add(await getFilePath("${linkVisualSummaryStorage.split("/").first}"));
+    filesToDownload.add(await getFilePath("${linkVisualSummaryThumbnailStorage.split("/").first}"));
+    for (var i = 0; i < filesToDownload.length; i++) {
+      final savedDir = Directory(filesToDownload[i]);
+      bool hasExisted = await savedDir.exists();
+      if (!hasExisted) {
+        await savedDir.create();
+      }
+      final taskId = await FlutterDownloader.enqueue(
+        url: i == 0 ? linkVisualSummarySource : linkVisualSummaryThumbnailSource,
+        fileName: i == 0
+            ? linkVisualSummaryStorage.substring(linkVisualSummaryStorage.indexOf('/'))
+            : linkVisualSummaryThumbnailStorage.substring(linkVisualSummaryThumbnailStorage.indexOf('/')),
+        savedDir: filesToDownload[i],
+      );
+    }
+    setState(() {
+      widget.visualSummary.downloadStatus = true;
+    });
+    IsarService().saveVisualSummary(widget.visualSummary);
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      setState(() {
+        _isDownloading = false;
+      });
+    });
+    return;
+  }
+
+  Future<void> deleteVisualSummary(String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
+    List<File> filesToDelete = [];
+    filesToDelete.add(File(await getFilePath("$linkVisualSummaryStorage")));
+    filesToDelete.add(File(await getFilePath("$linkVisualSummaryThumbnailStorage")));
+    for (var i = 0; i < filesToDelete.length; i++) {
+      try {
+        if (await filesToDelete[i].exists()) {
+          await filesToDelete[i].delete();
+        }
+      } catch (error) {
+        print(error);
+      }
+    }
+    setState(() {
+      widget.visualSummary.downloadStatus = false;
+    });
+    IsarService().saveVisualSummary(widget.visualSummary);
+  }
 
   Widget detailField(String title, String value) {
     return Column(
@@ -77,10 +142,24 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
               textAlign: TextAlign.center,
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
-            if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf")
-              SizedBox(height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!))
-            else
-              Image.network(widget.visualSummary.linkVisualSummarySource!),
+            FutureBuilder(
+                future: getVisualSummary(widget.visualSummary.linkVisualSummaryStorage!),
+                builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+                  if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf") {
+                    if (snapshot.data == null) {
+                      return SizedBox(
+                          height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!));
+                    } else {
+                      return SizedBox(height: 240, child: SfPdfViewer.file(snapshot.data!));
+                    }
+                  } else {
+                    if (snapshot.data == null) {
+                      return Image.network(widget.visualSummary.linkVisualSummarySource!);
+                    } else {
+                      return Image.file(snapshot.data!);
+                    }
+                  }
+                }),
             Padding(
                 padding: const EdgeInsets.only(left: 8, right: 8),
                 child: Column(
@@ -88,22 +167,70 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                     Row(
                       children: [
                         IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            setState(() {
+                              if (widget.visualSummary.read) {
+                                widget.visualSummary.read = false;
+                              } else {
+                                widget.visualSummary.read = true;
+                              }
+                            });
+                            IsarService().saveVisualSummary(widget.visualSummary);
+                          },
                           icon: Icon(
-                            CupertinoIcons.heart,
-                            color: Colors.black,
+                            CupertinoIcons.eye,
+                            color: widget.visualSummary.read ? Colors.green : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
-                          iconSize: iconSize,
                         ),
                         const SizedBox(width: 10),
                         IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.file_download_outlined),
-                          iconSize: iconSize,
+                          onPressed: () {
+                            setState(() {
+                              widget.visualSummary.isFavorite = !widget.visualSummary.isFavorite;
+                            });
+                            IsarService().saveVisualSummary(widget.visualSummary);
+                          },
+                          icon: Icon(
+                            widget.visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                            color: widget.visualSummary.isFavorite ? Colors.pink : Colors.black,
+                            size: iconSize,
+                            semanticLabel: 'Text to announce in accessibility modes',
+                          ),
                         ),
-                        const SizedBox(width: 10),
+                        SizedBox(width: _isDownloading ? 21.5 : 10),
+                        if (_isDownloading == true)
+                          const SizedBox(
+                            child: CircularProgressIndicator(),
+                            height: 25.0,
+                            width: 25.0,
+                          ),
+                        if (widget.visualSummary.downloadStatus == false && _isDownloading == false)
+                          IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _isDownloading = true;
+                              });
+                              downloadVisualSummary(
+                                  widget.visualSummary.linkVisualSummarySource!,
+                                  widget.visualSummary.linkVisualSummaryThumbnailSource!,
+                                  widget.visualSummary.linkVisualSummaryStorage!,
+                                  widget.visualSummary.linkVisualSummaryThumbnailStorage!);
+                            },
+                            icon: const Icon(Icons.file_download_outlined),
+                            iconSize: iconSize,
+                          ),
+                        if (widget.visualSummary.downloadStatus == true && _isDownloading == false)
+                          IconButton(
+                            onPressed: () async {
+                              deleteVisualSummary(widget.visualSummary.linkVisualSummaryStorage!,
+                                  widget.visualSummary.linkVisualSummaryThumbnailStorage!);
+                            },
+                            icon: const Icon(Icons.delete),
+                            iconSize: iconSize,
+                          ),
+                        SizedBox(width: _isDownloading ? 21.5 : 10),
                         IconButton(
                           onPressed: () async {
                             final uri = Uri.parse(widget.visualSummary.linkOriginalManuscript);
@@ -121,7 +248,23 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> {
                           onPressed: () {},
                           icon: const Icon(Icons.share_outlined),
                           iconSize: iconSize,
-                        )
+                        ),
+                        const SizedBox(width: 10),
+                        if (widget.visualSummary.linkTwitter != null)
+                          IconButton(
+                            //Button to jump to twitter for discussion
+                            onPressed: () async {
+                              final url = widget.visualSummary.linkTwitter.toString();
+                              final uri = Uri.parse(url);
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
+                              } else {
+                                throw "Could not launch $url";
+                              }
+                            },
+                            icon: const Icon(FontAwesomeIcons.twitter, color: Colors.blue),
+                            iconSize: iconSize,
+                          )
                       ],
                     ),
                     const SizedBox(

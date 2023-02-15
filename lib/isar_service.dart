@@ -17,11 +17,11 @@ class IsarService {
 
   IsarService._internal();
 
-  Future<void> saveLastUpdate(LastUpdate lastUpdate) async {
+  void saveLastUpdate(LastUpdate lastUpdate) {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }
 
-  Future<void> saveVisualSummary(VisualSummary visualSummary) async {
+  void saveVisualSummary(VisualSummary visualSummary) {
     _db.writeTxnSync<int>(() => _db.visualSummarys.putSync(visualSummary));
   }
 
