@@ -23,7 +23,7 @@ Future<void> syncVisualSummariesFromFirestore() async {
     QuerySnapshot querySnapshot = await collection.get();
     await Future.wait(querySnapshot.docs.map((doc) async {
       final data = (doc.data() as Map<String, dynamic>);
-      await IsarService().saveVisualSummary(VisualSummary()
+      IsarService().saveVisualSummary(VisualSummary()
         ..id = doc.id
         ..title = data['title']
         ..fellowAuthor = data['fellowAuthor']

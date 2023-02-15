@@ -1,8 +1,10 @@
+import 'package:emoroid_digest_app/visual_summary/visual_summary_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../models/visual_summary.dart';
+import 'dart:io';
 
-class Thumbnail extends StatelessWidget {
+class Thumbnail extends StatelessWidget with LocalDocument {
   const Thumbnail({
     Key? key,
     required this.visualSummary,
@@ -10,22 +12,44 @@ class Thumbnail extends StatelessWidget {
 
   final VisualSummary visualSummary;
 
+  Future<File?> getVisualSummaryThumb(String fileName) async {
+    final exists = await File((await getFilePath("$fileName"))).exists();
+    if (!exists) {
+      return null;
+    }
+    return File((await getFilePath("$fileName")));
+  }
+
   @override
   Widget build(BuildContext context) {
-    if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
-      return SizedBox(
-          height: 240.0,
-          child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!, enableDoubleTapZooming: false));
-    }
-    return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
-        loadingBuilder: (context, child, loadingProgress) {
-          if (loadingProgress == null) {
-            return child;
+    return FutureBuilder(
+        future: getVisualSummaryThumb(visualSummary.linkVisualSummaryThumbnailStorage!),
+        builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+          if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
+            if (snapshot.data == null) {
+              return SizedBox(
+                  height: 240.0,
+                  child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
+                      enableDoubleTapZooming: false));
+            } else {
+              return SizedBox(height: 240.0, child: SfPdfViewer.file(snapshot.data!, enableDoubleTapZooming: false));
+            }
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            if (snapshot.data == null) {
+              return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
+                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  });
+            } else {
+              return Image.file(snapshot.data!);
+            }
           }
         });
   }
