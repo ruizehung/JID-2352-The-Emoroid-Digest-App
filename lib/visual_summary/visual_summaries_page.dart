@@ -17,6 +17,7 @@ class VisualSummaryPage extends StatefulWidget {
 }
 
 class _VisualSummaryPageState extends State<VisualSummaryPage> {
+
   final double filterTitleFontSize = 20;
   bool isLoading = false;
   VisualSummary? visualSummarySelected;

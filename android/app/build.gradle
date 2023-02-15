@@ -54,6 +54,7 @@ android {
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -63,6 +64,10 @@ android {
             signingConfig signingConfigs.debug
         }
     }
+                                                                                                    
+    defaultConfig {                                                                                               
+        minSdkVersion 19                                                                                            
+    }                                                                                                             
 }
 
 flutter {
