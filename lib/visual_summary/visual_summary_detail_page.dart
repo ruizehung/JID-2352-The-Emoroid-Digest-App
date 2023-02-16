@@ -1,18 +1,15 @@
-import 'package:emoroid_digest_app/visual_summary/visual_summary_utils.dart';
+import 'package:dio/dio.dart';
+import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'dart:io';
-import 'package:path/path.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 
 import '../models/visual_summary.dart';
-
-import '../isar_service.dart';
+import '../utils/isar_service.dart';
 
 class VisualSummaryDetailPage extends StatefulWidget {
   const VisualSummaryDetailPage({super.key, required this.visualSummary, required this.setVisualSummarySelected});
@@ -24,53 +21,42 @@ class VisualSummaryDetailPage extends StatefulWidget {
   State<VisualSummaryDetailPage> createState() => _VisualSummaryDetailPageState();
 }
 
-class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with LocalDocument {
+class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with LocalFileSystem {
   final double iconSize = 30;
   final double fieldFontSize = 16;
   var _isDownloading = false;
-  Future<File> getVisualSummary(String linkVisualSummaryStorage) async {
-    final exists = await File((await getFilePath(linkVisualSummaryStorage))).exists();
-    if (!exists) {
-      return File('None');
-    }
-    return File((await getFilePath(linkVisualSummaryStorage)));
-  }
 
-  Future<void> downloadVisualSummary(String linkVisualSummarySource, String linkVisualSummaryThumbnailSource,
-      String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
-    List<String> filesToDownload = [];
-    filesToDownload.add(await getFilePath(linkVisualSummaryStorage.split("/").first));
-    filesToDownload.add(await getFilePath(linkVisualSummaryThumbnailStorage.split("/").first));
-    for (var i = 0; i < filesToDownload.length; i++) {
-      final savedDir = Directory(filesToDownload[i]);
-      bool hasExisted = await savedDir.exists();
-      if (!hasExisted) {
-        await savedDir.create();
-      }
-      await FlutterDownloader.enqueue(
-        url: i == 0 ? linkVisualSummarySource : linkVisualSummaryThumbnailSource,
-        fileName: i == 0
-            ? linkVisualSummaryStorage.substring(linkVisualSummaryStorage.indexOf('/'))
-            : linkVisualSummaryThumbnailStorage.substring(linkVisualSummaryThumbnailStorage.indexOf('/')),
-        savedDir: filesToDownload[i],
-      );
-    }
+  Future<void> downloadVisualSummary() async {
     setState(() {
-      widget.visualSummary.isDownloaded = true;
+      _isDownloading = true;
     });
-    IsarService().saveVisualSummary(widget.visualSummary);
-    Future.delayed(const Duration(milliseconds: 1500), () {
+    try {
+      await Dio().download(widget.visualSummary.linkVisualSummaryThumbnailSource!,
+          getFilePath(widget.visualSummary.linkVisualSummaryThumbnailStorage!));
+      await Dio().download(
+          widget.visualSummary.linkVisualSummarySource!, getFilePath(widget.visualSummary.linkVisualSummaryStorage!));
+      setState(() {
+        widget.visualSummary.isDownloaded = true;
+      });
+      IsarService().saveVisualSummary(widget.visualSummary);
+      print("Successfully downloaded visual summary ${widget.visualSummary.title}.");
+    } catch (e) {
+      print("Error downloading visual summary.\n\n" + e.toString());
+    } finally {
       setState(() {
         _isDownloading = false;
       });
-    });
-    return;
+    }
   }
 
-  Future<void> deleteVisualSummary(String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
+  Future<void> deleteVisualSummary() async {
+    setState(() {
+      widget.visualSummary.isDownloaded = false;
+    });
+    IsarService().saveVisualSummary(widget.visualSummary);
     List<File> filesToDelete = [];
-    filesToDelete.add(File(await getFilePath(linkVisualSummaryStorage)));
-    filesToDelete.add(File(await getFilePath(linkVisualSummaryThumbnailStorage)));
+    filesToDelete.add(File(getFilePath(widget.visualSummary.linkVisualSummaryStorage!)));
+    filesToDelete.add(File(getFilePath(widget.visualSummary.linkVisualSummaryThumbnailStorage!)));
     for (var i = 0; i < filesToDelete.length; i++) {
       try {
         if (await filesToDelete[i].exists()) {
@@ -80,10 +66,6 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
         print(error);
       }
     }
-    setState(() {
-      widget.visualSummary.isDownloaded = false;
-    });
-    IsarService().saveVisualSummary(widget.visualSummary);
   }
 
   Widget detailField(String title, String value) {
@@ -125,6 +107,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
 
   @override
   Widget build(BuildContext context) {
+    final localVisualSummary = File(getFilePath(widget.visualSummary.linkVisualSummaryStorage!));
     return SingleChildScrollView(
       child: Padding(
         padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
@@ -145,20 +128,25 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
               style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             FutureBuilder(
-                future: getVisualSummary(widget.visualSummary.linkVisualSummaryStorage!),
-                builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
+                future: localVisualSummary.exists(),
+                builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+                  if (snapshot.data == null) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                   if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf") {
-                    if (snapshot.data?.path == "None") {
+                    if (snapshot.data! == false) {
                       return SizedBox(
                           height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!));
                     } else {
-                      return SizedBox(height: 240, child: SfPdfViewer.file(snapshot.data!));
+                      return SizedBox(height: 240, child: SfPdfViewer.file(localVisualSummary));
                     }
                   } else {
-                    if (snapshot.data?.path == "None") {
+                    if (snapshot.data! == false) {
                       return Image.network(widget.visualSummary.linkVisualSummarySource!);
                     } else {
-                      return Image.file(snapshot.data!);
+                      return Image.file(localVisualSummary);
                     }
                   }
                 }),
@@ -204,21 +192,14 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         SizedBox(width: _isDownloading ? 21.5 : 10),
                         if (_isDownloading == true)
                           const SizedBox(
-                            child: CircularProgressIndicator(),
                             height: 25.0,
                             width: 25.0,
+                            child: CircularProgressIndicator(),
                           ),
                         if (widget.visualSummary.isDownloaded == false && _isDownloading == false)
                           IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _isDownloading = true;
-                              });
-                              downloadVisualSummary(
-                                  widget.visualSummary.linkVisualSummarySource!,
-                                  widget.visualSummary.linkVisualSummaryThumbnailSource!,
-                                  widget.visualSummary.linkVisualSummaryStorage!,
-                                  widget.visualSummary.linkVisualSummaryThumbnailStorage!);
+                            onPressed: () async {
+                              await downloadVisualSummary();
                             },
                             icon: const Icon(Icons.file_download_outlined),
                             iconSize: iconSize,
@@ -226,8 +207,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         if (widget.visualSummary.isDownloaded == true && _isDownloading == false)
                           IconButton(
                             onPressed: () async {
-                              deleteVisualSummary(widget.visualSummary.linkVisualSummaryStorage!,
-                                  widget.visualSummary.linkVisualSummaryThumbnailStorage!);
+                              await deleteVisualSummary();
                             },
                             icon: const Icon(Icons.delete),
                             iconSize: iconSize,

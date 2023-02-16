@@ -1,11 +1,9 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:emoroid_digest_app/visual_summary/visual_summary_card.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 import '../firebase.dart';
-import '../isar_service.dart';
+import '../utils/isar_service.dart';
 import '../models/visual_summary.dart';
 import '../visual_summary/visual_summary_detail_page.dart';
 

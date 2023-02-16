@@ -1,10 +1,10 @@
-import 'package:emoroid_digest_app/visual_summary/visual_summary_utils.dart';
+import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../models/visual_summary.dart';
 import 'dart:io';
 
-class VisualSummaryThumbnail extends StatelessWidget with LocalDocument {
+class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
   const VisualSummaryThumbnail({
     Key? key,
     required this.visualSummary,
@@ -12,19 +12,12 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalDocument {
 
   final VisualSummary visualSummary;
 
-  Future<File?> getVisualSummaryThumb(String fileName) async {
-    final exists = await File((await getFilePath(fileName))).exists();
-    if (!exists) {
-      return File("None");
-    }
-    return File((await getFilePath(fileName)));
-  }
-
   @override
   Widget build(BuildContext context) {
+    final localThumbnail = File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!));
     return FutureBuilder(
-        future: getVisualSummaryThumb(visualSummary.linkVisualSummaryThumbnailStorage!),
-        builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+        future: localThumbnail.exists(),
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.data == null) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -32,15 +25,15 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalDocument {
           }
 
           if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
-            if (snapshot.data!.path == "None") {
+            if (snapshot.data! == false) {
               return SizedBox(
                   height: 240.0,
                   child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
                       enableDoubleTapZooming: false));
             }
-            return SizedBox(height: 240.0, child: SfPdfViewer.file(snapshot.data!, enableDoubleTapZooming: false));
+            return SizedBox(height: 240.0, child: SfPdfViewer.file(localThumbnail, enableDoubleTapZooming: false));
           } else {
-            if (snapshot.data!.path == "None") {
+            if (snapshot.data! == false) {
               return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
                   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
                   loadingBuilder: (context, child, loadingProgress) {
@@ -53,7 +46,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalDocument {
                     }
                   });
             }
-            return Image.file(snapshot.data!);
+            return Image.file(localThumbnail);
           }
         });
   }
