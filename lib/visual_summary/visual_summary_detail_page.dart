@@ -1,6 +1,7 @@
 import 'package:emoroid_digest_app/visual_summary/visual_summary_utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -28,25 +29,25 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
   final double fieldFontSize = 16;
   var _isDownloading = false;
   Future<File> getVisualSummary(String linkVisualSummaryStorage) async {
-    final exists = await File((await getFilePath("$linkVisualSummaryStorage"))).exists();
+    final exists = await File((await getFilePath(linkVisualSummaryStorage))).exists();
     if (!exists) {
       return File('None');
     }
-    return File((await getFilePath("$linkVisualSummaryStorage")));
+    return File((await getFilePath(linkVisualSummaryStorage)));
   }
 
   Future<void> downloadVisualSummary(String linkVisualSummarySource, String linkVisualSummaryThumbnailSource,
       String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
     List<String> filesToDownload = [];
-    filesToDownload.add(await getFilePath("${linkVisualSummaryStorage.split("/").first}"));
-    filesToDownload.add(await getFilePath("${linkVisualSummaryThumbnailStorage.split("/").first}"));
+    filesToDownload.add(await getFilePath(linkVisualSummaryStorage.split("/").first));
+    filesToDownload.add(await getFilePath(linkVisualSummaryThumbnailStorage.split("/").first));
     for (var i = 0; i < filesToDownload.length; i++) {
       final savedDir = Directory(filesToDownload[i]);
       bool hasExisted = await savedDir.exists();
       if (!hasExisted) {
         await savedDir.create();
       }
-      final taskId = await FlutterDownloader.enqueue(
+      await FlutterDownloader.enqueue(
         url: i == 0 ? linkVisualSummarySource : linkVisualSummaryThumbnailSource,
         fileName: i == 0
             ? linkVisualSummaryStorage.substring(linkVisualSummaryStorage.indexOf('/'))
@@ -55,7 +56,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
       );
     }
     setState(() {
-      widget.visualSummary.downloadStatus = true;
+      widget.visualSummary.isDownloaded = true;
     });
     IsarService().saveVisualSummary(widget.visualSummary);
     Future.delayed(const Duration(milliseconds: 1500), () {
@@ -68,8 +69,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
 
   Future<void> deleteVisualSummary(String linkVisualSummaryStorage, String linkVisualSummaryThumbnailStorage) async {
     List<File> filesToDelete = [];
-    filesToDelete.add(File(await getFilePath("$linkVisualSummaryStorage")));
-    filesToDelete.add(File(await getFilePath("$linkVisualSummaryThumbnailStorage")));
+    filesToDelete.add(File(await getFilePath(linkVisualSummaryStorage)));
+    filesToDelete.add(File(await getFilePath(linkVisualSummaryThumbnailStorage)));
     for (var i = 0; i < filesToDelete.length; i++) {
       try {
         if (await filesToDelete[i].exists()) {
@@ -80,7 +81,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
       }
     }
     setState(() {
-      widget.visualSummary.downloadStatus = false;
+      widget.visualSummary.isDownloaded = false;
     });
     IsarService().saveVisualSummary(widget.visualSummary);
   }
@@ -170,17 +171,17 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         IconButton(
                           onPressed: () {
                             setState(() {
-                              if (widget.visualSummary.read) {
-                                widget.visualSummary.read = false;
+                              if (widget.visualSummary.hasRead) {
+                                widget.visualSummary.hasRead = false;
                               } else {
-                                widget.visualSummary.read = true;
+                                widget.visualSummary.hasRead = true;
                               }
                             });
                             IsarService().saveVisualSummary(widget.visualSummary);
                           },
                           icon: Icon(
                             CupertinoIcons.eye,
-                            color: widget.visualSummary.read ? Colors.green : Colors.black,
+                            color: widget.visualSummary.hasRead ? Colors.green : Colors.black,
                             size: iconSize,
                             semanticLabel: 'Text to announce in accessibility modes',
                           ),
@@ -207,7 +208,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             height: 25.0,
                             width: 25.0,
                           ),
-                        if (widget.visualSummary.downloadStatus == false && _isDownloading == false)
+                        if (widget.visualSummary.isDownloaded == false && _isDownloading == false)
                           IconButton(
                             onPressed: () {
                               setState(() {
@@ -222,7 +223,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             icon: const Icon(Icons.file_download_outlined),
                             iconSize: iconSize,
                           ),
-                        if (widget.visualSummary.downloadStatus == true && _isDownloading == false)
+                        if (widget.visualSummary.isDownloaded == true && _isDownloading == false)
                           IconButton(
                             onPressed: () async {
                               deleteVisualSummary(widget.visualSummary.linkVisualSummaryStorage!,
@@ -282,7 +283,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         widget.visualSummary.recordedPodcastTitle == null
                             ? "N/A"
                             : widget.visualSummary.recordedPodcastTitle!),
-                    detailField("Visual Summary Fellow Author", widget.visualSummary.fellowAuthor!),
+                    detailField("Visual Summary Fellow Author", widget.visualSummary.fellowAuthor),
                     detailField("Visual Summary Release Date",
                         "${widget.visualSummary.dateReleased.year.toString()}-${widget.visualSummary.dateReleased.month.toString().padLeft(2, '0')}-${widget.visualSummary.dateReleased.day.toString().padLeft(2, '0')}"),
                   ],
