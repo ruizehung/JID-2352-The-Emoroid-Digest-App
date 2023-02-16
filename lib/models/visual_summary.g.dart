@@ -22,120 +22,120 @@ const VisualSummarySchema = CollectionSchema(
       name: r'dateReleased',
       type: IsarType.dateTime,
     ),
-    r'downloadStatus': PropertySchema(
-      id: 1,
-      name: r'downloadStatus',
-      type: IsarType.bool,
-    ),
     r'fellowAuthor': PropertySchema(
-      id: 2,
+      id: 1,
       name: r'fellowAuthor',
       type: IsarType.string,
     ),
     r'giSocietyJournal': PropertySchema(
-      id: 3,
+      id: 2,
       name: r'giSocietyJournal',
       type: IsarType.stringList,
     ),
     r'guidelineAuthors': PropertySchema(
-      id: 4,
+      id: 3,
       name: r'guidelineAuthors',
       type: IsarType.stringList,
+    ),
+    r'hasRead': PropertySchema(
+      id: 4,
+      name: r'hasRead',
+      type: IsarType.bool,
     ),
     r'id': PropertySchema(
       id: 5,
       name: r'id',
       type: IsarType.string,
     ),
-    r'isFavorite': PropertySchema(
+    r'isDownloaded': PropertySchema(
       id: 6,
+      name: r'isDownloaded',
+      type: IsarType.bool,
+    ),
+    r'isFavorite': PropertySchema(
+      id: 7,
       name: r'isFavorite',
       type: IsarType.bool,
     ),
     r'keywords': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'keywords',
       type: IsarType.stringList,
     ),
     r'linkOriginalManuscript': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'linkOriginalManuscript',
       type: IsarType.string,
     ),
     r'linkTwitter': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'linkTwitter',
       type: IsarType.string,
     ),
     r'linkVisualInfographicSource': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'linkVisualInfographicSource',
       type: IsarType.string,
     ),
     r'linkVisualInfographicStorage': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'linkVisualInfographicStorage',
       type: IsarType.string,
     ),
     r'linkVisualInfographicThumbnailSource': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'linkVisualInfographicThumbnailSource',
       type: IsarType.string,
     ),
     r'linkVisualInfographicThumbnailStorage': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'linkVisualInfographicThumbnailStorage',
       type: IsarType.string,
     ),
     r'linkVisualSummarySource': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'linkVisualSummarySource',
       type: IsarType.string,
     ),
     r'linkVisualSummaryStorage': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'linkVisualSummaryStorage',
       type: IsarType.string,
     ),
     r'linkVisualSummaryThumbnailSource': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'linkVisualSummaryThumbnailSource',
       type: IsarType.string,
     ),
     r'linkVisualSummaryThumbnailStorage': PropertySchema(
-      id: 17,
+      id: 18,
       name: r'linkVisualSummaryThumbnailStorage',
       type: IsarType.string,
     ),
     r'mimeTypeVisualInfographic': PropertySchema(
-      id: 18,
+      id: 19,
       name: r'mimeTypeVisualInfographic',
       type: IsarType.string,
     ),
     r'mimeTypeVisualInfographicThumbnail': PropertySchema(
-      id: 19,
+      id: 20,
       name: r'mimeTypeVisualInfographicThumbnail',
       type: IsarType.string,
     ),
     r'mimeTypeVisualSummary': PropertySchema(
-      id: 20,
+      id: 21,
       name: r'mimeTypeVisualSummary',
       type: IsarType.string,
     ),
     r'mimeTypeVisualSummaryThumbnail': PropertySchema(
-      id: 21,
+      id: 22,
       name: r'mimeTypeVisualSummaryThumbnail',
       type: IsarType.string,
     ),
     r'organSystems': PropertySchema(
-      id: 22,
+      id: 23,
       name: r'organSystems',
       type: IsarType.stringList,
-    ),
-    r'read': PropertySchema(
-      id: 23,
-      name: r'read',
-      type: IsarType.bool,
     ),
     r'recordedPodcastTitle': PropertySchema(
       id: 24,
@@ -304,29 +304,29 @@ void _visualSummarySerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeDateTime(offsets[0], object.dateReleased);
-  writer.writeBool(offsets[1], object.downloadStatus);
-  writer.writeString(offsets[2], object.fellowAuthor);
-  writer.writeStringList(offsets[3], object.giSocietyJournal);
-  writer.writeStringList(offsets[4], object.guidelineAuthors);
+  writer.writeString(offsets[1], object.fellowAuthor);
+  writer.writeStringList(offsets[2], object.giSocietyJournal);
+  writer.writeStringList(offsets[3], object.guidelineAuthors);
+  writer.writeBool(offsets[4], object.hasRead);
   writer.writeString(offsets[5], object.id);
-  writer.writeBool(offsets[6], object.isFavorite);
-  writer.writeStringList(offsets[7], object.keywords);
-  writer.writeString(offsets[8], object.linkOriginalManuscript);
-  writer.writeString(offsets[9], object.linkTwitter);
-  writer.writeString(offsets[10], object.linkVisualInfographicSource);
-  writer.writeString(offsets[11], object.linkVisualInfographicStorage);
-  writer.writeString(offsets[12], object.linkVisualInfographicThumbnailSource);
-  writer.writeString(offsets[13], object.linkVisualInfographicThumbnailStorage);
-  writer.writeString(offsets[14], object.linkVisualSummarySource);
-  writer.writeString(offsets[15], object.linkVisualSummaryStorage);
-  writer.writeString(offsets[16], object.linkVisualSummaryThumbnailSource);
-  writer.writeString(offsets[17], object.linkVisualSummaryThumbnailStorage);
-  writer.writeString(offsets[18], object.mimeTypeVisualInfographic);
-  writer.writeString(offsets[19], object.mimeTypeVisualInfographicThumbnail);
-  writer.writeString(offsets[20], object.mimeTypeVisualSummary);
-  writer.writeString(offsets[21], object.mimeTypeVisualSummaryThumbnail);
-  writer.writeStringList(offsets[22], object.organSystems);
-  writer.writeBool(offsets[23], object.read);
+  writer.writeBool(offsets[6], object.isDownloaded);
+  writer.writeBool(offsets[7], object.isFavorite);
+  writer.writeStringList(offsets[8], object.keywords);
+  writer.writeString(offsets[9], object.linkOriginalManuscript);
+  writer.writeString(offsets[10], object.linkTwitter);
+  writer.writeString(offsets[11], object.linkVisualInfographicSource);
+  writer.writeString(offsets[12], object.linkVisualInfographicStorage);
+  writer.writeString(offsets[13], object.linkVisualInfographicThumbnailSource);
+  writer.writeString(offsets[14], object.linkVisualInfographicThumbnailStorage);
+  writer.writeString(offsets[15], object.linkVisualSummarySource);
+  writer.writeString(offsets[16], object.linkVisualSummaryStorage);
+  writer.writeString(offsets[17], object.linkVisualSummaryThumbnailSource);
+  writer.writeString(offsets[18], object.linkVisualSummaryThumbnailStorage);
+  writer.writeString(offsets[19], object.mimeTypeVisualInfographic);
+  writer.writeString(offsets[20], object.mimeTypeVisualInfographicThumbnail);
+  writer.writeString(offsets[21], object.mimeTypeVisualSummary);
+  writer.writeString(offsets[22], object.mimeTypeVisualSummaryThumbnail);
+  writer.writeStringList(offsets[23], object.organSystems);
   writer.writeString(offsets[24], object.recordedPodcastTitle);
   writer.writeString(offsets[25], object.title);
   writer.writeLong(offsets[26], object.yearGuidelinePublished);
@@ -340,34 +340,34 @@ VisualSummary _visualSummaryDeserialize(
 ) {
   final object = VisualSummary();
   object.dateReleased = reader.readDateTime(offsets[0]);
-  object.downloadStatus = reader.readBool(offsets[1]);
-  object.fellowAuthor = reader.readString(offsets[2]);
-  object.giSocietyJournal = reader.readStringList(offsets[3]) ?? [];
-  object.guidelineAuthors = reader.readStringList(offsets[4]) ?? [];
+  object.fellowAuthor = reader.readString(offsets[1]);
+  object.giSocietyJournal = reader.readStringList(offsets[2]) ?? [];
+  object.guidelineAuthors = reader.readStringList(offsets[3]) ?? [];
+  object.hasRead = reader.readBool(offsets[4]);
   object.id = reader.readStringOrNull(offsets[5]);
-  object.isFavorite = reader.readBool(offsets[6]);
-  object.keywords = reader.readStringList(offsets[7]) ?? [];
-  object.linkOriginalManuscript = reader.readString(offsets[8]);
-  object.linkTwitter = reader.readStringOrNull(offsets[9]);
-  object.linkVisualInfographicSource = reader.readStringOrNull(offsets[10]);
-  object.linkVisualInfographicStorage = reader.readStringOrNull(offsets[11]);
+  object.isDownloaded = reader.readBool(offsets[6]);
+  object.isFavorite = reader.readBool(offsets[7]);
+  object.keywords = reader.readStringList(offsets[8]) ?? [];
+  object.linkOriginalManuscript = reader.readString(offsets[9]);
+  object.linkTwitter = reader.readStringOrNull(offsets[10]);
+  object.linkVisualInfographicSource = reader.readStringOrNull(offsets[11]);
+  object.linkVisualInfographicStorage = reader.readStringOrNull(offsets[12]);
   object.linkVisualInfographicThumbnailSource =
-      reader.readStringOrNull(offsets[12]);
-  object.linkVisualInfographicThumbnailStorage =
       reader.readStringOrNull(offsets[13]);
-  object.linkVisualSummarySource = reader.readStringOrNull(offsets[14]);
-  object.linkVisualSummaryStorage = reader.readStringOrNull(offsets[15]);
+  object.linkVisualInfographicThumbnailStorage =
+      reader.readStringOrNull(offsets[14]);
+  object.linkVisualSummarySource = reader.readStringOrNull(offsets[15]);
+  object.linkVisualSummaryStorage = reader.readStringOrNull(offsets[16]);
   object.linkVisualSummaryThumbnailSource =
-      reader.readStringOrNull(offsets[16]);
-  object.linkVisualSummaryThumbnailStorage =
       reader.readStringOrNull(offsets[17]);
-  object.mimeTypeVisualInfographic = reader.readStringOrNull(offsets[18]);
+  object.linkVisualSummaryThumbnailStorage =
+      reader.readStringOrNull(offsets[18]);
+  object.mimeTypeVisualInfographic = reader.readStringOrNull(offsets[19]);
   object.mimeTypeVisualInfographicThumbnail =
-      reader.readStringOrNull(offsets[19]);
-  object.mimeTypeVisualSummary = reader.readStringOrNull(offsets[20]);
-  object.mimeTypeVisualSummaryThumbnail = reader.readStringOrNull(offsets[21]);
-  object.organSystems = reader.readStringList(offsets[22]) ?? [];
-  object.read = reader.readBool(offsets[23]);
+      reader.readStringOrNull(offsets[20]);
+  object.mimeTypeVisualSummary = reader.readStringOrNull(offsets[21]);
+  object.mimeTypeVisualSummaryThumbnail = reader.readStringOrNull(offsets[22]);
+  object.organSystems = reader.readStringList(offsets[23]) ?? [];
   object.recordedPodcastTitle = reader.readStringOrNull(offsets[24]);
   object.title = reader.readString(offsets[25]);
   object.yearGuidelinePublished = reader.readLong(offsets[26]);
@@ -384,23 +384,23 @@ P _visualSummaryDeserializeProp<P>(
     case 0:
       return (reader.readDateTime(offset)) as P;
     case 1:
-      return (reader.readBool(offset)) as P;
-    case 2:
       return (reader.readString(offset)) as P;
+    case 2:
+      return (reader.readStringList(offset) ?? []) as P;
     case 3:
       return (reader.readStringList(offset) ?? []) as P;
     case 4:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readBool(offset)) as P;
     case 5:
       return (reader.readStringOrNull(offset)) as P;
     case 6:
       return (reader.readBool(offset)) as P;
     case 7:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readBool(offset)) as P;
     case 8:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 9:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readString(offset)) as P;
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
@@ -426,9 +426,9 @@ P _visualSummaryDeserializeProp<P>(
     case 21:
       return (reader.readStringOrNull(offset)) as P;
     case 22:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 23:
-      return (reader.readBool(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 24:
       return (reader.readStringOrNull(offset)) as P;
     case 25:
@@ -585,16 +585,6 @@ extension VisualSummaryQueryFilter
         includeLower: includeLower,
         upper: upper,
         includeUpper: includeUpper,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      downloadStatusEqualTo(bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'downloadStatus',
-        value: value,
       ));
     });
   }
@@ -1189,6 +1179,16 @@ extension VisualSummaryQueryFilter
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      hasReadEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasRead',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1336,6 +1336,16 @@ extension VisualSummaryQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'id',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
+      isDownloadedEqualTo(bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isDownloaded',
+        value: value,
       ));
     });
   }
@@ -4019,16 +4029,6 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> readEqualTo(
-      bool value) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'read',
-        value: value,
-      ));
-    });
-  }
-
   QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
       recordedPodcastTitleIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -4399,20 +4399,6 @@ extension VisualSummaryQuerySortBy
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByDownloadStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadStatus', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByDownloadStatusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadStatus', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       sortByFellowAuthor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.asc);
@@ -4426,6 +4412,18 @@ extension VisualSummaryQuerySortBy
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByHasRead() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasRead', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByHasReadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasRead', Sort.desc);
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -4435,6 +4433,20 @@ extension VisualSummaryQuerySortBy
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      sortByIsDownloaded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownloaded', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      sortByIsDownloadedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownloaded', Sort.desc);
     });
   }
 
@@ -4649,18 +4661,6 @@ extension VisualSummaryQuerySortBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByRead() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'read', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByReadDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'read', Sort.desc);
-    });
-  }
-
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       sortByRecordedPodcastTitle() {
     return QueryBuilder.apply(this, (query) {
@@ -4719,20 +4719,6 @@ extension VisualSummaryQuerySortThenBy
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByDownloadStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadStatus', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByDownloadStatusDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'downloadStatus', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       thenByFellowAuthor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.asc);
@@ -4746,6 +4732,18 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByHasRead() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasRead', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByHasReadDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasRead', Sort.desc);
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -4755,6 +4753,20 @@ extension VisualSummaryQuerySortThenBy
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      thenByIsDownloaded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownloaded', Sort.asc);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
+      thenByIsDownloadedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isDownloaded', Sort.desc);
     });
   }
 
@@ -4981,18 +4993,6 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByRead() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'read', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByReadDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'read', Sort.desc);
-    });
-  }
-
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       thenByRecordedPodcastTitle() {
     return QueryBuilder.apply(this, (query) {
@@ -5043,13 +5043,6 @@ extension VisualSummaryQueryWhereDistinct
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByDownloadStatus() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'downloadStatus');
-    });
-  }
-
   QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByFellowAuthor(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -5071,10 +5064,23 @@ extension VisualSummaryQueryWhereDistinct
     });
   }
 
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByHasRead() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hasRead');
+    });
+  }
+
   QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctById(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
+      distinctByIsDownloaded() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isDownloaded');
     });
   }
 
@@ -5211,12 +5217,6 @@ extension VisualSummaryQueryWhereDistinct
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByRead() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'read');
-    });
-  }
-
   QueryBuilder<VisualSummary, VisualSummary, QDistinct>
       distinctByRecordedPodcastTitle({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -5255,12 +5255,6 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, bool, QQueryOperations> downloadStatusProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'downloadStatus');
-    });
-  }
-
   QueryBuilder<VisualSummary, String, QQueryOperations> fellowAuthorProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'fellowAuthor');
@@ -5281,9 +5275,21 @@ extension VisualSummaryQueryProperty
     });
   }
 
+  QueryBuilder<VisualSummary, bool, QQueryOperations> hasReadProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hasRead');
+    });
+  }
+
   QueryBuilder<VisualSummary, String?, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<VisualSummary, bool, QQueryOperations> isDownloadedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isDownloaded');
     });
   }
 
@@ -5401,12 +5407,6 @@ extension VisualSummaryQueryProperty
       organSystemsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'organSystems');
-    });
-  }
-
-  QueryBuilder<VisualSummary, bool, QQueryOperations> readProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'read');
     });
   }
 

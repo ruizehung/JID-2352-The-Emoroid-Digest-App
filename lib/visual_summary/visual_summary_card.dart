@@ -38,7 +38,7 @@ class VisualSummaryCard extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 3,
-                        child: Thumbnail(visualSummary: visualSummary),
+                        child: VisualSummaryThumbnail(visualSummary: visualSummary),
                       )
                     ],
                   ),
@@ -81,7 +81,7 @@ class VisualSummaryCard extends StatelessWidget {
                                 padding: const EdgeInsets.all(0),
                                 icon: Icon(
                                   CupertinoIcons.eye,
-                                  color: visualSummary.read ? Colors.green : Colors.black,
+                                  color: visualSummary.hasRead ? Colors.green : Colors.black,
                                   size: iconSize,
                                 ),
                               ),
