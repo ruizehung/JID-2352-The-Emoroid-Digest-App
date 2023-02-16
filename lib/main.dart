@@ -34,15 +34,6 @@ Future<void> main() async {
 
   IsarService.init();
   FirebaseAuth.instance.signInAnonymously();
-  // todo: Listen for update on last change
-  // CollectionReference reference = FirebaseFirestore.instance.collection('Visual Summaries');
-  // reference.snapshots().listen((querySnapshot) {
-  //   print(querySnapshot.docChanges.length);
-  //   for (var change in querySnapshot.docChanges) {
-  //     // Do something with change
-  //     print(change.doc.data());
-  //   }
-  // });
 
   runApp(const MyApp());
 }
@@ -87,11 +78,9 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   int _pageIndex = 1;
-
-  // Notifications
-  String? mtoken = "";
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
   int notificationCount = 0;
+
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   final List<Widget> _widgetOptions = <Widget>[
     VisualSummaryPage(),
@@ -105,13 +94,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
 
     // Notifications
-    requestPermission();
-    getToken();
-    initInfo();
+    initNotification();
   }
 
   // Notifications
-  void requestPermission() async {
+  void initNotification() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
     NotificationSettings settings = await messaging.requestPermission(
@@ -131,30 +118,14 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     } else {
       print('User declined or has not accepted permission');
     }
-  }
 
-  // Notifications
-  void getToken() async {
-    await FirebaseMessaging.instance.getToken().then((token) {
-      setState(() {
-        mtoken = token;
-        print('My token is $mtoken');
-      });
-      saveToken(token!);
-    });
-  }
+    await messaging.subscribeToTopic("NewVisualSummary");
+    await messaging.subscribeToTopic("NewPodcast");
 
-  void saveToken(String token) async {
-    await FirebaseFirestore.instance.collection('User Tokens').doc('Test Device').set({
-      'token': token,
-    });
-  }
-
-  // Notifications
-  initInfo() {
     var androidInitialize = const AndroidInitializationSettings('@mipmap/ic_launcher');
     var iOSInitialize = const DarwinInitializationSettings();
     var initializationSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+
     flutterLocalNotificationsPlugin.initialize(initializationSettings,
         onDidReceiveNotificationResponse: (NotificationResponse payload) async {
       try {
@@ -182,6 +153,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
       NotificationDetails platformChannelSpecifics =
           NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
+
       await flutterLocalNotificationsPlugin.show(
           0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
           payload: message.data['body']);
