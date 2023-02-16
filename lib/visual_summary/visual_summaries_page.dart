@@ -1,6 +1,6 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import '../isar_service.dart';
+import '../utils/isar_service.dart';
 import '../models/visual_summary.dart';
 import 'visual_summary_card.dart';
 import 'package:emoroid_digest_app/firebase.dart';
@@ -17,7 +17,6 @@ class VisualSummaryPage extends StatefulWidget {
 }
 
 class _VisualSummaryPageState extends State<VisualSummaryPage> {
-
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;
