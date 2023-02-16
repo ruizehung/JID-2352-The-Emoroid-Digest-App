@@ -23,30 +23,36 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
               child: CircularProgressIndicator(),
             );
           }
-
-          if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
-            if (snapshot.data! == false) {
-              return SizedBox(
-                  height: 240.0,
-                  child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
-                      enableDoubleTapZooming: false));
+          try {
+            if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
+              if (snapshot.data! == false) {
+                return SizedBox(
+                    height: 240.0,
+                    child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
+                        enableDoubleTapZooming: false));
+              }
+              return SizedBox(height: 240.0, child: SfPdfViewer.file(localThumbnail, enableDoubleTapZooming: false));
+            } else {
+              if (snapshot.data! == false) {
+                return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
+                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
+                    loadingBuilder: (context, child, loadingProgress) {
+                      if (loadingProgress == null) {
+                        return child;
+                      } else {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                    });
+              }
+              return Image.file(localThumbnail);
             }
-            return SizedBox(height: 240.0, child: SfPdfViewer.file(localThumbnail, enableDoubleTapZooming: false));
-          } else {
-            if (snapshot.data! == false) {
-              return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
-                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
-                  loadingBuilder: (context, child, loadingProgress) {
-                    if (loadingProgress == null) {
-                      return child;
-                    } else {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                  });
-            }
-            return Image.file(localThumbnail);
+          } catch (e) {
+            print("Error loading thumbnail: " + e.toString());
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         });
   }
