@@ -17,6 +17,7 @@ class VisualSummaryPage extends StatefulWidget {
 }
 
 class _VisualSummaryPageState extends State<VisualSummaryPage> {
+
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;

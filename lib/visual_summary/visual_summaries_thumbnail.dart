@@ -15,7 +15,7 @@ class Thumbnail extends StatelessWidget with LocalDocument {
   Future<File?> getVisualSummaryThumb(String fileName) async {
     final exists = await File((await getFilePath("$fileName"))).exists();
     if (!exists) {
-      return null;
+      return File("None");
     }
     return File((await getFilePath("$fileName")));
   }
@@ -26,7 +26,7 @@ class Thumbnail extends StatelessWidget with LocalDocument {
         future: getVisualSummaryThumb(visualSummary.linkVisualSummaryThumbnailStorage!),
         builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
           if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
-            if (snapshot.data == null) {
+            if (snapshot.data?.path == "None") {
               return SizedBox(
                   height: 240.0,
                   child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
@@ -35,7 +35,7 @@ class Thumbnail extends StatelessWidget with LocalDocument {
               return SizedBox(height: 240.0, child: SfPdfViewer.file(snapshot.data!, enableDoubleTapZooming: false));
             }
           } else {
-            if (snapshot.data == null) {
+            if (snapshot.data?.path == "None") {
               return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
                   frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
                   loadingBuilder: (context, child, loadingProgress) {

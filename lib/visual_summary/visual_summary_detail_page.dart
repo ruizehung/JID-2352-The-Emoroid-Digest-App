@@ -7,6 +7,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
 import 'dart:io';
+import 'package:path/path.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 
 import '../models/visual_summary.dart';
 
@@ -26,10 +28,10 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
   final double iconSize = 30;
   final double fieldFontSize = 16;
   var _isDownloading = false;
-  Future<File?> getVisualSummary(String linkVisualSummaryStorage) async {
+  Future<File> getVisualSummary(String linkVisualSummaryStorage) async {
     final exists = await File((await getFilePath(linkVisualSummaryStorage))).exists();
     if (!exists) {
-      return null;
+      return File('None');
     }
     return File((await getFilePath(linkVisualSummaryStorage)));
   }
@@ -144,16 +146,16 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
             ),
             FutureBuilder(
                 future: getVisualSummary(widget.visualSummary.linkVisualSummaryStorage!),
-                builder: (BuildContext context, AsyncSnapshot<File?> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
                   if (widget.visualSummary.mimeTypeVisualSummary == "application/pdf") {
-                    if (snapshot.data == null) {
+                    if (snapshot.data?.path == "None") {
                       return SizedBox(
                           height: 240, child: SfPdfViewer.network(widget.visualSummary.linkVisualSummarySource!));
                     } else {
                       return SizedBox(height: 240, child: SfPdfViewer.file(snapshot.data!));
                     }
                   } else {
-                    if (snapshot.data == null) {
+                    if (snapshot.data?.path == "None") {
                       return Image.network(widget.visualSummary.linkVisualSummarySource!);
                     } else {
                       return Image.file(snapshot.data!);
