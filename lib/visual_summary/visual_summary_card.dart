@@ -38,7 +38,7 @@ class VisualSummaryCard extends StatelessWidget {
                       ),
                       Expanded(
                         flex: 3,
-                        child: Thumbnail(visualSummary: visualSummary),
+                        child: VisualSummaryThumbnail(visualSummary: visualSummary),
                       )
                     ],
                   ),
