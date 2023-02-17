@@ -15,14 +15,14 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
 
   final VisualSummary visualSummary;
 
-  Future<bool> downloadThumbnail() async {
-    String localThumbnail = await getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
-    var mimeType = "." + localThumbnail.split('.').last;
-    localThumbnail = localThumbnail.replaceAll(".png", ".jpg");
+  Future<bool> downloadAndCompressThumbnail() async {
+    String localThumbnailPath = getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+    var mimeType = ".${localThumbnailPath.split('.').last}";
+    localThumbnailPath = localThumbnailPath.replaceAll(".png", ".jpg");
     if (mimeType == ".pdf") {
       return false;
     }
-    if (await File(localThumbnail).exists()) {
+    if (await File(localThumbnailPath).exists()) {
       return true;
     }
     var tempPath = await getTempFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
@@ -35,12 +35,11 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
       final imageToJPG = ImageConvert.decodeImage(File(tempPath).readAsBytesSync())!;
       File(tempPath).writeAsBytesSync(ImageConvert.encodeJpg(imageToJPG));
     }
-    var result = await FlutterImageCompress.compressAndGetFile(
+    await FlutterImageCompress.compressAndGetFile(
       File(tempPath).absolute.path,
-      localThumbnail,
+      localThumbnailPath,
       quality: 1,
     );
-    File(tempPath).delete();
     return true;
   }
 
@@ -49,7 +48,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
     final localThumbnail =
         File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!).replaceAll(".png", ".jpg"));
     return FutureBuilder(
-        future: downloadThumbnail(),
+        future: downloadAndCompressThumbnail(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.data == null) {
             return const Center(
