@@ -31,8 +31,6 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
       _isDownloading = true;
     });
     try {
-      await Dio().download(widget.visualSummary.linkVisualSummaryThumbnailSource!,
-          getFilePath(widget.visualSummary.linkVisualSummaryThumbnailStorage!));
       await Dio().download(
           widget.visualSummary.linkVisualSummarySource!, getFilePath(widget.visualSummary.linkVisualSummaryStorage!));
       setState(() {
@@ -56,7 +54,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
     IsarService().saveVisualSummary(widget.visualSummary);
     List<File> filesToDelete = [];
     filesToDelete.add(File(getFilePath(widget.visualSummary.linkVisualSummaryStorage!)));
-    filesToDelete.add(File(getFilePath(widget.visualSummary.linkVisualSummaryThumbnailStorage!)));
+    //Keep loop here in case we want to delete multiple things in the future when we delete a summary
     for (var i = 0; i < filesToDelete.length; i++) {
       try {
         if (await filesToDelete[i].exists()) {
