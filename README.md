@@ -15,16 +15,16 @@ For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
 
-## Release Notes
-### Version 0.1.0:
-#### New Features
+# Release Notes
+## Version 0.1.0:
+### New Features
 * Browse visual summaries based on categories (like medical society, organ systems, keywords, and the year the guideline was released)
 * Download visual summaries for offline access
 * Mark visual summaries as read or unread and favorite
 * Navigate to the tweet for a particular visual summary
 * Receive notification when new visual summaries are available
 
-#### Bug Fixes
+### Bug Fixes
 N/A
 
 ---
