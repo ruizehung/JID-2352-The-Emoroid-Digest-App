@@ -1,15 +1,16 @@
 import 'package:emoroid_digest_app/home/home.dart';
-import 'package:emoroid_digest_app/isar_service.dart';
+import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+
+import 'utils/local_file.dart';
 
 final firestore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
@@ -43,7 +44,6 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await FlutterDownloader.initialize(debug: true, ignoreSsl: true);
   await Firebase.initializeApp(
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
@@ -54,6 +54,7 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   IsarService.init();
+  LocalFileSystem.init();
   FirebaseAuth.instance.signInAnonymously();
 
   runApp(const TheEmoroidDigestAppWrapper());
