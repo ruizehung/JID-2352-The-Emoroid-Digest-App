@@ -37,12 +37,6 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-		<string>UIInterfaceOrientationLandscapeLeft</string>
-		<string>UIInterfaceOrientationLandscapeRight</string>
-	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
@@ -54,23 +48,18 @@
 	<false/>
 	<key>io.flutter.embedded_views_preview</key>
 	<true/>
-	<key>UIBackgroundModes</key>
-    <array>
-        <string>remote-notification</string>
-    </array>
-</dict>
 	<key>NSAppTransportSecurity</key>
 	<dict>
-	<key>NSExceptionDomains</key>
-	<dict>
-		<key>www.med.emory.edu</key>
+		<key>NSExceptionDomains</key>
 		<dict>
-		<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
-		<true/>
+			<key>www.med.emory.edu</key>
+			<dict>
+				<key>NSTemporaryExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 		</dict>
-	</dict>
 	</dict>
 	<key>FDMaximumConcurrentTasks</key>
 	<integer>10</integer>
-	</dict>
+</dict>
 </plist>
