@@ -8,7 +8,16 @@ class LocalFileSystem {
     _localPath = (await getApplicationDocumentsDirectory()).path;
   }
 
+  Future<String> tempPath() async {
+    return (await getTemporaryDirectory()).path;
+  }
+
   String getFilePath(String fileName) {
     return '$_localPath/$fileName';
+  }
+
+  Future<String> getTempFilePath(String fileName) async {
+    String _tempPath = await tempPath();
+    return '$_tempPath/$fileName';
   }
 }

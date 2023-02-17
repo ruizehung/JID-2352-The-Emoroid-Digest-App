@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../models/visual_summary.dart';
 import 'dart:io';
+import 'package:dio/dio.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image/image.dart' as ImageConvert;
 
 class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
   const VisualSummaryThumbnail({
@@ -12,11 +15,41 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
 
   final VisualSummary visualSummary;
 
+  Future<bool> downloadThumbnail() async {
+    String localThumbnail = await getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+    var mimeType = "." + localThumbnail.split('.').last;
+    localThumbnail = localThumbnail.replaceAll(".png", ".jpg");
+    if (mimeType == ".pdf") {
+      return false;
+    }
+    if (await File(localThumbnail).exists()) {
+      return true;
+    }
+    var tempPath = await getTempFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+    try {
+      await Dio().download(visualSummary.linkVisualSummaryThumbnailSource!, tempPath);
+    } catch (error) {
+      return false;
+    }
+    if (mimeType == ".png") {
+      final imageToJPG = ImageConvert.decodeImage(File(tempPath).readAsBytesSync())!;
+      File(tempPath).writeAsBytesSync(ImageConvert.encodeJpg(imageToJPG));
+    }
+    var result = await FlutterImageCompress.compressAndGetFile(
+      File(tempPath).absolute.path,
+      localThumbnail,
+      quality: 1,
+    );
+    File(tempPath).delete();
+    return true;
+  }
+
   @override
   Widget build(BuildContext context) {
-    final localThumbnail = File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!));
+    final localThumbnail =
+        File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!).replaceAll(".png", ".jpg"));
     return FutureBuilder(
-        future: localThumbnail.exists(),
+        future: downloadThumbnail(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.data == null) {
             return const Center(
