@@ -18,6 +18,28 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 // Notifications
 Future<void> backgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
+
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+        message.notification!.body.toString(),
+        htmlFormatBigText: true,
+        contentTitle: message.notification!.title.toString(),
+        htmlFormatContentTitle: true,
+      );
+
+      AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('dbfood', 'dbfood',
+          importance: Importance.max,
+          styleInformation: bigTextStyleInformation,
+          priority: Priority.max,
+          playSound: true);
+
+      NotificationDetails platformChannelSpecifics =
+          NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
+
+      await flutterLocalNotificationsPlugin.show(
+          0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
+          payload: message.data['body']);
 }
 
 Future<void> main() async {
