@@ -5,7 +5,6 @@ import '../models/visual_summary.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image/image.dart' as ImageConvert;
 
 class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
   const VisualSummaryThumbnail({
@@ -18,7 +17,6 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
   Future<bool> downloadAndCompressThumbnail() async {
     String localThumbnailPath = getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
     var mimeType = ".${localThumbnailPath.split('.').last}";
-    localThumbnailPath = localThumbnailPath.replaceAll(".png", ".jpg");
     if (mimeType == ".pdf") {
       return false;
     }
@@ -31,13 +29,15 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
     } catch (error) {
       return false;
     }
-    if (mimeType == ".png") {
-      final imageToJPG = ImageConvert.decodeImage(File(tempPath).readAsBytesSync())!;
-      File(tempPath).writeAsBytesSync(ImageConvert.encodeJpg(imageToJPG));
+
+    if (!await File(localThumbnailPath).parent.exists()) {
+      File(localThumbnailPath).parent.create();
     }
+
     await FlutterImageCompress.compressAndGetFile(
       File(tempPath).absolute.path,
       localThumbnailPath,
+      format: mimeType == ".png" ? CompressFormat.png : CompressFormat.jpeg,
       quality: 1,
     );
     return true;
@@ -45,8 +45,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
 
   @override
   Widget build(BuildContext context) {
-    final localThumbnail =
-        File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!).replaceAll(".png", ".jpg"));
+    final localThumbnail = File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!));
     return FutureBuilder(
         future: downloadAndCompressThumbnail(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -55,36 +54,30 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
               child: CircularProgressIndicator(),
             );
           }
-          try {
-            if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
-              if (snapshot.data! == false) {
-                return SizedBox(
-                    height: 240.0,
-                    child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
-                        enableDoubleTapZooming: false));
-              }
-              return SizedBox(height: 240.0, child: SfPdfViewer.file(localThumbnail, enableDoubleTapZooming: false));
-            } else {
-              if (snapshot.data! == false) {
-                return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
-                    frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
-                    loadingBuilder: (context, child, loadingProgress) {
-                      if (loadingProgress == null) {
-                        return child;
-                      } else {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                    });
-              }
-              return Image.file(localThumbnail);
+
+          if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
+            if (snapshot.data! == false) {
+              return SizedBox(
+                  height: 240.0,
+                  child: SfPdfViewer.network(visualSummary.linkVisualSummaryThumbnailSource!,
+                      enableDoubleTapZooming: false));
             }
-          } catch (e) {
-            print("Error loading thumbnail: " + e.toString());
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
+            return SizedBox(height: 240.0, child: SfPdfViewer.file(localThumbnail, enableDoubleTapZooming: false));
+          } else {
+            if (snapshot.data! == false) {
+              return Image.network(visualSummary.linkVisualSummaryThumbnailSource!,
+                  frameBuilder: (context, child, frame, wasSynchronouslyLoaded) => child,
+                  loadingBuilder: (context, child, loadingProgress) {
+                    if (loadingProgress == null) {
+                      return child;
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                  });
+            }
+            return Image.file(localThumbnail);
           }
         });
   }
