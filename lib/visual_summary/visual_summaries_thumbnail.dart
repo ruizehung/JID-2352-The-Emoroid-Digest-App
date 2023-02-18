@@ -26,21 +26,34 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
       return true;
     }
     var tempPath = await getTempFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+    List<String> createDir = [];
+    createDir.add((await getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!.split("/")[0])));
+    createDir.add((await getTempFilePath(visualSummary.linkVisualSummaryThumbnailStorage!.split("/")[0])));
+    for (var i = 0; i < createDir.length; i++) {
+      bool hasExisted = await Directory(createDir[i]).exists();
+      if (!hasExisted) {
+        await Directory(createDir[i]).create();
+      }
+    }
     try {
       await Dio().download(visualSummary.linkVisualSummaryThumbnailSource!, tempPath);
     } catch (error) {
+      print("Error downloaded visual summary thumbnail ${visualSummary.title}.");
       return false;
     }
     if (mimeType == ".png") {
       final imageToJPG = ImageConvert.decodeImage(File(tempPath).readAsBytesSync())!;
       File(tempPath).writeAsBytesSync(ImageConvert.encodeJpg(imageToJPG));
     }
-    await FlutterImageCompress.compressAndGetFile(
-      File(tempPath).absolute.path,
-      localThumbnailPath,
-      quality: 1,
-    );
-    return true;
+    try {
+      var result = await FlutterImageCompress.compressAndGetFile(File(tempPath).absolute.path, localThumbnail,
+          quality: 1, format: CompressFormat.jpeg);
+      File(tempPath).delete();
+      return true;
+    } catch (error) {
+      print("Error compressing visual summary thumbnail ${visualSummary.title}.");
+    }
+    return false;
   }
 
   @override
