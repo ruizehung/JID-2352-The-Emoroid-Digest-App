@@ -4,13 +4,11 @@ import 'package:path_provider/path_provider.dart';
 
 class LocalFileSystem {
   static late String _localPath;
+  static late String _tempPath;
 
   static Future<void> init() async {
     _localPath = (await getApplicationDocumentsDirectory()).path;
-  }
-
-  Future<String> tempPath() async {
-    return (await getTemporaryDirectory()).path;
+    _tempPath = (await getTemporaryDirectory()).path;
   }
 
   Future<Directory?> externalPath() async {
@@ -22,7 +20,6 @@ class LocalFileSystem {
   }
 
   Future<String> getTempFilePath(String fileName) async {
-    String _tempPath = await tempPath();
     return '$_tempPath/$fileName';
   }
 
