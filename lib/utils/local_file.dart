@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
 class LocalFileSystem {
@@ -12,6 +13,10 @@ class LocalFileSystem {
     return (await getTemporaryDirectory()).path;
   }
 
+  Future<Directory?> externalPath() async {
+    return getExternalStorageDirectory();
+  }
+
   String getFilePath(String fileName) {
     return '$_localPath/$fileName';
   }
@@ -20,4 +25,9 @@ class LocalFileSystem {
     String _tempPath = await tempPath();
     return '$_tempPath/$fileName';
   }
+
+  // Future<String> getExternalPath(String fileName) async {
+  //   String _tempPath = (await externalPath()).path;
+  //   return '$_tempPath/$fileName';
+  // }
 }
