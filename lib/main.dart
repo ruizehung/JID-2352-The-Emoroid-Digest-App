@@ -1,6 +1,9 @@
-import 'package:emoroid_digest_app/home/home.dart';
+import 'package:emoroid_digest_app/pages/home.dart';
+import 'package:emoroid_digest_app/pages/notification_page.dart';
+import 'package:emoroid_digest_app/pages/search_page.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
-import 'package:emoroid_digest_app/visual_summary/visual_summaries_page.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summaries_list_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -21,25 +24,22 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
-      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-        message.notification!.body.toString(),
-        htmlFormatBigText: true,
-        contentTitle: message.notification!.title.toString(),
-        htmlFormatContentTitle: true,
-      );
+  BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
+    message.notification!.body.toString(),
+    htmlFormatBigText: true,
+    contentTitle: message.notification!.title.toString(),
+    htmlFormatContentTitle: true,
+  );
 
-      AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('dbfood', 'dbfood',
-          importance: Importance.max,
-          styleInformation: bigTextStyleInformation,
-          priority: Priority.max,
-          playSound: true);
+  AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('dbfood', 'dbfood',
+      importance: Importance.max, styleInformation: bigTextStyleInformation, priority: Priority.max, playSound: true);
 
-      NotificationDetails platformChannelSpecifics =
-          NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
+  NotificationDetails platformChannelSpecifics =
+      NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
 
-      await flutterLocalNotificationsPlugin.show(
-          0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
-          payload: message.data['body']);
+  await flutterLocalNotificationsPlugin.show(
+      0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
+      payload: message.data['body']);
 }
 
 Future<void> main() async {
@@ -102,14 +102,9 @@ class TheEmoroidDigestApp extends StatefulWidget {
 class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsBindingObserver {
   int _pageIndex = 1;
   int notificationCount = 0;
-
+  final navigatorKey = GlobalKey<NavigatorState>();
+  final visualSummaryNavigatorKey = GlobalKey<NavigatorState>();
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-  final List<Widget> _widgetOptions = <Widget>[
-    const VisualSummaryPage(),
-    const HomePage(),
-    const Text('Index 2: Podcasts'),
-  ];
 
   @override
   void initState() {
@@ -207,10 +202,106 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     }
   }
 
-  Future<void> _onNavButtonTapped(int index) async {
-    setState(() {
-      _pageIndex = index;
+  Future<void> _onSearchTapped() async {
+    String currentRoute = "";
+    Navigator.popUntil(navigatorKey.currentContext!, (route) {
+      currentRoute = route.settings.name!;
+      if (currentRoute.startsWith("/notification")) {
+        return false;
+      }
+      return true;
     });
+    if (currentRoute == "/search") return;
+    setState(() {
+      notificationCount = 0;
+    });
+    navigatorKey.currentState!.pushNamed("/search");
+  }
+
+  Future<void> _onNotificationTapped() async {
+    String currentRoute = "";
+    Navigator.popUntil(navigatorKey.currentContext!, (route) {
+      currentRoute = route.settings.name!;
+      if (currentRoute.startsWith("/search")) {
+        return false;
+      }
+      return true;
+    });
+    if (currentRoute == "/notification") return;
+    setState(() {
+      notificationCount = 0;
+    });
+    navigatorKey.currentState!.pushNamed("/notification");
+  }
+
+  Future<void> _onNavButtonTapped(int index) async {
+    if (index == _pageIndex) return;
+    setState(() => _pageIndex = index);
+    switch (index) {
+      case 0:
+        navigatorKey.currentState!.pushReplacementNamed("/visual-summary");
+        break;
+      case 1:
+        navigatorKey.currentState!.pushReplacementNamed("/home");
+        break;
+      case 2:
+        navigatorKey.currentState!.pushReplacementNamed("/podcast");
+        break;
+    }
+  }
+
+  Widget _buildBody() {
+    return WillPopScope(
+      onWillPop: () async {
+        navigatorKey.currentState!.maybePop();
+        return false;
+      },
+      child: Column(
+        children: [
+          Expanded(
+            child: Navigator(
+              key: navigatorKey,
+              initialRoute: "/home",
+              onGenerateRoute: (settings) {
+                Widget page;
+                switch (settings.name) {
+                  case "/home":
+                    page = const HomePage();
+                    break;
+                  case "/visual-summary":
+                    page = const VisualSummaryListPage();
+                    break;
+                  case "/visual-summary/detail":
+                    page = const VisualSummaryDetailPage();
+                    break;
+                  case "/podcast":
+                    page = const Text('Index 2: Podcasts');
+                    break;
+                  case "/podcast/detail":
+                    page = const Text('Index 2: Podcasts');
+                    break;
+                  case "/notification":
+                    page = const NotificationPage();
+                    break;
+                  case "/search":
+                    page = const SearchPage();
+                    break;
+                  default:
+                    page = Text('Unknown page: ${settings.name!}');
+                }
+
+                return PageRouteBuilder(
+                  pageBuilder: (context, __, ___) => page,
+                  transitionDuration: Duration.zero,
+                  reverseTransitionDuration: Duration.zero,
+                  settings: settings,
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -222,15 +313,10 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           // Notifications
           Stack(children: <Widget>[
             IconButton(
-                icon: const Icon(Icons.notifications),
-                tooltip: 'Notifications',
-                onPressed: () {
-                  setState(() {
-                    notificationCount = 0;
-                  });
-                  // Add functionality ---> Display Notifications
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Notifications clicked!')));
-                }),
+              icon: const Icon(Icons.notifications),
+              tooltip: 'Notifications',
+              onPressed: _onNotificationTapped,
+            ),
             notificationCount != 0
                 ? Positioned(
                     right: 11,
@@ -260,21 +346,13 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           IconButton(
             icon: const Icon(Icons.search),
             tooltip: 'Search',
-            onPressed: () {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Search clicked!')));
-            },
+            onPressed: _onSearchTapped,
           ),
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            _widgetOptions.elementAt(_pageIndex),
-          ],
-        ),
-      ),
+      body: _buildBody(),
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.image),
