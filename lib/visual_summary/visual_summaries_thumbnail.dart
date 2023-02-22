@@ -46,7 +46,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
       File(tempPath).writeAsBytesSync(ImageConvert.encodeJpg(imageToJPG));
     }
     try {
-      var result = await FlutterImageCompress.compressAndGetFile(File(tempPath).absolute.path, localThumbnail,
+      var result = await FlutterImageCompress.compressAndGetFile(File(tempPath).absolute.path, localThumbnailPath,
           quality: 1, format: CompressFormat.jpeg);
       File(tempPath).delete();
       return true;
