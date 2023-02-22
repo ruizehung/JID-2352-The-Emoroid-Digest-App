@@ -108,332 +108,365 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
 
   @override
   Widget build(BuildContext context) {
-    // TODO: add pull to refresh
-    // https://stackoverflow.com/questions/65682460/how-to-use-refreshindicator-to-update-futurebuilder-state
-    return Column(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(top: 10, left: 15),
-          child: SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                OutlinedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                  onPressed: () => showModalBottomSheet(
+    return RefreshIndicator(
+      onRefresh: () async {
+        final connectivityResult = await (Connectivity().checkConnectivity());
+        if (connectivityResult != ConnectivityResult.none) {
+          await syncVisualSummariesFromFirestore();
+        }
+        setState(() {});
+        await Future.delayed(const Duration(seconds: 1));
+      },
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 10, left: 15),
+            child: SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("Organ Systems"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final organSystems = IsarService().getUniqueOrganSystems().toList();
+                                      organSystems.sort();
+                                      organSystems.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: organSystems.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: organSystems[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedOrganSystem = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(organSystems[index]),
+                                          groupValue: selectedOrganSystem ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("Organ Systems"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("GI Society"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final societies = IsarService().getUniqueGISocietyJournal().toList();
+                                      societies.sort();
+                                      societies.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: societies.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: societies[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedGISocietyJournal = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(societies[index]),
+                                          groupValue: selectedGISocietyJournal ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("GI Society"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("Year Guideline Published"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final societies = IsarService()
+                                          .getUniqueYearGuidelinePublished()
+                                          .map((e) => e.toString())
+                                          .toList();
+                                      societies.sort((a, b) => b.compareTo(a));
+                                      societies.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: societies.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: societies[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedYearGuidelinePublished = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(societies[index]),
+                                          groupValue: selectedYearGuidelinePublished ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("Year Guideline Published"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
                       context: context,
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
-                            child: Column(
-                              children: [
-                                getModalBottomSheetTitle("Organ Systems"),
-                                Expanded(
-                                  child: StatefulBuilder(builder: (context, setListState) {
-                                    final organSystems = IsarService().getUniqueOrganSystems().toList();
-                                    organSystems.sort();
-                                    organSystems.insert(0, showAll);
-                                    return ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: organSystems.length,
-                                      itemBuilder: (context, index) => RadioListTile(
-                                        value: organSystems[index],
-                                        onChanged: (val) {
-                                          setState(() => setListState(() {
-                                                selectedOrganSystem = val != showAll ? val : null;
-                                              }));
-                                        },
-                                        activeColor: Colors.blue,
-                                        title: Text(organSystems[index]),
-                                        groupValue: selectedOrganSystem ?? showAll,
-                                        controlAffinity: ListTileControlAffinity.trailing,
+                            child: StatefulBuilder(builder: (context, setListState) {
+                              final keywords = IsarService().getUniqueKeywords().toList();
+                              keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
+                              return Column(
+                                children: [
+                                  getModalBottomSheetTitle("Keywords"),
+                                  SingleChildScrollView(
+                                    child: Row(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8, right: 8),
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() => setListState(() {
+                                                  selectedKeywords.addAll(IsarService().getUniqueKeywords());
+                                                }));
+                                          },
+                                          child: const Text(showAll),
+                                        ),
                                       ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ))),
-                  child: getFilterOutlinedButtonChild("Organ Systems"),
-                ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) => FractionallySizedBox(
-                            heightFactor: 1,
-                            child: Column(
-                              children: [
-                                getModalBottomSheetTitle("GI Society"),
-                                Expanded(
-                                  child: StatefulBuilder(builder: (context, setListState) {
-                                    final societies = IsarService().getUniqueGISocietyJournal().toList();
-                                    societies.sort();
-                                    societies.insert(0, showAll);
-                                    return ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: societies.length,
-                                      itemBuilder: (context, index) => RadioListTile(
-                                        value: societies[index],
-                                        onChanged: (val) {
-                                          setState(() => setListState(() {
-                                                selectedGISocietyJournal = val != showAll ? val : null;
-                                              }));
-                                        },
-                                        activeColor: Colors.blue,
-                                        title: Text(societies[index]),
-                                        groupValue: selectedGISocietyJournal ?? showAll,
-                                        controlAffinity: ListTileControlAffinity.trailing,
-                                      ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ))),
-                  child: getFilterOutlinedButtonChild("GI Society"),
-                ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) => FractionallySizedBox(
-                            heightFactor: 1,
-                            child: Column(
-                              children: [
-                                getModalBottomSheetTitle("Year Guideline Published"),
-                                Expanded(
-                                  child: StatefulBuilder(builder: (context, setListState) {
-                                    final societies = IsarService()
-                                        .getUniqueYearGuidelinePublished()
-                                        .map((e) => e.toString())
-                                        .toList();
-                                    societies.sort((a, b) => b.compareTo(a));
-                                    societies.insert(0, showAll);
-                                    return ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: societies.length,
-                                      itemBuilder: (context, index) => RadioListTile(
-                                        value: societies[index],
-                                        onChanged: (val) {
-                                          setState(() => setListState(() {
-                                                selectedYearGuidelinePublished = val != showAll ? val : null;
-                                              }));
-                                        },
-                                        activeColor: Colors.blue,
-                                        title: Text(societies[index]),
-                                        groupValue: selectedYearGuidelinePublished ?? showAll,
-                                        controlAffinity: ListTileControlAffinity.trailing,
-                                      ),
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ))),
-                  child: getFilterOutlinedButtonChild("Year Guideline Published"),
-                ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                  onPressed: () => showModalBottomSheet(
-                    context: context,
-                    builder: ((context) => FractionallySizedBox(
-                          heightFactor: 1,
-                          child: StatefulBuilder(builder: (context, setListState) {
-                            final keywords = IsarService().getUniqueKeywords().toList();
-                            keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
-                            return Column(
-                              children: [
-                                getModalBottomSheetTitle("Keywords"),
-                                SingleChildScrollView(
-                                  child: Row(children: [
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 8, right: 8),
-                                      child: OutlinedButton(
+                                      OutlinedButton(
                                         onPressed: () {
                                           setState(() => setListState(() {
-                                                selectedKeywords.addAll(IsarService().getUniqueKeywords());
+                                                selectedKeywords.clear();
                                               }));
                                         },
-                                        child: const Text(showAll),
+                                        child: const Text(clearAll),
+                                      ),
+                                    ]),
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: keywords.length,
+                                      itemBuilder: (context, index) => CheckboxListTile(
+                                        value: selectedKeywords.contains(keywords[index]),
+                                        onChanged: (val) {
+                                          setState(() => setListState(() {
+                                                if (val!) {
+                                                  selectedKeywords.add(keywords[index]);
+                                                } else {
+                                                  selectedKeywords.remove(keywords[index]);
+                                                }
+                                              }));
+                                        },
+                                        activeColor: Colors.blue,
+                                        title: Text(keywords[index]),
+                                        controlAffinity: ListTileControlAffinity.trailing,
                                       ),
                                     ),
-                                    OutlinedButton(
-                                      onPressed: () {
-                                        setState(() => setListState(() {
-                                              selectedKeywords.clear();
-                                            }));
-                                      },
-                                      child: const Text(clearAll),
-                                    ),
-                                  ]),
-                                ),
-                                Expanded(
-                                  child: ListView.builder(
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: keywords.length,
-                                    itemBuilder: (context, index) => CheckboxListTile(
-                                      value: selectedKeywords.contains(keywords[index]),
-                                      onChanged: (val) {
-                                        setState(() => setListState(() {
-                                              if (val!) {
-                                                selectedKeywords.add(keywords[index]);
-                                              } else {
-                                                selectedKeywords.remove(keywords[index]);
-                                              }
-                                            }));
-                                      },
-                                      activeColor: Colors.blue,
-                                      title: Text(keywords[index]),
-                                      controlAffinity: ListTileControlAffinity.trailing,
-                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          }),
-                        )),
+                                ],
+                              );
+                            }),
+                          )),
+                    ),
+                    child: getFilterOutlinedButtonChild("Keywords"),
                   ),
-                  child: getFilterOutlinedButtonChild("Keywords"),
-                ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) => FractionallySizedBox(
-                            heightFactor: 1,
-                            child: Column(
-                              children: [
-                                getModalBottomSheetTitle("Read"),
-                                Expanded(
-                                  child: StatefulBuilder(builder: (context, setListState) {
-                                    return ListView(
-                                      children: [
-                                        RadioListTile(
-                                          value: null,
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectRead = val;
-                                                }));
-                                          },
-                                          title: const Text(showAll),
-                                          groupValue: selectRead,
-                                        ),
-                                        RadioListTile(
-                                          value: true,
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectRead = val;
-                                                }));
-                                          },
-                                          title: const Text("Read"),
-                                          groupValue: selectRead,
-                                        ),
-                                        RadioListTile(
-                                          value: false,
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectRead = val;
-                                                }));
-                                          },
-                                          title: const Text("Not yet read"),
-                                          groupValue: selectRead,
-                                        ),
-                                      ],
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ))),
-                  child: getFilterOutlinedButtonChild("Read"),
-                ),
-                OutlinedButton(
-                  style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                  onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) => FractionallySizedBox(
-                            heightFactor: 1,
-                            child: Column(
-                              children: [
-                                getModalBottomSheetTitle("Favorite"),
-                                Expanded(
-                                  child: StatefulBuilder(builder: (context, setListState) {
-                                    return ListView(
-                                      children: [
-                                        RadioListTile(
-                                          value: null,
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectFavorite = val;
-                                                }));
-                                          },
-                                          title: const Text(showAll),
-                                          groupValue: selectFavorite,
-                                        ),
-                                        RadioListTile(
-                                          value: true,
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectFavorite = val;
-                                                }));
-                                          },
-                                          title: const Text("Favorite"),
-                                          groupValue: selectFavorite,
-                                        ),
-                                        RadioListTile(
-                                          value: false,
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectFavorite = val;
-                                                }));
-                                          },
-                                          title: const Text("Non-favorite"),
-                                          groupValue: selectFavorite,
-                                        ),
-                                      ],
-                                    );
-                                  }),
-                                ),
-                              ],
-                            ),
-                          ))),
-                  child: getFilterOutlinedButtonChild("Favorite"),
-                ),
-              ],
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("Read"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      return ListView(
+                                        children: [
+                                          RadioListTile(
+                                            value: null,
+                                            onChanged: (val) {
+                                              setState(() => setListState(() {
+                                                    selectRead = val;
+                                                  }));
+                                            },
+                                            title: const Text(showAll),
+                                            groupValue: selectRead,
+                                          ),
+                                          RadioListTile(
+                                            value: true,
+                                            onChanged: (val) {
+                                              setState(() => setListState(() {
+                                                    selectRead = val;
+                                                  }));
+                                            },
+                                            title: const Text("Read"),
+                                            groupValue: selectRead,
+                                          ),
+                                          RadioListTile(
+                                            value: false,
+                                            onChanged: (val) {
+                                              setState(() => setListState(() {
+                                                    selectRead = val;
+                                                  }));
+                                            },
+                                            title: const Text("Not yet read"),
+                                            groupValue: selectRead,
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("Read"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("Favorite"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      return ListView(
+                                        children: [
+                                          RadioListTile(
+                                            value: null,
+                                            onChanged: (val) {
+                                              setState(() => setListState(() {
+                                                    selectFavorite = val;
+                                                  }));
+                                            },
+                                            title: const Text(showAll),
+                                            groupValue: selectFavorite,
+                                          ),
+                                          RadioListTile(
+                                            value: true,
+                                            onChanged: (val) {
+                                              setState(() => setListState(() {
+                                                    selectFavorite = val;
+                                                  }));
+                                            },
+                                            title: const Text("Favorite"),
+                                            groupValue: selectFavorite,
+                                          ),
+                                          RadioListTile(
+                                            value: false,
+                                            onChanged: (val) {
+                                              setState(() => setListState(() {
+                                                    selectFavorite = val;
+                                                  }));
+                                            },
+                                            title: const Text("Non-favorite"),
+                                            groupValue: selectFavorite,
+                                          ),
+                                        ],
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("Favorite"),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        Flexible(
-            fit: FlexFit.loose,
-            child: FutureBuilder<List<VisualSummary>>(
-                future: _getFilteredVisualSummaries(),
-                builder: (BuildContext context, AsyncSnapshot<List<VisualSummary>> future) {
-                  if (isLoading || !future.hasData) {
-                    return const Center(child: CircularProgressIndicator());
-                  } else {
-                    return ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      cacheExtent: 999,
-                      itemCount: future.data!.length,
-                      itemBuilder: (context, index) => VisualSummaryCard(
-                        visualSummary: future.data![index],
-                      ),
-                    );
-                  }
-                })),
-      ],
+          Flexible(
+              fit: FlexFit.loose,
+              child: FutureBuilder<List<VisualSummary>>(
+                  future: _getFilteredVisualSummaries(),
+                  builder: (BuildContext context, AsyncSnapshot<List<VisualSummary>> future) {
+                    if (isLoading || !future.hasData) {
+                      return const Center(child: CircularProgressIndicator());
+                    } else {
+                      if (future.data!.isEmpty) {
+                        return SingleChildScrollView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          child: Column(
+                            children: const [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("No visual summaries available",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                  )),
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text("Download some visual summaries to have them available offline",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                  )),
+                            ],
+                          ),
+                        );
+                      }
+                      return ListView.builder(
+                        scrollDirection: Axis.vertical,
+                        cacheExtent: 999,
+                        itemCount: future.data!.length,
+                        itemBuilder: (context, index) => VisualSummaryCard(
+                          visualSummary: future.data![index],
+                        ),
+                      );
+                    }
+                  })),
+        ],
+      ),
     );
   }
 }
