@@ -34,6 +34,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
     try {
       await Dio().download(visualSummary.linkVisualSummaryThumbnailSource!, tempPath);
     } catch (error) {
+      print("Error downloaded visual summary thumbnail ${visualSummary.title}.");
       return false;
     }
 
