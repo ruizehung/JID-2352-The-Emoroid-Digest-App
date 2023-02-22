@@ -5,6 +5,7 @@ import '../../models/visual_summary.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image/image.dart' as ImageConvert;
 
 class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
   const VisualSummaryThumbnail({
@@ -16,6 +17,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
 
   Future<bool> downloadAndCompressThumbnail() async {
     String localThumbnailPath = getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+    localThumbnailPath = localThumbnailPath.replaceAll(".png", ".jpg");
     var mimeType = ".${localThumbnailPath.split('.').last}";
     if (mimeType == ".pdf") {
       return false;
@@ -24,6 +26,11 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
       return true;
     }
     var tempPath = await getTempFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+
+    if (!await File(tempPath).parent.exists()) {
+      File(tempPath).parent.create();
+    }
+
     try {
       await Dio().download(visualSummary.linkVisualSummaryThumbnailSource!, tempPath);
     } catch (error) {
@@ -34,19 +41,24 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
       File(localThumbnailPath).parent.create();
     }
 
-    await FlutterImageCompress.compressAndGetFile(
-      File(tempPath).absolute.path,
-      localThumbnailPath,
-      format: mimeType == ".png" ? CompressFormat.png : CompressFormat.jpeg,
-      quality: 1,
-    );
-
-    return true;
+    if (mimeType == ".png") {
+      final imageToJPG = ImageConvert.decodeImage(File(tempPath).readAsBytesSync())!;
+      File(tempPath).writeAsBytesSync(ImageConvert.encodeJpg(imageToJPG));
+    }
+    try {
+      await FlutterImageCompress.compressAndGetFile(File(tempPath).absolute.path, localThumbnailPath,
+          quality: 1, format: CompressFormat.jpeg);
+      File(tempPath).delete();
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final localThumbnail = File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!));
+    final localThumbnail =
+        File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!).replaceAll(".png", ".jpg"));
     return FutureBuilder(
         future: downloadAndCompressThumbnail(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
