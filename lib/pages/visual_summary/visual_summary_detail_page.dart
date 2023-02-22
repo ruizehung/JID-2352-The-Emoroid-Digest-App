@@ -1,3 +1,4 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/cupertino.dart';
@@ -148,7 +149,24 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         if (visualSummary.mimeTypeVisualSummary == "application/pdf") {
                           if (snapshot.data! == false) {
                             return SizedBox(
-                                height: 240, child: SfPdfViewer.network(visualSummary.linkVisualSummarySource!));
+                              height: 240,
+                              child: SfPdfViewer.network(
+                                visualSummary.linkVisualSummarySource!,
+                                onDocumentLoadFailed: (details) async {
+                                  if (await (Connectivity().checkConnectivity()) == ConnectivityResult.none) {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                          const SnackBar(content: Text("No internet connection. Failed to load PDF.")));
+                                    }
+                                  } else {
+                                    if (context.mounted) {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(SnackBar(content: Text(details.description)));
+                                    }
+                                  }
+                                },
+                              ),
+                            );
                           } else {
                             return SizedBox(height: 240, child: SfPdfViewer.file(localVisualSummary!));
                           }
