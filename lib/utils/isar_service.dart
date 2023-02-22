@@ -17,6 +17,10 @@ class IsarService {
 
   IsarService._internal();
 
+  VisualSummary? getVisualSummary(String id) {
+    return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
+  }
+
   void saveLastUpdate(LastUpdate lastUpdate) {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }

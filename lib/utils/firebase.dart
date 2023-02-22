@@ -5,7 +5,7 @@ import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 
-import 'utils/isar_service.dart';
+import 'isar_service.dart';
 
 Future<void> syncVisualSummariesFromFirestore() async {
   final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();

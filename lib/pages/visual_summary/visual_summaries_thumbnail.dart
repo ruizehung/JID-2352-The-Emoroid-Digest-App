@@ -1,7 +1,7 @@
 import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-import '../models/visual_summary.dart';
+import '../../models/visual_summary.dart';
 import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -40,6 +40,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
       format: mimeType == ".png" ? CompressFormat.png : CompressFormat.jpeg,
       quality: 1,
     );
+
     return true;
   }
 
