@@ -1,20 +1,24 @@
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../models/visual_summary.dart';
+import '../../models/visual_summary.dart';
 import 'visual_summaries_thumbnail.dart';
 
 class VisualSummaryCard extends StatelessWidget {
   final double iconSize = 25;
-  const VisualSummaryCard({super.key, required this.visualSummary, required this.setVisualSummarySelected});
+  const VisualSummaryCard({super.key, required this.visualSummary});
 
   final VisualSummary visualSummary;
-  final Function(VisualSummary? v) setVisualSummarySelected;
+  // final ValueChanged<String>? onPush;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          setVisualSummarySelected(visualSummary);
+          Navigator.of(context).pushNamed(
+            "/visual-summary/detail",
+            arguments: VisualSummaryDetailPageArguments(visualSummary.id!),
+          );
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8),
