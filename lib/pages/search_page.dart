@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+
 import '../../models/visual_summary.dart';
 import '../../utils/isar_service.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
