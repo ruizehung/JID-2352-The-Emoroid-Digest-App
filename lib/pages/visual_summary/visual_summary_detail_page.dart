@@ -212,7 +212,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 size: iconSize,
                                 semanticLabel: 'Text to announce in accessibility modes',
                               ),
-                            ),ß
+                            ),
                             SizedBox(width: _isLoading ? 21.5 : 10),
                             if (_isLoading == true)
                               const SizedBox(
