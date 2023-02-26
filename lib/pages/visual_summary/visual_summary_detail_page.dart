@@ -187,11 +187,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             IconButton(
                               onPressed: () {
                                 setState(() {
-                                  if (visualSummary.hasRead) {
-                                    visualSummary.hasRead = false;
-                                  } else {
-                                    visualSummary.hasRead = true;
-                                  }
+                                  visualSummary.hasRead = !visualSummary.hasRead;
                                 });
                                 IsarService().saveVisualSummary(visualSummary);
                               },
