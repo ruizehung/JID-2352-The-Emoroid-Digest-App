@@ -1,11 +1,45 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 
 import 'isar_service.dart';
+
+Future<void> syncPodcastsFromFirestore() async {
+  final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();
+  final podcastsLastUpdateTime = (lastUpdateCloud.data()!["podcasts"] as Timestamp).toDate();
+  var lastUpdateLocal = await IsarService().getLastUpdate();
+
+  if (lastUpdateLocal!.podcasts == null || lastUpdateLocal.podcasts!.compareTo(podcastsLastUpdateTime) < 0) {
+    CollectionReference collection = FirebaseFirestore.instance.collection('Podcasts');
+
+    // Get docs from collection reference
+    QuerySnapshot querySnapshot = await collection.get();
+    await Future.wait(querySnapshot.docs.map((doc) async {
+      final data = (doc.data() as Map<String, dynamic>);
+      IsarService().savePodcast(Podcast()
+        ..id = doc.id
+        ..title = data['title']
+        ..dateReleased = (data['date_released'] as Timestamp).toDate()
+        ..twitterPodcastLink = data['twitterPodcastLink']
+        ..guest = data['guest']
+        ..linkGuest = data['link_guest']
+        ..guidelineAuthors = (data['guidelineAuthors'] as List<dynamic>).cast<String>()
+        ..yearGuidelinePublished = data['yearGuidelinePublished']
+        ..giSocietyJournal = data['giSocietyJournal']
+        ..organSystems = (data['organSystems'] as List<dynamic>).cast<String>()
+        ..keywords = (data['keywords'] as List<dynamic>).cast<String>()
+        ..mediaUrl = data['media_url']
+        ..mediaStorage = data['media_storage']);
+    }));
+
+    lastUpdateLocal.podcasts = podcastsLastUpdateTime;
+    IsarService().saveLastUpdate(lastUpdateLocal);
+  }
+}
 
 Future<void> syncVisualSummariesFromFirestore() async {
   final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();
