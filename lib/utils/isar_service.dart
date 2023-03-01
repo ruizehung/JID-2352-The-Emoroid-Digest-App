@@ -1,4 +1,5 @@
 import 'package:emoroid_digest_app/models/last_update.dart';
+import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
 
@@ -21,12 +22,20 @@ class IsarService {
     return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
   }
 
+  Podcast? getPodcast(String id) {
+    return _db.podcasts.filter().idEqualTo(id).findFirstSync();
+  }
+
   void saveLastUpdate(LastUpdate lastUpdate) {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }
 
   void saveVisualSummary(VisualSummary visualSummary) {
     _db.writeTxnSync<int>(() => _db.visualSummarys.putSync(visualSummary));
+  }
+
+  void savePodcast(Podcast podcast) {
+    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
   }
 
   Future<LastUpdate?> getLastUpdate() async {
