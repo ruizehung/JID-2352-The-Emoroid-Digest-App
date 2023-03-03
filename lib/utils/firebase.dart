@@ -20,7 +20,7 @@ Future<void> syncPodcastsFromFirestore() async {
     QuerySnapshot querySnapshot = await collection.get();
     await Future.wait(querySnapshot.docs.map((doc) async {
       final data = (doc.data() as Map<String, dynamic>);
-      IsarService().savePodcast(Podcast()
+      Podcast p = Podcast()
         ..id = doc.id
         ..title = data['title']
         ..dateReleased = (data['date_released'] as Timestamp).toDate()
@@ -33,10 +33,14 @@ Future<void> syncPodcastsFromFirestore() async {
         ..organSystems = (data['organSystems'] as List<dynamic>).cast<String>()
         ..keywords = (data['keywords'] as List<dynamic>).cast<String>()
         ..mediaUrl = data['media_url']
-        ..mediaStorage = data['media_storage']);
+        ..mediaStorage = data['media_storage']
+        ..hasRead = false
+        ..isFavorite = false;
+
+      IsarService().savePodcast(p);
     }));
 
-    lastUpdateLocal.podcasts = podcastsLastUpdateTime;
+    // lastUpdateLocal.podcasts = podcastsLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);
   }
 }
