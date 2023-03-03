@@ -18,6 +18,8 @@ class Podcast {
   late List<String> keywords;
   String? mediaUrl;
   String? mediaStorage;
+  late bool hasRead = false;
+  late bool isFavorite = false;
 }
 
 /// FNV-1a 64bit hash algorithm optimized for Dart Strings

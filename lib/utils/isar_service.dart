@@ -35,7 +35,26 @@ class IsarService {
   }
 
   void savePodcast(Podcast podcast) {
-    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
+    try {
+      _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
+    } catch (test) {
+      print("Start");
+      print("");
+      print(podcast.id);
+      print(podcast.title);
+      print(podcast.dateReleased);
+      print(podcast.twitterPodcastLink);
+      print(podcast.guest);
+      print(podcast.linkGuest);
+      print(podcast.guidelineAuthors);
+      print(podcast.yearGuidelinePublished);
+      print(podcast.giSocietyJournal);
+      print(podcast.organSystems);
+      print(podcast.keywords);
+      print(podcast.hasRead);
+      print(podcast.isFavorite);
+      print(test);
+    }
   }
 
   Future<LastUpdate?> getLastUpdate() async {
@@ -47,6 +66,10 @@ class IsarService {
 
   Future<List<VisualSummary>> getVisualSummariesWithThumbnail() async {
     return await _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+  }
+
+  Future<List<Podcast>> getPodcasts() async {
+    return await _db.podcasts.filter().idIsNotNull().findAll();
   }
 
   Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
