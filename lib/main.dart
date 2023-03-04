@@ -286,6 +286,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                   case "/search":
                     page = const SearchPage();
                     break;
+                  // case "/about":
+                  //   page = const AboutPage();
+                  //   break;
                   default:
                     page = Text('Unknown page: ${settings.name!}');
                 }
@@ -306,6 +309,28 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
+    final TextStyle textStyle = theme.textTheme.bodyMedium!;
+    final List<Widget> aboutBoxChildren = <Widget>[
+      const SizedBox(height: 24),
+      RichText(
+        text: TextSpan(
+          children: <TextSpan>[
+            TextSpan(
+                style: textStyle,
+                text: "The Emoroid Digest App is a mobile app available on both iOS and Android platforms that allow"
+                    "users to access the visual summaries and podcasts released by The Emoroid Digest."
+                    "Users are able to view and download visual summaries and listen to podcasts. See "),
+            TextSpan(
+                style: textStyle.copyWith(color: theme.colorScheme.primary),
+                text:
+                    'https://med.emory.edu/departments/medicine/divisions/digestive-diseases/education/emoroid-digest.html'),
+            TextSpan(style: textStyle, text: ' for more info.'),
+          ],
+        ),
+      ),
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -373,15 +398,41 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
       ),
       drawer: Drawer(
         child: Column(children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 80),
-            child: TextButton(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut();
-              },
-              child: const Text("Sign out"),
-            ),
-          )
+          Container(
+              padding: const EdgeInsets.only(top: 80),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.question_mark,
+                  size: 20,
+                ),
+                title: const Text(
+                  "About",
+                  style: TextStyle(
+                    fontSize: 20,
+                  ),
+                ),
+                onTap: () async {
+                  Navigator.of(context).pop();
+                  showAboutDialog(
+                    context: context,
+                    applicationIcon: Image.asset(
+                      "assets/logo.png",
+                      width: 50,
+                      height: 50,
+                    ),
+                    applicationName: 'Emoroid Digest App',
+                    applicationVersion: 'April 2023',
+                    applicationLegalese: '\u{a9} 2023 The Emoroid Digest Team',
+                    children: aboutBoxChildren,
+                  );
+                },
+              )
+
+              // TextButton(
+              //   onPressed: () async {},
+              //   child: const Text("About"),
+              // ),
+              )
         ]),
       ),
     );
