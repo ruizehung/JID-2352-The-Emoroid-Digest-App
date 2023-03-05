@@ -34,7 +34,7 @@ Future<void> syncPodcastsFromFirestore() async {
         ..keywords = (data['keywords'] as List<dynamic>).cast<String>()
         ..mediaUrl = data['media_url']
         ..mediaStorage = data['media_storage']
-        ..hasRead = false
+        ..hasListened = false
         ..isFavorite = false;
 
       IsarService().savePodcast(p);

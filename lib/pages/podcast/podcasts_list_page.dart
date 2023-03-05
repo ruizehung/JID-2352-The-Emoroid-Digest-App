@@ -19,7 +19,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;
-  bool? selectRead;
+  bool? selectListened;
   bool? selectFavorite;
   Podcast? podcastSelected;
   String? selectedOrganSystem;
@@ -39,7 +39,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
         await syncPodcastsFromFirestore();
       }
       setState(() {
-        selectedKeywords = IsarService().getUniqueKeywords();
+        selectedKeywords = IsarService().getUniquePodcastsKeywords();
         isLoading = false;
       });
     });
@@ -55,6 +55,9 @@ class _PodcastListPageState extends State<PodcastListPage> {
       if (selectedOrganSystem != null && !p.organSystems.contains(selectedOrganSystem)) {
         continue;
       }
+      if (selectedGISocietyJournal != null && p.giSocietyJournal != selectedGISocietyJournal) {
+        continue;
+      }
       if (selectedYearGuidelinePublished != null &&
           p.yearGuidelinePublished != int.parse(selectedYearGuidelinePublished!)) {
         continue;
@@ -62,7 +65,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
       if (selectedKeywords.intersection(p.keywords.toSet()).isEmpty) {
         continue;
       }
-      if (selectRead != null && p.hasRead != selectRead) {
+      if (selectListened != null && p.hasListened != selectListened) {
         continue;
       }
       if (selectFavorite != null && p.isFavorite != selectFavorite) {
@@ -170,7 +173,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                   getModalBottomSheetTitle("GI Society"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService().getUniqueGISocietyJournal().toList();
+                                      final societies = IsarService().getUniquePodcastsGISocietyJournal().toList();
                                       societies.sort();
                                       societies.insert(0, showAll);
                                       return ListView.builder(
@@ -247,7 +250,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
                             child: StatefulBuilder(builder: (context, setListState) {
-                              final keywords = IsarService().getUniqueKeywords().toList();
+                              final keywords = IsarService().getUniquePodcastsKeywords().toList();
                               keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
                               return Column(
                                 children: [
@@ -259,7 +262,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                         child: OutlinedButton(
                                           onPressed: () {
                                             setState(() => setListState(() {
-                                                  selectedKeywords.addAll(IsarService().getUniqueKeywords());
+                                                  selectedKeywords.addAll(IsarService().getUniquePodcastsKeywords());
                                                 }));
                                           },
                                           child: const Text(showAll),
@@ -313,7 +316,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                               heightFactor: 1,
                               child: Column(
                                 children: [
-                                  getModalBottomSheetTitle("Read"),
+                                  getModalBottomSheetTitle("Listened"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
                                       return ListView(
@@ -322,31 +325,31 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                             value: null,
                                             onChanged: (val) {
                                               setState(() => setListState(() {
-                                                    selectRead = val;
+                                                    selectListened = val;
                                                   }));
                                             },
                                             title: const Text(showAll),
-                                            groupValue: selectRead,
+                                            groupValue: selectListened,
                                           ),
                                           RadioListTile(
                                             value: true,
                                             onChanged: (val) {
                                               setState(() => setListState(() {
-                                                    selectRead = val;
+                                                    selectListened = val;
                                                   }));
                                             },
-                                            title: const Text("Read"),
-                                            groupValue: selectRead,
+                                            title: const Text("Listened"),
+                                            groupValue: selectListened,
                                           ),
                                           RadioListTile(
                                             value: false,
                                             onChanged: (val) {
                                               setState(() => setListState(() {
-                                                    selectRead = val;
+                                                    selectListened = val;
                                                   }));
                                             },
-                                            title: const Text("Not yet read"),
-                                            groupValue: selectRead,
+                                            title: const Text("Not yet listen"),
+                                            groupValue: selectListened,
                                           ),
                                         ],
                                       );
@@ -355,7 +358,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                 ],
                               ),
                             ))),
-                    child: getFilterOutlinedButtonChild("Read"),
+                    child: getFilterOutlinedButtonChild("Listened"),
                   ),
                   OutlinedButton(
                     style: ButtonStyle(

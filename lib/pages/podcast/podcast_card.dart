@@ -8,7 +8,6 @@ class PodcastCard extends StatelessWidget {
   const PodcastCard({super.key, required this.podcast});
 
   final Podcast podcast;
-  // final ValueChanged<String>? onPush;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class PodcastCard extends StatelessWidget {
                         Expanded(
                           flex: 7,
                           child: Padding(
-                            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
+                            padding: const EdgeInsets.only(left: 8, right: 8, top: 8, bottom: 24),
                             child: Text(podcast.title,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 5,
@@ -79,8 +78,8 @@ class PodcastCard extends StatelessWidget {
                                   alignment: const Alignment(0, -1),
                                   padding: const EdgeInsets.all(0),
                                   icon: Icon(
-                                    CupertinoIcons.eye,
-                                    color: podcast.hasRead ? Colors.green : Colors.black,
+                                    CupertinoIcons.ear,
+                                    color: podcast.hasListened ? Colors.green : Colors.black,
                                     size: iconSize,
                                   ),
                                 ),

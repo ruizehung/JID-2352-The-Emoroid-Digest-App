@@ -39,7 +39,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
         await syncVisualSummariesFromFirestore();
       }
       setState(() {
-        selectedKeywords = IsarService().getUniqueKeywords();
+        selectedKeywords = IsarService().getUniqueVisualSummariesKeywords();
         isLoading = false;
       });
     });
@@ -177,7 +177,8 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   getModalBottomSheetTitle("GI Society"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService().getUniqueGISocietyJournal().toList();
+                                      final societies =
+                                          IsarService().getUniqueVisualSummariesGISocietyJournal().toList();
                                       societies.sort();
                                       societies.insert(0, showAll);
                                       return ListView.builder(
@@ -254,7 +255,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
                             child: StatefulBuilder(builder: (context, setListState) {
-                              final keywords = IsarService().getUniqueKeywords().toList();
+                              final keywords = IsarService().getUniqueVisualSummariesKeywords().toList();
                               keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
                               return Column(
                                 children: [
@@ -266,7 +267,8 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                         child: OutlinedButton(
                                           onPressed: () {
                                             setState(() => setListState(() {
-                                                  selectedKeywords.addAll(IsarService().getUniqueKeywords());
+                                                  selectedKeywords
+                                                      .addAll(IsarService().getUniqueVisualSummariesKeywords());
                                                 }));
                                           },
                                           child: const Text(showAll),
