@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
@@ -26,6 +28,8 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
   String? selectedGISocietyJournal;
   String? selectedYearGuidelinePublished;
   Set<String> selectedKeywords = {};
+  late StreamSubscription<ConnectivityResult> subscription;
+  ConnectivityResult connectivityStatus = ConnectivityResult.none;
 
   @override
   void initState() {
@@ -34,8 +38,12 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
       setState(() {
         isLoading = true;
       });
-      final connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult != ConnectivityResult.none) {
+      subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+        setState(() {
+          connectivityStatus = result;
+        });
+      });
+      if (connectivityStatus != ConnectivityResult.none) {
         await syncVisualSummariesFromFirestore();
       }
       setState(() {
@@ -49,7 +57,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
     List<VisualSummary> sourceList;
     List<VisualSummary> toRender = [];
 
-    if (await (Connectivity().checkConnectivity()) == ConnectivityResult.none) {
+    if (connectivityStatus == ConnectivityResult.none) {
       sourceList = await IsarService().getDownloadedVisualSummaries();
     } else {
       sourceList = await IsarService().getVisualSummariesWithThumbnail();
@@ -431,24 +439,32 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       if (future.data!.isEmpty) {
+                        String errorText;
+                        if (connectivityStatus == ConnectivityResult.none) {
+                          errorText =
+                              "No internet connection! Please download some visual summaries to have them available offline!\nOr, update your filters!";
+                        } else {
+                          errorText = "Please update your filters!";
+                        }
+
                         return SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
-                            children: const [
-                              SizedBox(
+                            children: [
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text("No visual summaries available",
+                              const Text("No visual summaries available",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
                                   )),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text("Download some visual summaries to have them available offline",
+                              Text(errorText,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   )),
                             ],
