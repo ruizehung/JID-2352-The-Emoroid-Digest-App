@@ -35,26 +35,7 @@ class IsarService {
   }
 
   void savePodcast(Podcast podcast) {
-    try {
-      _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
-    } catch (test) {
-      print("Start");
-      print("");
-      print(podcast.id);
-      print(podcast.title);
-      print(podcast.dateReleased);
-      print(podcast.twitterPodcastLink);
-      print(podcast.guest);
-      print(podcast.linkGuest);
-      print(podcast.guidelineAuthors);
-      print(podcast.yearGuidelinePublished);
-      print(podcast.giSocietyJournal);
-      print(podcast.organSystems);
-      print(podcast.keywords);
-      print(podcast.hasRead);
-      print(podcast.isFavorite);
-      print(test);
-    }
+    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
   }
 
   Future<LastUpdate?> getLastUpdate() async {
@@ -84,7 +65,7 @@ class IsarService {
     return set;
   }
 
-  Set<String> getUniqueGISocietyJournal() {
+  Set<String> getUniqueVisualSummariesGISocietyJournal() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.addAll(vs.giSocietyJournal);
@@ -92,10 +73,26 @@ class IsarService {
     return set;
   }
 
-  Set<String> getUniqueKeywords() {
+  Set<String> getUniquePodcastsGISocietyJournal() {
+    final set = <String>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.add(p.giSocietyJournal);
+    }
+    return set;
+  }
+
+  Set<String> getUniqueVisualSummariesKeywords() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.addAll(vs.keywords);
+    }
+    return set;
+  }
+
+  Set<String> getUniquePodcastsKeywords() {
+    final set = <String>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.addAll(p.keywords);
     }
     return set;
   }
@@ -111,7 +108,7 @@ class IsarService {
   static Future<Isar> _openDB() async {
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [VisualSummarySchema, LastUpdateSchema],
+        [VisualSummarySchema, PodcastSchema, LastUpdateSchema],
         inspector: true,
       );
     }

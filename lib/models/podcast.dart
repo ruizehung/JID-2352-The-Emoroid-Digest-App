@@ -18,7 +18,7 @@ class Podcast {
   late List<String> keywords;
   String? mediaUrl;
   String? mediaStorage;
-  late bool hasRead = false;
+  late bool hasListened = false;
   late bool isFavorite = false;
 }
 
