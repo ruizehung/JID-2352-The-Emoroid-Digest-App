@@ -37,48 +37,58 @@ const PodcastSchema = CollectionSchema(
       name: r'guidelineAuthors',
       type: IsarType.stringList,
     ),
-    r'id': PropertySchema(
+    r'hasListened': PropertySchema(
       id: 4,
+      name: r'hasListened',
+      type: IsarType.bool,
+    ),
+    r'id': PropertySchema(
+      id: 5,
       name: r'id',
       type: IsarType.string,
     ),
+    r'isFavorite': PropertySchema(
+      id: 6,
+      name: r'isFavorite',
+      type: IsarType.bool,
+    ),
     r'keywords': PropertySchema(
-      id: 5,
+      id: 7,
       name: r'keywords',
       type: IsarType.stringList,
     ),
     r'linkGuest': PropertySchema(
-      id: 6,
+      id: 8,
       name: r'linkGuest',
       type: IsarType.string,
     ),
     r'mediaStorage': PropertySchema(
-      id: 7,
+      id: 9,
       name: r'mediaStorage',
       type: IsarType.string,
     ),
     r'mediaUrl': PropertySchema(
-      id: 8,
+      id: 10,
       name: r'mediaUrl',
       type: IsarType.string,
     ),
     r'organSystems': PropertySchema(
-      id: 9,
+      id: 11,
       name: r'organSystems',
       type: IsarType.stringList,
     ),
     r'title': PropertySchema(
-      id: 10,
+      id: 12,
       name: r'title',
       type: IsarType.string,
     ),
     r'twitterPodcastLink': PropertySchema(
-      id: 11,
+      id: 13,
       name: r'twitterPodcastLink',
       type: IsarType.string,
     ),
     r'yearGuidelinePublished': PropertySchema(
-      id: 12,
+      id: 14,
       name: r'yearGuidelinePublished',
       type: IsarType.long,
     )
@@ -160,15 +170,17 @@ void _podcastSerialize(
   writer.writeString(offsets[1], object.giSocietyJournal);
   writer.writeString(offsets[2], object.guest);
   writer.writeStringList(offsets[3], object.guidelineAuthors);
-  writer.writeString(offsets[4], object.id);
-  writer.writeStringList(offsets[5], object.keywords);
-  writer.writeString(offsets[6], object.linkGuest);
-  writer.writeString(offsets[7], object.mediaStorage);
-  writer.writeString(offsets[8], object.mediaUrl);
-  writer.writeStringList(offsets[9], object.organSystems);
-  writer.writeString(offsets[10], object.title);
-  writer.writeString(offsets[11], object.twitterPodcastLink);
-  writer.writeLong(offsets[12], object.yearGuidelinePublished);
+  writer.writeBool(offsets[4], object.hasListened);
+  writer.writeString(offsets[5], object.id);
+  writer.writeBool(offsets[6], object.isFavorite);
+  writer.writeStringList(offsets[7], object.keywords);
+  writer.writeString(offsets[8], object.linkGuest);
+  writer.writeString(offsets[9], object.mediaStorage);
+  writer.writeString(offsets[10], object.mediaUrl);
+  writer.writeStringList(offsets[11], object.organSystems);
+  writer.writeString(offsets[12], object.title);
+  writer.writeString(offsets[13], object.twitterPodcastLink);
+  writer.writeLong(offsets[14], object.yearGuidelinePublished);
 }
 
 Podcast _podcastDeserialize(
@@ -182,15 +194,17 @@ Podcast _podcastDeserialize(
   object.giSocietyJournal = reader.readString(offsets[1]);
   object.guest = reader.readString(offsets[2]);
   object.guidelineAuthors = reader.readStringList(offsets[3]) ?? [];
-  object.id = reader.readStringOrNull(offsets[4]);
-  object.keywords = reader.readStringList(offsets[5]) ?? [];
-  object.linkGuest = reader.readString(offsets[6]);
-  object.mediaStorage = reader.readStringOrNull(offsets[7]);
-  object.mediaUrl = reader.readStringOrNull(offsets[8]);
-  object.organSystems = reader.readStringList(offsets[9]) ?? [];
-  object.title = reader.readString(offsets[10]);
-  object.twitterPodcastLink = reader.readString(offsets[11]);
-  object.yearGuidelinePublished = reader.readLong(offsets[12]);
+  object.hasListened = reader.readBool(offsets[4]);
+  object.id = reader.readStringOrNull(offsets[5]);
+  object.isFavorite = reader.readBool(offsets[6]);
+  object.keywords = reader.readStringList(offsets[7]) ?? [];
+  object.linkGuest = reader.readString(offsets[8]);
+  object.mediaStorage = reader.readStringOrNull(offsets[9]);
+  object.mediaUrl = reader.readStringOrNull(offsets[10]);
+  object.organSystems = reader.readStringList(offsets[11]) ?? [];
+  object.title = reader.readString(offsets[12]);
+  object.twitterPodcastLink = reader.readString(offsets[13]);
+  object.yearGuidelinePublished = reader.readLong(offsets[14]);
   return object;
 }
 
@@ -210,22 +224,26 @@ P _podcastDeserializeProp<P>(
     case 3:
       return (reader.readStringList(offset) ?? []) as P;
     case 4:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 5:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 6:
-      return (reader.readString(offset)) as P;
+      return (reader.readBool(offset)) as P;
     case 7:
-      return (reader.readStringOrNull(offset)) as P;
-    case 8:
-      return (reader.readStringOrNull(offset)) as P;
-    case 9:
       return (reader.readStringList(offset) ?? []) as P;
+    case 8:
+      return (reader.readString(offset)) as P;
+    case 9:
+      return (reader.readStringOrNull(offset)) as P;
     case 10:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 12:
+      return (reader.readString(offset)) as P;
+    case 13:
+      return (reader.readString(offset)) as P;
+    case 14:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -865,6 +883,16 @@ extension PodcastQueryFilter
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> hasListenedEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'hasListened',
+        value: value,
+      ));
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition> idIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
@@ -1006,6 +1034,16 @@ extension PodcastQueryFilter
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'id',
         value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> isFavoriteEqualTo(
+      bool value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'isFavorite',
+        value: value,
       ));
     });
   }
@@ -2296,6 +2334,18 @@ extension PodcastQuerySortBy on QueryBuilder<Podcast, Podcast, QSortBy> {
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByHasListened() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasListened', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByHasListenedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasListened', Sort.desc);
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterSortBy> sortById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -2305,6 +2355,18 @@ extension PodcastQuerySortBy on QueryBuilder<Podcast, Podcast, QSortBy> {
   QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByIsFavorite() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFavorite', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByIsFavoriteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFavorite', Sort.desc);
     });
   }
 
@@ -2420,6 +2482,18 @@ extension PodcastQuerySortThenBy
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByHasListened() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasListened', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByHasListenedDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'hasListened', Sort.desc);
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterSortBy> thenById() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.asc);
@@ -2429,6 +2503,18 @@ extension PodcastQuerySortThenBy
   QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByIdDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'id', Sort.desc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByIsFavorite() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFavorite', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByIsFavoriteDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'isFavorite', Sort.desc);
     });
   }
 
@@ -2547,10 +2633,22 @@ extension PodcastQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QDistinct> distinctByHasListened() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'hasListened');
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QDistinct> distinctById(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QDistinct> distinctByIsFavorite() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'isFavorite');
     });
   }
 
@@ -2642,9 +2740,21 @@ extension PodcastQueryProperty
     });
   }
 
+  QueryBuilder<Podcast, bool, QQueryOperations> hasListenedProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'hasListened');
+    });
+  }
+
   QueryBuilder<Podcast, String?, QQueryOperations> idProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'id');
+    });
+  }
+
+  QueryBuilder<Podcast, bool, QQueryOperations> isFavoriteProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'isFavorite');
     });
   }
 
