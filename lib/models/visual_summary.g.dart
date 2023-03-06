@@ -352,19 +352,14 @@ VisualSummary _visualSummaryDeserialize(
   object.linkTwitter = reader.readStringOrNull(offsets[10]);
   object.linkVisualInfographicSource = reader.readStringOrNull(offsets[11]);
   object.linkVisualInfographicStorage = reader.readStringOrNull(offsets[12]);
-  object.linkVisualInfographicThumbnailSource =
-      reader.readStringOrNull(offsets[13]);
-  object.linkVisualInfographicThumbnailStorage =
-      reader.readStringOrNull(offsets[14]);
+  object.linkVisualInfographicThumbnailSource = reader.readStringOrNull(offsets[13]);
+  object.linkVisualInfographicThumbnailStorage = reader.readStringOrNull(offsets[14]);
   object.linkVisualSummarySource = reader.readStringOrNull(offsets[15]);
   object.linkVisualSummaryStorage = reader.readStringOrNull(offsets[16]);
-  object.linkVisualSummaryThumbnailSource =
-      reader.readStringOrNull(offsets[17]);
-  object.linkVisualSummaryThumbnailStorage =
-      reader.readStringOrNull(offsets[18]);
+  object.linkVisualSummaryThumbnailSource = reader.readStringOrNull(offsets[17]);
+  object.linkVisualSummaryThumbnailStorage = reader.readStringOrNull(offsets[18]);
   object.mimeTypeVisualInfographic = reader.readStringOrNull(offsets[19]);
-  object.mimeTypeVisualInfographicThumbnail =
-      reader.readStringOrNull(offsets[20]);
+  object.mimeTypeVisualInfographicThumbnail = reader.readStringOrNull(offsets[20]);
   object.mimeTypeVisualSummary = reader.readStringOrNull(offsets[21]);
   object.mimeTypeVisualSummaryThumbnail = reader.readStringOrNull(offsets[22]);
   object.organSystems = reader.readStringList(offsets[23]) ?? [];
@@ -448,11 +443,9 @@ List<IsarLinkBase<dynamic>> _visualSummaryGetLinks(VisualSummary object) {
   return [];
 }
 
-void _visualSummaryAttach(
-    IsarCollection<dynamic> col, Id id, VisualSummary object) {}
+void _visualSummaryAttach(IsarCollection<dynamic> col, Id id, VisualSummary object) {}
 
-extension VisualSummaryQueryWhereSort
-    on QueryBuilder<VisualSummary, VisualSummary, QWhere> {
+extension VisualSummaryQueryWhereSort on QueryBuilder<VisualSummary, VisualSummary, QWhere> {
   QueryBuilder<VisualSummary, VisualSummary, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
@@ -460,10 +453,8 @@ extension VisualSummaryQueryWhereSort
   }
 }
 
-extension VisualSummaryQueryWhere
-    on QueryBuilder<VisualSummary, VisualSummary, QWhereClause> {
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdEqualTo(
-      Id isarId) {
+extension VisualSummaryQueryWhere on QueryBuilder<VisualSummary, VisualSummary, QWhereClause> {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(IdWhereClause.between(
         lower: isarId,
@@ -472,8 +463,7 @@ extension VisualSummaryQueryWhere
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause>
-      isarIdNotEqualTo(Id isarId) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdNotEqualTo(Id isarId) {
     return QueryBuilder.apply(this, (query) {
       if (query.whereSort == Sort.asc) {
         return query
@@ -495,8 +485,7 @@ extension VisualSummaryQueryWhere
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause>
-      isarIdGreaterThan(Id isarId, {bool include = false}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdGreaterThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.greaterThan(lower: isarId, includeLower: include),
@@ -504,9 +493,7 @@ extension VisualSummaryQueryWhere
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdLessThan(
-      Id isarId,
-      {bool include = false}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterWhereClause> isarIdLessThan(Id isarId, {bool include = false}) {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(
         IdWhereClause.lessThan(upper: isarId, includeUpper: include),
@@ -531,10 +518,8 @@ extension VisualSummaryQueryWhere
   }
 }
 
-extension VisualSummaryQueryFilter
-    on QueryBuilder<VisualSummary, VisualSummary, QFilterCondition> {
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      dateReleasedEqualTo(DateTime value) {
+extension VisualSummaryQueryFilter on QueryBuilder<VisualSummary, VisualSummary, QFilterCondition> {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> dateReleasedEqualTo(DateTime value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'dateReleased',
@@ -543,8 +528,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      dateReleasedGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> dateReleasedGreaterThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -557,8 +541,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      dateReleasedLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> dateReleasedLessThan(
     DateTime value, {
     bool include = false,
   }) {
@@ -571,8 +554,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      dateReleasedBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> dateReleasedBetween(
     DateTime lower,
     DateTime upper, {
     bool includeLower = true,
@@ -589,8 +571,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -603,8 +584,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -619,8 +599,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -635,8 +614,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -655,8 +633,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -669,8 +646,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -683,8 +659,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'fellowAuthor',
@@ -694,8 +670,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'fellowAuthor',
@@ -705,8 +681,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'fellowAuthor',
@@ -715,8 +690,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      fellowAuthorIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> fellowAuthorIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'fellowAuthor',
@@ -725,8 +699,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -739,8 +712,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -755,8 +727,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -771,8 +742,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -791,8 +761,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -805,8 +774,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -819,9 +787,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'giSocietyJournal',
@@ -831,9 +798,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'giSocietyJournal',
@@ -843,8 +809,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'giSocietyJournal',
@@ -853,8 +818,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalElementIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'giSocietyJournal',
@@ -863,8 +827,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalLengthEqualTo(int length) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'giSocietyJournal',
@@ -876,8 +839,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'giSocietyJournal',
@@ -889,8 +851,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'giSocietyJournal',
@@ -902,8 +863,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalLengthLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -918,8 +878,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalLengthGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -934,8 +893,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      giSocietyJournalLengthBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> giSocietyJournalLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -952,8 +910,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -966,8 +923,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -982,8 +938,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -998,8 +953,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1018,8 +972,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1032,8 +985,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1046,9 +998,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'guidelineAuthors',
@@ -1058,9 +1009,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'guidelineAuthors',
@@ -1070,8 +1020,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'guidelineAuthors',
@@ -1080,8 +1029,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsElementIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'guidelineAuthors',
@@ -1090,8 +1038,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsLengthEqualTo(int length) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'guidelineAuthors',
@@ -1103,8 +1050,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'guidelineAuthors',
@@ -1116,8 +1062,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'guidelineAuthors',
@@ -1129,8 +1074,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsLengthLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -1145,8 +1089,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsLengthGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -1161,8 +1104,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      guidelineAuthorsLengthBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> guidelineAuthorsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1179,8 +1121,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      hasReadEqualTo(bool value) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> hasReadEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'hasRead',
@@ -1197,8 +1138,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      idIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'id',
@@ -1219,8 +1159,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      idGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1269,8 +1208,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      idStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1296,8 +1234,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idContains(
-      String value,
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idContains(String value,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
@@ -1308,8 +1245,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idMatches(
-      String pattern,
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idMatches(String pattern,
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
@@ -1320,8 +1256,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      idIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'id',
@@ -1330,8 +1265,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      idIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> idIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'id',
@@ -1340,8 +1274,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      isDownloadedEqualTo(bool value) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> isDownloadedEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isDownloaded',
@@ -1350,8 +1283,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      isFavoriteEqualTo(bool value) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> isFavoriteEqualTo(bool value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isFavorite',
@@ -1360,8 +1292,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      isarIdEqualTo(Id value) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> isarIdEqualTo(Id value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'isarId',
@@ -1370,8 +1301,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      isarIdGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> isarIdGreaterThan(
     Id value, {
     bool include = false,
   }) {
@@ -1384,8 +1314,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      isarIdLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> isarIdLessThan(
     Id value, {
     bool include = false,
   }) {
@@ -1398,8 +1327,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      isarIdBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> isarIdBetween(
     Id lower,
     Id upper, {
     bool includeLower = true,
@@ -1416,8 +1344,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1430,8 +1357,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1446,8 +1372,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1462,8 +1387,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1482,8 +1406,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1496,8 +1419,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1510,8 +1432,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'keywords',
@@ -1521,8 +1443,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'keywords',
@@ -1532,8 +1454,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'keywords',
@@ -1542,8 +1463,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsElementIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'keywords',
@@ -1552,8 +1472,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsLengthEqualTo(int length) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'keywords',
@@ -1565,8 +1484,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'keywords',
@@ -1578,8 +1496,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'keywords',
@@ -1591,8 +1508,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsLengthLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -1607,8 +1523,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsLengthGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -1623,8 +1538,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      keywordsLengthBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> keywordsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -1641,8 +1555,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1655,8 +1568,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1671,8 +1583,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1687,8 +1598,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -1707,8 +1617,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1721,8 +1630,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1735,9 +1643,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkOriginalManuscript',
@@ -1747,9 +1654,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkOriginalManuscript',
@@ -1759,8 +1665,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkOriginalManuscript',
@@ -1769,8 +1674,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkOriginalManuscriptIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkOriginalManuscriptIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkOriginalManuscript',
@@ -1779,8 +1683,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkTwitter',
@@ -1788,8 +1691,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkTwitter',
@@ -1797,8 +1699,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1811,8 +1712,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1827,8 +1727,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1843,8 +1742,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -1863,8 +1761,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1877,8 +1774,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1891,8 +1787,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkTwitter',
@@ -1902,8 +1798,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkTwitter',
@@ -1913,8 +1809,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkTwitter',
@@ -1923,8 +1818,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkTwitterIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkTwitterIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkTwitter',
@@ -1933,8 +1827,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualInfographicSource',
@@ -1942,8 +1835,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualInfographicSource',
@@ -1951,8 +1843,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -1965,8 +1856,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1981,8 +1871,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -1997,8 +1886,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2017,8 +1905,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2031,8 +1918,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2045,9 +1931,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualInfographicSource',
@@ -2057,9 +1942,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualInfographicSource',
@@ -2069,8 +1953,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualInfographicSource',
@@ -2079,8 +1962,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicSourceIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualInfographicSource',
@@ -2089,8 +1971,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualInfographicStorage',
@@ -2098,8 +1979,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualInfographicStorage',
@@ -2107,8 +1987,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2121,8 +2000,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2137,8 +2015,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2153,8 +2030,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2173,8 +2049,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2187,8 +2062,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2201,9 +2075,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualInfographicStorage',
@@ -2213,9 +2086,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualInfographicStorage',
@@ -2225,8 +2097,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualInfographicStorage',
@@ -2235,8 +2106,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicStorageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualInfographicStorage',
@@ -2245,8 +2115,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualInfographicThumbnailSource',
@@ -2254,8 +2123,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualInfographicThumbnailSource',
@@ -2263,8 +2131,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2277,8 +2144,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2293,8 +2159,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2309,8 +2174,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2329,8 +2193,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2343,8 +2206,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2357,9 +2219,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualInfographicThumbnailSource',
@@ -2369,9 +2231,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualInfographicThumbnailSource',
@@ -2381,8 +2243,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualInfographicThumbnailSource',
@@ -2391,8 +2252,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailSourceIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualInfographicThumbnailSource',
@@ -2401,8 +2261,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualInfographicThumbnailStorage',
@@ -2410,8 +2269,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualInfographicThumbnailStorage',
@@ -2419,8 +2277,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2433,8 +2290,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2449,8 +2305,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2465,8 +2320,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2485,8 +2339,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2499,8 +2352,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2513,9 +2365,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualInfographicThumbnailStorage',
@@ -2525,9 +2377,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualInfographicThumbnailStorage',
@@ -2537,8 +2389,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualInfographicThumbnailStorage',
@@ -2547,8 +2398,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualInfographicThumbnailStorageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualInfographicThumbnailStorage',
@@ -2557,8 +2407,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualSummarySource',
@@ -2566,8 +2415,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualSummarySource',
@@ -2575,8 +2423,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2589,8 +2436,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2605,8 +2451,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2621,8 +2466,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2641,8 +2485,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2655,8 +2498,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2669,9 +2511,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualSummarySource',
@@ -2681,9 +2522,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualSummarySource',
@@ -2693,8 +2533,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualSummarySource',
@@ -2703,8 +2542,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummarySourceIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummarySourceIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualSummarySource',
@@ -2713,8 +2551,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualSummaryStorage',
@@ -2722,8 +2559,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualSummaryStorage',
@@ -2731,8 +2567,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2745,8 +2580,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2761,8 +2595,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2777,8 +2610,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2797,8 +2629,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2811,8 +2642,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2825,9 +2655,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualSummaryStorage',
@@ -2837,9 +2666,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualSummaryStorage',
@@ -2849,8 +2677,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualSummaryStorage',
@@ -2859,8 +2686,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryStorageIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryStorageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualSummaryStorage',
@@ -2869,8 +2695,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualSummaryThumbnailSource',
@@ -2878,8 +2703,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualSummaryThumbnailSource',
@@ -2887,8 +2711,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -2901,8 +2724,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2917,8 +2739,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -2933,8 +2754,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -2953,8 +2773,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2967,8 +2786,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -2981,9 +2799,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualSummaryThumbnailSource',
@@ -2993,9 +2811,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualSummaryThumbnailSource',
@@ -3005,8 +2823,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualSummaryThumbnailSource',
@@ -3015,8 +2832,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailSourceIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailSourceIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualSummaryThumbnailSource',
@@ -3025,8 +2841,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'linkVisualSummaryThumbnailStorage',
@@ -3034,8 +2849,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'linkVisualSummaryThumbnailStorage',
@@ -3043,8 +2857,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -3057,8 +2870,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3073,8 +2885,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3089,8 +2900,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -3109,8 +2919,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3123,8 +2932,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3137,9 +2945,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'linkVisualSummaryThumbnailStorage',
@@ -3149,9 +2957,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'linkVisualSummaryThumbnailStorage',
@@ -3161,8 +2969,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'linkVisualSummaryThumbnailStorage',
@@ -3171,8 +2978,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualSummaryThumbnailStorageIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> linkVisualSummaryThumbnailStorageIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkVisualSummaryThumbnailStorage',
@@ -3181,8 +2987,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'mimeTypeVisualInfographic',
@@ -3190,8 +2995,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'mimeTypeVisualInfographic',
@@ -3199,8 +3003,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -3213,8 +3016,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3229,8 +3031,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3245,8 +3046,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -3265,8 +3065,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3279,8 +3078,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3293,9 +3091,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'mimeTypeVisualInfographic',
@@ -3305,9 +3102,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'mimeTypeVisualInfographic',
@@ -3317,8 +3113,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'mimeTypeVisualInfographic',
@@ -3327,8 +3122,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'mimeTypeVisualInfographic',
@@ -3337,8 +3131,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'mimeTypeVisualInfographicThumbnail',
@@ -3346,8 +3139,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'mimeTypeVisualInfographicThumbnail',
@@ -3355,8 +3147,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -3369,8 +3160,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3385,8 +3175,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3401,8 +3190,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -3421,8 +3209,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3435,8 +3222,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3449,9 +3235,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailContains(
+      String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'mimeTypeVisualInfographicThumbnail',
@@ -3461,9 +3247,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'mimeTypeVisualInfographicThumbnail',
@@ -3473,8 +3259,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'mimeTypeVisualInfographicThumbnail',
@@ -3483,8 +3268,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualInfographicThumbnailIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualInfographicThumbnailIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'mimeTypeVisualInfographicThumbnail',
@@ -3493,8 +3277,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'mimeTypeVisualSummary',
@@ -3502,8 +3285,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'mimeTypeVisualSummary',
@@ -3511,8 +3293,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -3525,8 +3306,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3541,8 +3321,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3557,8 +3336,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -3577,8 +3355,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3591,8 +3368,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3605,8 +3381,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'mimeTypeVisualSummary',
@@ -3616,9 +3392,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'mimeTypeVisualSummary',
@@ -3628,8 +3403,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'mimeTypeVisualSummary',
@@ -3638,8 +3412,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'mimeTypeVisualSummary',
@@ -3648,8 +3421,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'mimeTypeVisualSummaryThumbnail',
@@ -3657,8 +3429,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'mimeTypeVisualSummaryThumbnail',
@@ -3666,8 +3437,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -3680,8 +3450,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3696,8 +3465,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3712,8 +3480,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -3732,8 +3499,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3746,8 +3512,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3760,9 +3525,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailContains(String value,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'mimeTypeVisualSummaryThumbnail',
@@ -3772,9 +3536,9 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailMatches(String pattern,
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'mimeTypeVisualSummaryThumbnail',
@@ -3784,8 +3548,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'mimeTypeVisualSummaryThumbnail',
@@ -3794,8 +3557,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      mimeTypeVisualSummaryThumbnailIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> mimeTypeVisualSummaryThumbnailIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'mimeTypeVisualSummaryThumbnail',
@@ -3804,8 +3566,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3818,8 +3579,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3834,8 +3594,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -3850,8 +3609,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -3870,8 +3628,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3884,8 +3641,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -3898,8 +3654,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'organSystems',
@@ -3909,8 +3665,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'organSystems',
@@ -3920,8 +3676,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'organSystems',
@@ -3930,8 +3685,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsElementIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'organSystems',
@@ -3940,8 +3694,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsLengthEqualTo(int length) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsLengthEqualTo(int length) {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'organSystems',
@@ -3953,8 +3706,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'organSystems',
@@ -3966,8 +3718,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.listLength(
         r'organSystems',
@@ -3979,8 +3730,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsLengthLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsLengthLessThan(
     int length, {
     bool include = false,
   }) {
@@ -3995,8 +3745,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsLengthGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsLengthGreaterThan(
     int length, {
     bool include = false,
   }) {
@@ -4011,8 +3760,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      organSystemsLengthBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> organSystemsLengthBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -4029,8 +3777,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleIsNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleIsNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNull(
         property: r'recordedPodcastTitle',
@@ -4038,8 +3785,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleIsNotNull() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleIsNotNull() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(const FilterCondition.isNotNull(
         property: r'recordedPodcastTitle',
@@ -4047,8 +3793,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleEqualTo(
     String? value, {
     bool caseSensitive = true,
   }) {
@@ -4061,8 +3806,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleGreaterThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -4077,8 +3821,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleLessThan(
     String? value, {
     bool include = false,
     bool caseSensitive = true,
@@ -4093,8 +3836,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleBetween(
     String? lower,
     String? upper, {
     bool includeLower = true,
@@ -4113,8 +3855,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -4127,8 +3868,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -4141,8 +3881,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleContains(String value,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'recordedPodcastTitle',
@@ -4152,8 +3892,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'recordedPodcastTitle',
@@ -4163,8 +3903,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'recordedPodcastTitle',
@@ -4173,8 +3912,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      recordedPodcastTitleIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> recordedPodcastTitleIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'recordedPodcastTitle',
@@ -4183,8 +3921,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleEqualTo(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -4197,8 +3934,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -4213,8 +3949,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -4229,8 +3964,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -4249,8 +3983,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleStartsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -4263,8 +3996,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleEndsWith(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -4277,8 +4009,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleContains(String value, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleContains(String value, bool bool,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'title',
@@ -4288,8 +4020,8 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleMatches(String pattern, {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleMatches(String pattern,
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'title',
@@ -4299,8 +4031,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleIsEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'title',
@@ -4309,8 +4040,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      titleIsNotEmpty() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> titleIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'title',
@@ -4319,8 +4049,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      yearGuidelinePublishedEqualTo(int value) {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> yearGuidelinePublishedEqualTo(int value) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'yearGuidelinePublished',
@@ -4329,8 +4058,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      yearGuidelinePublishedGreaterThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> yearGuidelinePublishedGreaterThan(
     int value, {
     bool include = false,
   }) {
@@ -4343,8 +4071,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      yearGuidelinePublishedLessThan(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> yearGuidelinePublishedLessThan(
     int value, {
     bool include = false,
   }) {
@@ -4357,8 +4084,7 @@ extension VisualSummaryQueryFilter
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      yearGuidelinePublishedBetween(
+  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition> yearGuidelinePublishedBetween(
     int lower,
     int upper, {
     bool includeLower = true,
@@ -4376,37 +4102,30 @@ extension VisualSummaryQueryFilter
   }
 }
 
-extension VisualSummaryQueryObject
-    on QueryBuilder<VisualSummary, VisualSummary, QFilterCondition> {}
+extension VisualSummaryQueryObject on QueryBuilder<VisualSummary, VisualSummary, QFilterCondition> {}
 
-extension VisualSummaryQueryLinks
-    on QueryBuilder<VisualSummary, VisualSummary, QFilterCondition> {}
+extension VisualSummaryQueryLinks on QueryBuilder<VisualSummary, VisualSummary, QFilterCondition> {}
 
-extension VisualSummaryQuerySortBy
-    on QueryBuilder<VisualSummary, VisualSummary, QSortBy> {
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByDateReleased() {
+extension VisualSummaryQuerySortBy on QueryBuilder<VisualSummary, VisualSummary, QSortBy> {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByDateReleased() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateReleased', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByDateReleasedDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByDateReleasedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateReleased', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByFellowAuthor() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByFellowAuthor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByFellowAuthorDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByFellowAuthorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.desc);
     });
@@ -4436,15 +4155,13 @@ extension VisualSummaryQuerySortBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByIsDownloaded() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByIsDownloaded() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isDownloaded', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByIsDownloadedDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByIsDownloadedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isDownloaded', Sort.desc);
     });
@@ -4456,22 +4173,19 @@ extension VisualSummaryQuerySortBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByIsFavoriteDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByIsFavoriteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isFavorite', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkOriginalManuscript() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkOriginalManuscript() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkOriginalManuscript', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkOriginalManuscriptDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkOriginalManuscriptDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkOriginalManuscript', Sort.desc);
     });
@@ -4483,193 +4197,163 @@ extension VisualSummaryQuerySortBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkTwitterDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkTwitterDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkTwitter', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicSource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicSource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicSource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicSourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicSourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicSource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicStorage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicStorageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailSource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicThumbnailSource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicThumbnailSource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailSourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicThumbnailSourceDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailSource', Sort.desc);
+      return query.addSortBy(r'linkVisualInfographicThumbnailSource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicThumbnailStorage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.asc);
+      return query.addSortBy(r'linkVisualInfographicThumbnailStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualInfographicThumbnailStorageDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.desc);
+      return query.addSortBy(r'linkVisualInfographicThumbnailStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummarySource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummarySource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummarySource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummarySourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummarySourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummarySource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummaryStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummaryStorage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummaryStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummaryStorageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummaryThumbnailSource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummaryThumbnailSource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailSource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummaryThumbnailSourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummaryThumbnailSourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailSource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummaryThumbnailStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummaryThumbnailStorage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualSummaryThumbnailStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByLinkVisualSummaryThumbnailStorageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualInfographic() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualInfographic() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographic', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualInfographicDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualInfographicDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographic', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualInfographicThumbnail() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualInfographicThumbnail() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographicThumbnail', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualInfographicThumbnailDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualInfographicThumbnailDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographicThumbnail', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualSummary() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualSummary() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummary', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualSummaryDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualSummaryDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummary', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualSummaryThumbnail() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualSummaryThumbnail() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummaryThumbnail', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByMimeTypeVisualSummaryThumbnailDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByMimeTypeVisualSummaryThumbnailDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummaryThumbnail', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByRecordedPodcastTitle() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByRecordedPodcastTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recordedPodcastTitle', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByRecordedPodcastTitleDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByRecordedPodcastTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recordedPodcastTitle', Sort.desc);
     });
@@ -4687,46 +4371,39 @@ extension VisualSummaryQuerySortBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByYearGuidelinePublished() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByYearGuidelinePublished() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'yearGuidelinePublished', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByYearGuidelinePublishedDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> sortByYearGuidelinePublishedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'yearGuidelinePublished', Sort.desc);
     });
   }
 }
 
-extension VisualSummaryQuerySortThenBy
-    on QueryBuilder<VisualSummary, VisualSummary, QSortThenBy> {
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByDateReleased() {
+extension VisualSummaryQuerySortThenBy on QueryBuilder<VisualSummary, VisualSummary, QSortThenBy> {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByDateReleased() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateReleased', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByDateReleasedDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByDateReleasedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateReleased', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByFellowAuthor() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByFellowAuthor() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByFellowAuthorDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByFellowAuthorDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'fellowAuthor', Sort.desc);
     });
@@ -4756,15 +4433,13 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByIsDownloaded() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIsDownloaded() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isDownloaded', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByIsDownloadedDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIsDownloadedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isDownloaded', Sort.desc);
     });
@@ -4776,8 +4451,7 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByIsFavoriteDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByIsFavoriteDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'isFavorite', Sort.desc);
     });
@@ -4795,15 +4469,13 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkOriginalManuscript() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkOriginalManuscript() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkOriginalManuscript', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkOriginalManuscriptDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkOriginalManuscriptDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkOriginalManuscript', Sort.desc);
     });
@@ -4815,193 +4487,163 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkTwitterDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkTwitterDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkTwitter', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicSource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicSource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicSource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicSourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicSourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicSource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicStorage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicStorageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailSource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicThumbnailSource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualInfographicThumbnailSource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailSourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicThumbnailSourceDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailSource', Sort.desc);
+      return query.addSortBy(r'linkVisualInfographicThumbnailSource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicThumbnailStorage() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.asc);
+      return query.addSortBy(r'linkVisualInfographicThumbnailStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualInfographicThumbnailStorageDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.desc);
+      return query.addSortBy(r'linkVisualInfographicThumbnailStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummarySource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummarySource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummarySource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummarySourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummarySourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummarySource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummaryStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummaryStorage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummaryStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummaryStorageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummaryThumbnailSource() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummaryThumbnailSource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailSource', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummaryThumbnailSourceDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummaryThumbnailSourceDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailSource', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummaryThumbnailStorage() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummaryThumbnailStorage() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailStorage', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualSummaryThumbnailStorageDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByLinkVisualSummaryThumbnailStorageDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummaryThumbnailStorage', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualInfographic() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualInfographic() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographic', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualInfographicDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualInfographicDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographic', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualInfographicThumbnail() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualInfographicThumbnail() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographicThumbnail', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualInfographicThumbnailDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualInfographicThumbnailDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualInfographicThumbnail', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualSummary() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualSummary() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummary', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualSummaryDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualSummaryDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummary', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualSummaryThumbnail() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualSummaryThumbnail() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummaryThumbnail', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByMimeTypeVisualSummaryThumbnailDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByMimeTypeVisualSummaryThumbnailDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'mimeTypeVisualSummaryThumbnail', Sort.desc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByRecordedPodcastTitle() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByRecordedPodcastTitle() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recordedPodcastTitle', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByRecordedPodcastTitleDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByRecordedPodcastTitleDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'recordedPodcastTitle', Sort.desc);
     });
@@ -5019,46 +4661,39 @@ extension VisualSummaryQuerySortThenBy
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByYearGuidelinePublished() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByYearGuidelinePublished() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'yearGuidelinePublished', Sort.asc);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByYearGuidelinePublishedDesc() {
+  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy> thenByYearGuidelinePublishedDesc() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'yearGuidelinePublished', Sort.desc);
     });
   }
 }
 
-extension VisualSummaryQueryWhereDistinct
-    on QueryBuilder<VisualSummary, VisualSummary, QDistinct> {
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByDateReleased() {
+extension VisualSummaryQueryWhereDistinct on QueryBuilder<VisualSummary, VisualSummary, QDistinct> {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByDateReleased() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dateReleased');
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByFellowAuthor(
-      {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByFellowAuthor({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'fellowAuthor', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByGiSocietyJournal() {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByGiSocietyJournal() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'giSocietyJournal');
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByGuidelineAuthors() {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByGuidelineAuthors() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'guidelineAuthors');
     });
@@ -5070,15 +4705,13 @@ extension VisualSummaryQueryWhereDistinct
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctById(
-      {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctById({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'id', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByIsDownloaded() {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByIsDownloaded() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'isDownloaded');
     });
@@ -5096,160 +4729,133 @@ extension VisualSummaryQueryWhereDistinct
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkOriginalManuscript({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkOriginalManuscript({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkOriginalManuscript',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkOriginalManuscript', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkTwitter(
-      {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkTwitter({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'linkTwitter', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicSource({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualInfographicSource(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicSource',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualInfographicSource', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicStorage({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualInfographicStorage(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicStorage',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualInfographicStorage', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicThumbnailSource(
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualInfographicThumbnailSource(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicThumbnailSource',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualInfographicThumbnailSource', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicThumbnailStorage(
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualInfographicThumbnailStorage(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicThumbnailStorage',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualInfographicThumbnailStorage', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualSummarySource({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualSummarySource({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualSummarySource',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualSummarySource', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualSummaryStorage({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualSummaryStorage(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualSummaryStorage',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualSummaryStorage', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualSummaryThumbnailSource({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualSummaryThumbnailSource(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualSummaryThumbnailSource',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualSummaryThumbnailSource', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualSummaryThumbnailStorage({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByLinkVisualSummaryThumbnailStorage(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualSummaryThumbnailStorage',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'linkVisualSummaryThumbnailStorage', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByMimeTypeVisualInfographic({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByMimeTypeVisualInfographic(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'mimeTypeVisualInfographic',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'mimeTypeVisualInfographic', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByMimeTypeVisualInfographicThumbnail(
-          {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByMimeTypeVisualInfographicThumbnail(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'mimeTypeVisualInfographicThumbnail',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'mimeTypeVisualInfographicThumbnail', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByMimeTypeVisualSummary({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByMimeTypeVisualSummary({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'mimeTypeVisualSummary',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'mimeTypeVisualSummary', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByMimeTypeVisualSummaryThumbnail({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByMimeTypeVisualSummaryThumbnail(
+      {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'mimeTypeVisualSummaryThumbnail',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'mimeTypeVisualSummaryThumbnail', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByOrganSystems() {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByOrganSystems() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'organSystems');
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByRecordedPodcastTitle({bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByRecordedPodcastTitle({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'recordedPodcastTitle',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'recordedPodcastTitle', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByTitle(
-      {bool caseSensitive = true}) {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByTitle({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'title', caseSensitive: caseSensitive);
     });
   }
 
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByYearGuidelinePublished() {
+  QueryBuilder<VisualSummary, VisualSummary, QDistinct> distinctByYearGuidelinePublished() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'yearGuidelinePublished');
     });
   }
 }
 
-extension VisualSummaryQueryProperty
-    on QueryBuilder<VisualSummary, VisualSummary, QQueryProperty> {
+extension VisualSummaryQueryProperty on QueryBuilder<VisualSummary, VisualSummary, QQueryProperty> {
   QueryBuilder<VisualSummary, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
     });
   }
 
-  QueryBuilder<VisualSummary, DateTime, QQueryOperations>
-      dateReleasedProperty() {
+  QueryBuilder<VisualSummary, DateTime, QQueryOperations> dateReleasedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'dateReleased');
     });
@@ -5261,15 +4867,13 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, List<String>, QQueryOperations>
-      giSocietyJournalProperty() {
+  QueryBuilder<VisualSummary, List<String>, QQueryOperations> giSocietyJournalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'giSocietyJournal');
     });
   }
 
-  QueryBuilder<VisualSummary, List<String>, QQueryOperations>
-      guidelineAuthorsProperty() {
+  QueryBuilder<VisualSummary, List<String>, QQueryOperations> guidelineAuthorsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'guidelineAuthors');
     });
@@ -5299,15 +4903,13 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, List<String>, QQueryOperations>
-      keywordsProperty() {
+  QueryBuilder<VisualSummary, List<String>, QQueryOperations> keywordsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'keywords');
     });
   }
 
-  QueryBuilder<VisualSummary, String, QQueryOperations>
-      linkOriginalManuscriptProperty() {
+  QueryBuilder<VisualSummary, String, QQueryOperations> linkOriginalManuscriptProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkOriginalManuscript');
     });
@@ -5319,99 +4921,85 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicSourceProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualInfographicSourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualInfographicSource');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicStorageProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualInfographicStorageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualInfographicStorage');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicThumbnailSourceProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualInfographicThumbnailSourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualInfographicThumbnailSource');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicThumbnailStorageProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualInfographicThumbnailStorageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualInfographicThumbnailStorage');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualSummarySourceProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualSummarySourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualSummarySource');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualSummaryStorageProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualSummaryStorageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualSummaryStorage');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualSummaryThumbnailSourceProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualSummaryThumbnailSourceProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualSummaryThumbnailSource');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualSummaryThumbnailStorageProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> linkVisualSummaryThumbnailStorageProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkVisualSummaryThumbnailStorage');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      mimeTypeVisualInfographicProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> mimeTypeVisualInfographicProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mimeTypeVisualInfographic');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      mimeTypeVisualInfographicThumbnailProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> mimeTypeVisualInfographicThumbnailProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mimeTypeVisualInfographicThumbnail');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      mimeTypeVisualSummaryProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> mimeTypeVisualSummaryProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mimeTypeVisualSummary');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      mimeTypeVisualSummaryThumbnailProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> mimeTypeVisualSummaryThumbnailProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'mimeTypeVisualSummaryThumbnail');
     });
   }
 
-  QueryBuilder<VisualSummary, List<String>, QQueryOperations>
-      organSystemsProperty() {
+  QueryBuilder<VisualSummary, List<String>, QQueryOperations> organSystemsProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'organSystems');
     });
   }
 
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      recordedPodcastTitleProperty() {
+  QueryBuilder<VisualSummary, String?, QQueryOperations> recordedPodcastTitleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'recordedPodcastTitle');
     });
@@ -5423,8 +5011,7 @@ extension VisualSummaryQueryProperty
     });
   }
 
-  QueryBuilder<VisualSummary, int, QQueryOperations>
-      yearGuidelinePublishedProperty() {
+  QueryBuilder<VisualSummary, int, QQueryOperations> yearGuidelinePublishedProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'yearGuidelinePublished');
     });
