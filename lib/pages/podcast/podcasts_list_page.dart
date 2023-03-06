@@ -19,6 +19,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;
+  bool loaded = false;
   bool? selectListened;
   bool? selectFavorite;
   Podcast? podcastSelected;
@@ -33,10 +34,14 @@ class _PodcastListPageState extends State<PodcastListPage> {
     Future.delayed(Duration.zero, () async {
       setState(() {
         isLoading = true;
+        loaded = false;
       });
       final connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult != ConnectivityResult.none) {
         await syncPodcastsFromFirestore();
+        setState(() {
+          loaded = true;
+        });
       }
       setState(() {
         selectedKeywords = IsarService().getUniquePodcastsKeywords();
@@ -109,6 +114,10 @@ class _PodcastListPageState extends State<PodcastListPage> {
         final connectivityResult = await (Connectivity().checkConnectivity());
         if (connectivityResult != ConnectivityResult.none) {
           await syncPodcastsFromFirestore();
+          setState(() {
+            loaded:
+            true;
+          });
         }
         setState(() {});
         await Future.delayed(const Duration(seconds: 1));
@@ -213,7 +222,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
                                       final societies = IsarService()
-                                          .getUniqueYearGuidelinePublished()
+                                          .getUniquePodcastsYearGuidelinePublished()
                                           .map((e) => e.toString())
                                           .toList();
                                       societies.sort((a, b) => b.compareTo(a));
@@ -427,29 +436,55 @@ class _PodcastListPageState extends State<PodcastListPage> {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       if (future.data!.isEmpty) {
-                        return SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: const [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text("No podcasts available",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text("Download some podcasts to have them available offline",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  )),
-                            ],
-                          ),
-                        );
+                        if (loaded) {
+                          return SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No podcasts available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("Please update the filters",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No podcasts available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No internet connection",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          );
+                        }
                       }
                       return ListView.builder(
                         scrollDirection: Axis.vertical,

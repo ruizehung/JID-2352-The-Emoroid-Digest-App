@@ -97,10 +97,18 @@ class IsarService {
     return set;
   }
 
-  Set<int> getUniqueYearGuidelinePublished() {
+  Set<int> getUniqueVisualSummariesYearGuidelinePublished() {
     final set = <int>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.add(vs.yearGuidelinePublished);
+    }
+    return set;
+  }
+
+  Set<int> getUniquePodcastsYearGuidelinePublished() {
+    final set = <int>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.add(p.yearGuidelinePublished);
     }
     return set;
   }

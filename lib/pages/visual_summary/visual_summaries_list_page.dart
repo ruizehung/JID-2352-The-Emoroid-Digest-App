@@ -218,7 +218,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
                                       final societies = IsarService()
-                                          .getUniqueYearGuidelinePublished()
+                                          .getUniqueVisualSummariesYearGuidelinePublished()
                                           .map((e) => e.toString())
                                           .toList();
                                       societies.sort((a, b) => b.compareTo(a));
