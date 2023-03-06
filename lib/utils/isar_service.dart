@@ -76,6 +76,14 @@ class IsarService {
     return set;
   }
 
+  Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(value) async {
+    return await _db.visualSummarys
+        .filter()
+        .titleContains(value, false, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
   static Future<Isar> _openDB() async {
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
