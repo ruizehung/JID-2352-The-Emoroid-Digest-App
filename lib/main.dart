@@ -1,8 +1,10 @@
 import 'package:emoroid_digest_app/pages/home.dart';
 import 'package:emoroid_digest_app/pages/notification_page.dart';
 import 'package:emoroid_digest_app/pages/search_page.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcasts_list_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summaries_list_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +20,7 @@ import 'utils/local_file.dart';
 final firestore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-// Notifications
+// Work in Progress - Notifications
 Future<void> backgroundHandler(RemoteMessage message) async {
   print('Handling a background message ${message.messageId}');
 
@@ -49,7 +51,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  // Notifications
+  // Work in Progress - Notifications
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
@@ -111,11 +113,11 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Notifications
+    // Work in Progress - Notifications
     initNotification();
   }
 
-  // Notifications
+  // Work in Progress - Notifications
   void initNotification() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -275,10 +277,10 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                     page = const VisualSummaryDetailPage();
                     break;
                   case "/podcast":
-                    page = const Text('Index 2: Podcasts');
+                    page = const PodcastListPage();
                     break;
                   case "/podcast/detail":
-                    page = const Text('Index 2: Podcasts');
+                    page = const PodcastDetailPage();
                     break;
                   case "/notification":
                     page = const NotificationPage();
@@ -310,7 +312,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
       appBar: AppBar(
         title: Text(widget.title),
         actions: [
-          // Notifications
+          // Work in Progress - Notifications
           Stack(children: <Widget>[
             IconButton(
               icon: const Icon(Icons.notifications),

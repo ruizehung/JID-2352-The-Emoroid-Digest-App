@@ -187,11 +187,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             IconButton(
                               onPressed: () {
                                 setState(() {
-                                  if (visualSummary.hasRead) {
-                                    visualSummary.hasRead = false;
-                                  } else {
-                                    visualSummary.hasRead = true;
-                                  }
+                                  visualSummary.hasRead = !visualSummary.hasRead;
                                 });
                                 IsarService().saveVisualSummary(visualSummary);
                               },
@@ -199,7 +195,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 CupertinoIcons.eye,
                                 color: visualSummary.hasRead ? Colors.green : Colors.black,
                                 size: iconSize,
-                                semanticLabel: 'Text to announce in accessibility modes',
+                                semanticLabel: 'An eye icon to indicate if a user has read a visual summary',
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -214,7 +210,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                                 color: visualSummary.isFavorite ? Colors.pink : Colors.black,
                                 size: iconSize,
-                                semanticLabel: 'Text to announce in accessibility modes',
+                                semanticLabel:
+                                    'A heart icon to indicate if a user has marked a visual summary as favorite',
                               ),
                             ),
                             SizedBox(width: _isLoading ? 21.5 : 10),
