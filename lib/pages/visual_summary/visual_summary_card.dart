@@ -1,49 +1,21 @@
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
-import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../models/visual_summary.dart';
 import 'visual_summaries_thumbnail.dart';
 
-class VisualSummaryCard extends StatefulWidget {
-  const VisualSummaryCard({super.key, required this.id});
-
-  final String id;
-
-  @override
-  State<VisualSummaryCard> createState() => _VisualSummaryCardState();
-}
-
-class _VisualSummaryCardState extends State<VisualSummaryCard> {
+class VisualSummaryCard extends StatelessWidget {
   final double iconSize = 25;
-  late VisualSummary visualSummary;
+  const VisualSummaryCard({super.key, required this.visualSummary, required this.onTap});
 
-  @override
-  void initState() {
-    super.initState();
-    setState(() {
-      visualSummary = IsarService().getVisualSummary(widget.id)!;
-    });
-
-    Stream<VisualSummary?> visualSummaryChanged = IsarService().getVisualSummaryWatchingObj(widget.id);
-
-    visualSummaryChanged.listen((newVisualSummary) {
-      if (newVisualSummary != null) {
-        setState(() {
-          visualSummary = newVisualSummary;
-        });
-      }
-    });
-  }
+  final VisualSummary visualSummary;
+  final void Function(BuildContext context) onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(
-            "/visual-summary/detail",
-            arguments: VisualSummaryDetailPageArguments(visualSummary.id!),
-          );
+          onTap(context);
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8),
