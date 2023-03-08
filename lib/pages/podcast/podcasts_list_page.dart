@@ -1,35 +1,32 @@
-import 'dart:async';
-
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
-import '../../models/visual_summary.dart';
-import 'visual_summary_card.dart';
+import '../../models/podcast.dart';
+import 'podcast_card.dart';
 import 'package:emoroid_digest_app/utils/firebase.dart';
 
 const showAll = "Show all";
 const clearAll = "Clear all";
 
-class VisualSummaryListPage extends StatefulWidget {
-  const VisualSummaryListPage({super.key});
+class PodcastListPage extends StatefulWidget {
+  const PodcastListPage({super.key});
 
   @override
-  State<VisualSummaryListPage> createState() => _VisualSummaryListPageState();
+  State<PodcastListPage> createState() => _PodcastListPageState();
 }
 
-class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
+class _PodcastListPageState extends State<PodcastListPage> {
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;
-  bool? selectRead;
+  bool loaded = false;
+  bool? selectListened;
   bool? selectFavorite;
-  VisualSummary? visualSummarySelected;
+  Podcast? podcastSelected;
   String? selectedOrganSystem;
   String? selectedGISocietyJournal;
   String? selectedYearGuidelinePublished;
   Set<String> selectedKeywords = {};
-  late StreamSubscription<ConnectivityResult> subscription;
-  ConnectivityResult connectivityStatus = ConnectivityResult.none;
 
   @override
   void initState() {
@@ -37,53 +34,49 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
     Future.delayed(Duration.zero, () async {
       setState(() {
         isLoading = true;
+        loaded = false;
       });
-      subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+      final connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult != ConnectivityResult.none) {
+        await syncPodcastsFromFirestore();
         setState(() {
-          connectivityStatus = result;
+          loaded = true;
         });
-      });
-      if (connectivityStatus != ConnectivityResult.none) {
-        await syncVisualSummariesFromFirestore();
       }
       setState(() {
-        selectedKeywords = IsarService().getUniqueVisualSummariesKeywords();
+        selectedKeywords = IsarService().getUniquePodcastsKeywords();
         isLoading = false;
       });
     });
   }
 
-  Future<List<VisualSummary>> _getFilteredVisualSummaries() async {
-    List<VisualSummary> sourceList;
-    List<VisualSummary> toRender = [];
+  Future<List<Podcast>> _getFilteredPodcasts() async {
+    List<Podcast> sourceList;
+    List<Podcast> toRender = [];
 
-    if (connectivityStatus == ConnectivityResult.none) {
-      sourceList = await IsarService().getDownloadedVisualSummaries();
-    } else {
-      sourceList = await IsarService().getVisualSummariesWithThumbnail();
-    }
+    sourceList = await IsarService().getPodcasts();
 
-    for (var vs in sourceList) {
-      if (selectedOrganSystem != null && !vs.organSystems.contains(selectedOrganSystem)) {
+    for (var p in sourceList) {
+      if (selectedOrganSystem != null && !p.organSystems.contains(selectedOrganSystem)) {
         continue;
       }
-      if (selectedGISocietyJournal != null && !vs.giSocietyJournal.contains(selectedGISocietyJournal)) {
+      if (selectedGISocietyJournal != null && p.giSocietyJournal != selectedGISocietyJournal) {
         continue;
       }
       if (selectedYearGuidelinePublished != null &&
-          vs.yearGuidelinePublished != int.parse(selectedYearGuidelinePublished!)) {
+          p.yearGuidelinePublished != int.parse(selectedYearGuidelinePublished!)) {
         continue;
       }
-      if (selectedKeywords.intersection(vs.keywords.toSet()).isEmpty) {
+      if (selectedKeywords.intersection(p.keywords.toSet()).isEmpty) {
         continue;
       }
-      if (selectRead != null && vs.hasRead != selectRead) {
+      if (selectListened != null && p.hasListened != selectListened) {
         continue;
       }
-      if (selectFavorite != null && vs.isFavorite != selectFavorite) {
+      if (selectFavorite != null && p.isFavorite != selectFavorite) {
         continue;
       }
-      toRender.add(vs);
+      toRender.add(p);
     }
     toRender.sort((a, b) => -a.dateReleased.compareTo(b.dateReleased));
     return toRender;
@@ -120,7 +113,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
       onRefresh: () async {
         final connectivityResult = await (Connectivity().checkConnectivity());
         if (connectivityResult != ConnectivityResult.none) {
-          await syncVisualSummariesFromFirestore();
+          await syncPodcastsFromFirestore();
         }
         setState(() {});
         await Future.delayed(const Duration(seconds: 1));
@@ -185,8 +178,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   getModalBottomSheetTitle("GI Society"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies =
-                                          IsarService().getUniqueVisualSummariesGISocietyJournal().toList();
+                                      final societies = IsarService().getUniquePodcastsGISocietyJournal().toList();
                                       societies.sort();
                                       societies.insert(0, showAll);
                                       return ListView.builder(
@@ -226,7 +218,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
                                       final societies = IsarService()
-                                          .getUniqueVisualSummariesYearGuidelinePublished()
+                                          .getUniquePodcastsYearGuidelinePublished()
                                           .map((e) => e.toString())
                                           .toList();
                                       societies.sort((a, b) => b.compareTo(a));
@@ -263,7 +255,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
                             child: StatefulBuilder(builder: (context, setListState) {
-                              final keywords = IsarService().getUniqueVisualSummariesKeywords().toList();
+                              final keywords = IsarService().getUniquePodcastsKeywords().toList();
                               keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
                               return Column(
                                 children: [
@@ -275,8 +267,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                         child: OutlinedButton(
                                           onPressed: () {
                                             setState(() => setListState(() {
-                                                  selectedKeywords
-                                                      .addAll(IsarService().getUniqueVisualSummariesKeywords());
+                                                  selectedKeywords.addAll(IsarService().getUniquePodcastsKeywords());
                                                 }));
                                           },
                                           child: const Text(showAll),
@@ -330,7 +321,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                               heightFactor: 1,
                               child: Column(
                                 children: [
-                                  getModalBottomSheetTitle("Read"),
+                                  getModalBottomSheetTitle("Listened"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
                                       return ListView(
@@ -339,31 +330,31 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                             value: null,
                                             onChanged: (val) {
                                               setState(() => setListState(() {
-                                                    selectRead = val;
+                                                    selectListened = val;
                                                   }));
                                             },
                                             title: const Text(showAll),
-                                            groupValue: selectRead,
+                                            groupValue: selectListened,
                                           ),
                                           RadioListTile(
                                             value: true,
                                             onChanged: (val) {
                                               setState(() => setListState(() {
-                                                    selectRead = val;
+                                                    selectListened = val;
                                                   }));
                                             },
-                                            title: const Text("Read"),
-                                            groupValue: selectRead,
+                                            title: const Text("Listened"),
+                                            groupValue: selectListened,
                                           ),
                                           RadioListTile(
                                             value: false,
                                             onChanged: (val) {
                                               setState(() => setListState(() {
-                                                    selectRead = val;
+                                                    selectListened = val;
                                                   }));
                                             },
-                                            title: const Text("Not yet read"),
-                                            groupValue: selectRead,
+                                            title: const Text("Not yet listen"),
+                                            groupValue: selectListened,
                                           ),
                                         ],
                                       );
@@ -372,7 +363,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                 ],
                               ),
                             ))),
-                    child: getFilterOutlinedButtonChild("Read"),
+                    child: getFilterOutlinedButtonChild("Listened"),
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
@@ -434,50 +425,68 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
           ),
           Flexible(
               fit: FlexFit.loose,
-              child: FutureBuilder<List<VisualSummary>>(
-                  future: _getFilteredVisualSummaries(),
-                  builder: (BuildContext context, AsyncSnapshot<List<VisualSummary>> future) {
+              child: FutureBuilder<List<Podcast>>(
+                  future: _getFilteredPodcasts(),
+                  builder: (BuildContext context, AsyncSnapshot<List<Podcast>> future) {
                     if (isLoading || !future.hasData) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       if (future.data!.isEmpty) {
-                        String errorText;
-                        if (connectivityStatus == ConnectivityResult.none) {
-                          errorText =
-                              "No internet connection! Please download some visual summaries to have them available offline!\nOr, update your filters!";
+                        if (loaded) {
+                          return SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No podcasts available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("Please update the filters",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          );
                         } else {
-                          errorText = "Please update your filters!";
+                          return SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No podcasts available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No internet connection",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          );
                         }
-
-                        return SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: [
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              const Text("No visual summaries available",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  )),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Text(errorText,
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                  )),
-                            ],
-                          ),
-                        );
                       }
                       return ListView.builder(
                         scrollDirection: Axis.vertical,
                         cacheExtent: 999,
                         itemCount: future.data!.length,
-                        itemBuilder: (context, index) => VisualSummaryCard(
+                        itemBuilder: (context, index) => PodcastCard(
                           id: future.data![index].id!,
                         ),
                       );

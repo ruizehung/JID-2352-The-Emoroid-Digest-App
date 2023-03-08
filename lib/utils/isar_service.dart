@@ -1,4 +1,5 @@
 import 'package:emoroid_digest_app/models/last_update.dart';
+import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
 
@@ -21,12 +22,36 @@ class IsarService {
     return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
   }
 
+  Stream<VisualSummary?> getVisualSummaryWatchingObj(String id) {
+    VisualSummary? vs = _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
+    if (vs == null) {
+      return const Stream.empty();
+    }
+    return _db.visualSummarys.watchObject(vs.isarId);
+  }
+
+  Podcast? getPodcast(String id) {
+    return _db.podcasts.filter().idEqualTo(id).findFirstSync();
+  }
+
+  Stream<Podcast?> getPodcastWatchingObj(String id) {
+    Podcast? podcast = _db.podcasts.filter().idEqualTo(id).findFirstSync();
+    if (podcast == null) {
+      return const Stream.empty();
+    }
+    return _db.podcasts.watchObject(podcast.isarId);
+  }
+
   void saveLastUpdate(LastUpdate lastUpdate) {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }
 
   void saveVisualSummary(VisualSummary visualSummary) {
     _db.writeTxnSync<int>(() => _db.visualSummarys.putSync(visualSummary));
+  }
+
+  void savePodcast(Podcast podcast) {
+    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
   }
 
   Future<LastUpdate?> getLastUpdate() async {
@@ -38,6 +63,10 @@ class IsarService {
 
   Future<List<VisualSummary>> getVisualSummariesWithThumbnail() async {
     return await _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+  }
+
+  Future<List<Podcast>> getPodcasts() async {
+    return await _db.podcasts.filter().idIsNotNull().findAll();
   }
 
   Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
@@ -52,7 +81,7 @@ class IsarService {
     return set;
   }
 
-  Set<String> getUniqueGISocietyJournal() {
+  Set<String> getUniqueVisualSummariesGISocietyJournal() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.addAll(vs.giSocietyJournal);
@@ -60,7 +89,15 @@ class IsarService {
     return set;
   }
 
-  Set<String> getUniqueKeywords() {
+  Set<String> getUniquePodcastsGISocietyJournal() {
+    final set = <String>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.add(p.giSocietyJournal);
+    }
+    return set;
+  }
+
+  Set<String> getUniqueVisualSummariesKeywords() {
     final set = <String>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.addAll(vs.keywords);
@@ -68,7 +105,15 @@ class IsarService {
     return set;
   }
 
-  Set<int> getUniqueYearGuidelinePublished() {
+  Set<String> getUniquePodcastsKeywords() {
+    final set = <String>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.addAll(p.keywords);
+    }
+    return set;
+  }
+
+  Set<int> getUniqueVisualSummariesYearGuidelinePublished() {
     final set = <int>{};
     for (var vs in _db.visualSummarys.where().findAllSync()) {
       set.add(vs.yearGuidelinePublished);
@@ -76,10 +121,18 @@ class IsarService {
     return set;
   }
 
+  Set<int> getUniquePodcastsYearGuidelinePublished() {
+    final set = <int>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.add(p.yearGuidelinePublished);
+    }
+    return set;
+  }
+
   static Future<Isar> _openDB() async {
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [VisualSummarySchema, LastUpdateSchema],
+        [VisualSummarySchema, PodcastSchema, LastUpdateSchema],
         inspector: true,
       );
     }
