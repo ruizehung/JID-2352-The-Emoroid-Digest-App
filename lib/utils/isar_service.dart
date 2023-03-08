@@ -22,24 +22,8 @@ class IsarService {
     return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
   }
 
-  Stream<VisualSummary?> getVisualSummaryWatchingObj(String id) {
-    VisualSummary? vs = _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
-    if (vs == null) {
-      return const Stream.empty();
-    }
-    return _db.visualSummarys.watchObject(vs.isarId);
-  }
-
   Podcast? getPodcast(String id) {
     return _db.podcasts.filter().idEqualTo(id).findFirstSync();
-  }
-
-  Stream<Podcast?> getPodcastWatchingObj(String id) {
-    Podcast? podcast = _db.podcasts.filter().idEqualTo(id).findFirstSync();
-    if (podcast == null) {
-      return const Stream.empty();
-    }
-    return _db.podcasts.watchObject(podcast.isarId);
   }
 
   void saveLastUpdate(LastUpdate lastUpdate) {
@@ -61,8 +45,8 @@ class IsarService {
     return await _db.lastUpdates.filter().idEqualTo(0).findFirst();
   }
 
-  Future<List<VisualSummary>> getVisualSummariesWithThumbnail() async {
-    return await _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+  Future<List<VisualSummary>> getVisualSummariesWithThumbnail() {
+    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
   }
 
   Future<List<Podcast>> getPodcasts() async {
@@ -70,7 +54,7 @@ class IsarService {
   }
 
   Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
-    return await _db.visualSummarys.filter().isDownloadedEqualTo(true).findAll();
+    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
   }
 
   Set<String> getUniqueOrganSystems() {

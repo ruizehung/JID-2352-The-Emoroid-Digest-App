@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
 import '../../models/podcast.dart';
@@ -487,7 +488,16 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         cacheExtent: 999,
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => PodcastCard(
-                          id: future.data![index].id!,
+                          podcast: future.data![index],
+                          onTap: (context) {
+                            () async {
+                              Navigator.of(context).pushNamed(
+                                "/podcast/detail",
+                                arguments: PodcastDetailPageArguments(future.data![index].id!),
+                              );
+                              setState(() {});
+                            }();
+                          },
                         ),
                       );
                     }

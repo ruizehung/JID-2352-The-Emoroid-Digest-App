@@ -1,6 +1,8 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_card.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_card.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:flutter/material.dart';
 
 import '../utils/firebase.dart';
@@ -99,7 +101,18 @@ class _HomePageState extends State<HomePage> {
                   child: CircularProgressIndicator(),
                 ));
               } else {
-                return VisualSummaryCard(id: future.data!.id!);
+                return VisualSummaryCard(
+                  visualSummary: future.data!,
+                  onTap: (context) {
+                    () async {
+                      await Navigator.of(context).pushNamed(
+                        "/visual-summary/detail",
+                        arguments: VisualSummaryDetailPageArguments(future.data!.id!),
+                      );
+                      setState(() {});
+                    }();
+                  },
+                );
               }
             }),
         const Padding(
@@ -123,7 +136,18 @@ class _HomePageState extends State<HomePage> {
                   child: CircularProgressIndicator(),
                 ));
               } else {
-                return PodcastCard(id: future.data!.id!);
+                return PodcastCard(
+                  podcast: future.data!,
+                  onTap: (context) {
+                    () async {
+                      Navigator.of(context).pushNamed(
+                        "/podcast/detail",
+                        arguments: PodcastDetailPageArguments(future.data!.id!),
+                      );
+                      setState(() {});
+                    }();
+                  },
+                );
               }
             }),
       ],

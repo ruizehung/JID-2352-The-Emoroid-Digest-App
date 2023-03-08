@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
 import '../../models/visual_summary.dart';
@@ -51,6 +52,12 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
         isLoading = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   Future<List<VisualSummary>> _getFilteredVisualSummaries() async {
@@ -478,7 +485,16 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                         cacheExtent: 999,
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => VisualSummaryCard(
-                          id: future.data![index].id!,
+                          visualSummary: future.data![index],
+                          onTap: (context) {
+                            () async {
+                              await Navigator.of(context).pushNamed(
+                                "/visual-summary/detail",
+                                arguments: VisualSummaryDetailPageArguments(future.data![index].id!),
+                              );
+                              setState(() {});
+                            }();
+                          },
                         ),
                       );
                     }
