@@ -114,10 +114,6 @@ class _PodcastListPageState extends State<PodcastListPage> {
         final connectivityResult = await (Connectivity().checkConnectivity());
         if (connectivityResult != ConnectivityResult.none) {
           await syncPodcastsFromFirestore();
-          setState(() {
-            loaded:
-            true;
-          });
         }
         setState(() {});
         await Future.delayed(const Duration(seconds: 1));
@@ -491,7 +487,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         cacheExtent: 999,
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => PodcastCard(
-                          podcast: future.data![index],
+                          id: future.data![index].id!,
                         ),
                       );
                     }

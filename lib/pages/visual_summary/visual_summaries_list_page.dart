@@ -462,7 +462,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                         cacheExtent: 999,
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => VisualSummaryCard(
-                          visualSummary: future.data![index],
+                          id: future.data![index].id!,
                         ),
                       );
                     }

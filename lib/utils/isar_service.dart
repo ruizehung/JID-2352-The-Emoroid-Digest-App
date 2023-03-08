@@ -22,8 +22,24 @@ class IsarService {
     return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
   }
 
+  Stream<VisualSummary?> getVisualSummaryWatchingObj(String id) {
+    VisualSummary? vs = _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
+    if (vs == null) {
+      return const Stream.empty();
+    }
+    return _db.visualSummarys.watchObject(vs.isarId);
+  }
+
   Podcast? getPodcast(String id) {
     return _db.podcasts.filter().idEqualTo(id).findFirstSync();
+  }
+
+  Stream<Podcast?> getPodcastWatchingObj(String id) {
+    Podcast? podcast = _db.podcasts.filter().idEqualTo(id).findFirstSync();
+    if (podcast == null) {
+      return const Stream.empty();
+    }
+    return _db.podcasts.watchObject(podcast.isarId);
   }
 
   void saveLastUpdate(LastUpdate lastUpdate) {

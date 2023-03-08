@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
         isLoading = true;
       });
       await syncVisualSummariesFromFirestore();
+      await syncPodcastsFromFirestore();
       setState(() {
         isLoading = false;
       });
@@ -98,7 +99,7 @@ class _HomePageState extends State<HomePage> {
                   child: CircularProgressIndicator(),
                 ));
               } else {
-                return VisualSummaryCard(visualSummary: future.data!);
+                return VisualSummaryCard(id: future.data!.id!);
               }
             }),
         const Padding(
@@ -122,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                   child: CircularProgressIndicator(),
                 ));
               } else {
-                return PodcastCard(podcast: future.data!);
+                return PodcastCard(id: future.data!.id!);
               }
             }),
       ],
