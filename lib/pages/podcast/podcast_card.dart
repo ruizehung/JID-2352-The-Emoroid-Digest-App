@@ -2,12 +2,38 @@ import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../models/podcast.dart';
+import '../../utils/isar_service.dart';
 
-class PodcastCard extends StatelessWidget {
+class PodcastCard extends StatefulWidget {
+  const PodcastCard({super.key, required this.id});
+
+  final String id;
+
+  @override
+  State<PodcastCard> createState() => _PodcastCardState();
+}
+
+class _PodcastCardState extends State<PodcastCard> {
   final double iconSize = 25;
-  const PodcastCard({super.key, required this.podcast});
+  late Podcast podcast;
 
-  final Podcast podcast;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      podcast = IsarService().getPodcast(widget.id)!;
+    });
+
+    Stream<Podcast?> podcastChanged = IsarService().getPodcastWatchingObj(widget.id);
+
+    podcastChanged.listen((newPodcast) {
+      if (newPodcast != null) {
+        setState(() {
+          podcast = newPodcast;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
