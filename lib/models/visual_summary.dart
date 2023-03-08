@@ -1,8 +1,9 @@
+import 'package:emoroid_digest_app/models/master.dart';
 import 'package:isar/isar.dart';
 part 'visual_summary.g.dart';
 
 @collection
-class VisualSummary {
+class VisualSummary extends Master {
   String? id;
   Id get isarId => fastHash(id!);
 

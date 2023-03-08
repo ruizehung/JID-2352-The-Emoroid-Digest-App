@@ -1,4 +1,5 @@
 import 'package:emoroid_digest_app/models/last_update.dart';
+import 'package:emoroid_digest_app/models/master.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
@@ -111,6 +112,24 @@ class IsarService {
         .titleContains(value, false, caseSensitive: false)
         .sortByYearGuidelinePublishedDesc()
         .findAll();
+  }
+
+  Future<List<Podcast>> getPodcastsResultAfterSearch(value) async {
+    return await _db.podcasts
+        .filter()
+        .titleContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
+  Future<List<Master>> getMasterList() async {
+    Set<Master> msSet = Set();
+
+    await getPodcasts().then((value) => msSet.addAll(value));
+    await getVisualSummariesWithThumbnail().then((value) => msSet.addAll(value));
+    List<Master> ms = msSet.toList();
+
+    return ms;
   }
 
   Set<int> getUniquePodcastsYearGuidelinePublished() {

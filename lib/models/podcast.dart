@@ -1,8 +1,9 @@
+import 'package:emoroid_digest_app/models/master.dart';
 import 'package:isar/isar.dart';
 part 'podcast.g.dart';
 
 @collection
-class Podcast {
+class Podcast extends Master {
   String? id;
   Id get isarId => fastHash(id!);
 
@@ -20,6 +21,9 @@ class Podcast {
   String? mediaStorage;
   late bool hasListened = false;
   late bool isFavorite = false;
+
+  @Index(type: IndexType.value, caseSensitive: false)
+  List<String> get contentTitle => title.split(' ');
 }
 
 /// FNV-1a 64bit hash algorithm optimized for Dart Strings
