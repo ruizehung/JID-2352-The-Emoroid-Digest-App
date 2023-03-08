@@ -122,13 +122,17 @@ class IsarService {
         .findAll();
   }
 
-  Future<List<Master>> getMasterList() async {
+  //List of all Visual Summaries and Podcasts
+  Future<List<Master>> getMasterList(value) async {
     Set<Master> msSet = Set();
-
-    await getPodcasts().then((value) => msSet.addAll(value));
-    await getVisualSummariesWithThumbnail().then((value) => msSet.addAll(value));
+    if (value.isEmpty) {
+      await getPodcasts().then((value) => msSet.addAll(value));
+      await getVisualSummariesWithThumbnail().then((value) => msSet.addAll(value));
+    } else {
+      await getPodcastsResultAfterSearch(value).then((value) => msSet.addAll(value));
+      await getVisualSummariesResultAfterSearch(value).then((value) => msSet.addAll(value));
+    }
     List<Master> ms = msSet.toList();
-
     return ms;
   }
 
