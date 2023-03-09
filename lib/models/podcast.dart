@@ -1,9 +1,8 @@
-import 'package:emoroid_digest_app/models/master.dart';
 import 'package:isar/isar.dart';
 part 'podcast.g.dart';
 
 @collection
-class Podcast extends Master {
+class Podcast {
   String? id;
   Id get isarId => fastHash(id!);
 
