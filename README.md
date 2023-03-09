@@ -1,4 +1,4 @@
-<img src="asset/logo.jpg" width="200">
+<img src="assets/logo.jpg" width="200">
 
 # The Emoroid Digest App
 
