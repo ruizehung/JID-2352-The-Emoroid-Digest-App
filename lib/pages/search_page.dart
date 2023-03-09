@@ -1,10 +1,8 @@
-import 'package:emoroid_digest_app/models/master.dart';
-import 'package:emoroid_digest_app/models/podcast.dart';
+import 'package:emoroid_digest_app/models/search_result_item.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_card.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_card.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:flutter/material.dart';
-import '../../models/visual_summary.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -16,7 +14,8 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final searchList = <String>{};
   final TextEditingController _searchController = TextEditingController();
-  Future<List<Master>> result = IsarService().getMasterList("");
+  Future<List<SearchResultItem>> result = IsarService().getSearchResultItems("");
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -43,9 +42,9 @@ class _SearchPageState extends State<SearchPage> {
                       onChanged: (value) {
                         setState(() {
                           if (value.isEmpty) {
-                            result = IsarService().getMasterList("");
+                            result = IsarService().getSearchResultItems("");
                           } else {
-                            result = IsarService().getMasterList(value);
+                            result = IsarService().getSearchResultItems(value);
                           }
                         });
                       },
@@ -61,9 +60,9 @@ class _SearchPageState extends State<SearchPage> {
             )),
         Flexible(
             fit: FlexFit.loose,
-            child: FutureBuilder<List<Master>>(
+            child: FutureBuilder<List<SearchResultItem>>(
                 future: result,
-                builder: (BuildContext context, AsyncSnapshot<List<Master>> future) {
+                builder: (BuildContext context, AsyncSnapshot<List<SearchResultItem>> future) {
                   var data = future.data;
                   if (data == null) {
                     return const Center(child: CircularProgressIndicator());
@@ -71,16 +70,16 @@ class _SearchPageState extends State<SearchPage> {
                     var datalength = data.length;
                     if (datalength == 0) {
                       return const Center(
-                        child: Text('no data found'),
+                        child: Text('No data found'),
                       );
                     } else {
                       return ListView.builder(
                         scrollDirection: Axis.vertical,
                         cacheExtent: 999,
                         itemCount: future.data!.length,
-                        itemBuilder: (context, index) => (future.data![index] is VisualSummary)
-                            ? VisualSummaryCard(visualSummary: future.data![index] as VisualSummary)
-                            : PodcastCard(podcast: future.data![index] as Podcast),
+                        itemBuilder: (context, index) => (future.data![index].visualSummary != null)
+                            ? VisualSummaryCard(visualSummary: future.data![index].visualSummary!)
+                            : PodcastCard(podcast: future.data![index].podcast!),
                       );
                     }
                   }
