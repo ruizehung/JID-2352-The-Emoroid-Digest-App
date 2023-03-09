@@ -20,6 +20,9 @@ class Podcast {
   String? mediaStorage;
   late bool hasListened = false;
   late bool isFavorite = false;
+
+  @Index(type: IndexType.value, caseSensitive: false)
+  List<String> get contentTitle => title.split(' ');
 }
 
 /// FNV-1a 64bit hash algorithm optimized for Dart Strings
