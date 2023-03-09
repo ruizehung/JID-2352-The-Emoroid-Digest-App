@@ -1,6 +1,8 @@
 import 'package:emoroid_digest_app/models/search_result_item.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_card.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_card.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +17,7 @@ class _SearchPageState extends State<SearchPage> {
   final searchList = <String>{};
   final TextEditingController _searchController = TextEditingController();
   Future<List<SearchResultItem>> result = IsarService().getSearchResultItems("");
+  String query = "";
 
   @override
   Widget build(BuildContext context) {
@@ -39,13 +42,10 @@ class _SearchPageState extends State<SearchPage> {
                     child: SizedBox(
                   height: 50,
                   child: TextField(
-                      onChanged: (value) {
+                      onChanged: (query) {
                         setState(() {
-                          if (value.isEmpty) {
-                            result = IsarService().getSearchResultItems("");
-                          } else {
-                            result = IsarService().getSearchResultItems(value);
-                          }
+                          this.query = query;
+                          result = IsarService().getSearchResultItems(query);
                         });
                       },
                       controller: _searchController,
@@ -78,8 +78,35 @@ class _SearchPageState extends State<SearchPage> {
                         cacheExtent: 999,
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => (future.data![index].visualSummary != null)
-                            ? VisualSummaryCard(visualSummary: future.data![index].visualSummary!)
-                            : PodcastCard(podcast: future.data![index].podcast!),
+                            ? VisualSummaryCard(
+                                visualSummary: future.data![index].visualSummary!,
+                                onTap: (context) {
+                                  () async {
+                                    await Navigator.of(context).pushNamed(
+                                      "/visual-summary/detail",
+                                      arguments:
+                                          VisualSummaryDetailPageArguments(future.data![index].visualSummary!.id!),
+                                    );
+                                    setState(() {
+                                      result = IsarService().getSearchResultItems(query);
+                                    });
+                                  }();
+                                },
+                              )
+                            : PodcastCard(
+                                podcast: future.data![index].podcast!,
+                                onTap: (context) {
+                                  () async {
+                                    Navigator.of(context).pushNamed(
+                                      "/podcast/detail",
+                                      arguments: PodcastDetailPageArguments(future.data![index].podcast!.id!),
+                                    );
+                                    setState(() {
+                                      result = IsarService().getSearchResultItems(query);
+                                    });
+                                  }();
+                                },
+                              ),
                       );
                     }
                   }

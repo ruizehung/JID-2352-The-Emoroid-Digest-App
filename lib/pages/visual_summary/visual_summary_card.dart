@@ -6,19 +6,16 @@ import 'visual_summaries_thumbnail.dart';
 
 class VisualSummaryCard extends StatelessWidget {
   final double iconSize = 25;
-  const VisualSummaryCard({super.key, required this.visualSummary});
+  const VisualSummaryCard({super.key, required this.visualSummary, required this.onTap});
 
   final VisualSummary visualSummary;
-  // final ValueChanged<String>? onPush;
+  final void Function(BuildContext context) onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(
-            "/visual-summary/detail",
-            arguments: VisualSummaryDetailPageArguments(visualSummary.id!),
-          );
+          onTap(context);
         },
         child: Padding(
           padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8),

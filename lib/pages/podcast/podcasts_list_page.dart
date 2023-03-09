@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
 import '../../models/podcast.dart';
@@ -114,10 +115,6 @@ class _PodcastListPageState extends State<PodcastListPage> {
         final connectivityResult = await (Connectivity().checkConnectivity());
         if (connectivityResult != ConnectivityResult.none) {
           await syncPodcastsFromFirestore();
-          setState(() {
-            loaded:
-            true;
-          });
         }
         setState(() {});
         await Future.delayed(const Duration(seconds: 1));
@@ -492,6 +489,15 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => PodcastCard(
                           podcast: future.data![index],
+                          onTap: (context) {
+                            () async {
+                              Navigator.of(context).pushNamed(
+                                "/podcast/detail",
+                                arguments: PodcastDetailPageArguments(future.data![index].id!),
+                              );
+                              setState(() {});
+                            }();
+                          },
                         ),
                       );
                     }

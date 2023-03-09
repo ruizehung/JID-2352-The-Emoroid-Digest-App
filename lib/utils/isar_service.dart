@@ -46,8 +46,8 @@ class IsarService {
     return await _db.lastUpdates.filter().idEqualTo(0).findFirst();
   }
 
-  Future<List<VisualSummary>> getVisualSummariesWithThumbnail() async {
-    return await _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+  Future<List<VisualSummary>> getVisualSummariesWithThumbnail() {
+    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
   }
 
   Future<List<Podcast>> getPodcasts() async {
@@ -55,7 +55,7 @@ class IsarService {
   }
 
   Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
-    return await _db.visualSummarys.filter().isDownloadedEqualTo(true).findAll();
+    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
   }
 
   Set<String> getUniqueOrganSystems() {
