@@ -1,4 +1,5 @@
 import 'package:emoroid_digest_app/models/last_update.dart';
+import 'package:emoroid_digest_app/models/search_result_item.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
@@ -103,6 +104,51 @@ class IsarService {
       set.add(vs.yearGuidelinePublished);
     }
     return set;
+  }
+
+  Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(String value) async {
+    return await _db.visualSummarys
+        .filter()
+        .titleContains(value, false, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
+  Future<List<Podcast>> getPodcastsResultAfterSearch(String value) async {
+    return await _db.podcasts
+        .filter()
+        .titleContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
+  //List of all Visual Summaries and Podcasts
+  Future<List<SearchResultItem>> getSearchResultItems(String value) async {
+    Set<SearchResultItem> msSet = {};
+    if (value.isEmpty) {
+      await getPodcasts().then((podcasts) {
+        for (var p in podcasts) {
+          msSet.add(SearchResultItem()..podcast = p);
+        }
+      });
+      await getVisualSummariesWithThumbnail().then((visualSummaries) {
+        for (var vs in visualSummaries) {
+          msSet.add(SearchResultItem()..visualSummary = vs);
+        }
+      });
+    } else {
+      await getPodcastsResultAfterSearch(value).then((podcasts) {
+        for (var p in podcasts) {
+          msSet.add(SearchResultItem()..podcast = p);
+        }
+      });
+      await getVisualSummariesResultAfterSearch(value).then((visualSummaries) {
+        for (var vs in visualSummaries) {
+          msSet.add(SearchResultItem()..visualSummary = vs);
+        }
+      });
+    }
+    return msSet.toList();
   }
 
   Set<int> getUniquePodcastsYearGuidelinePublished() {
