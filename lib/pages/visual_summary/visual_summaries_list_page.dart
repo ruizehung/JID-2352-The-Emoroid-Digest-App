@@ -184,6 +184,72 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
                     onPressed: () => showModalBottomSheet(
+                      context: context,
+                      builder: ((context) => FractionallySizedBox(
+                            heightFactor: 1,
+                            child: StatefulBuilder(builder: (context, setListState) {
+                              final keywords = IsarService().getUniqueVisualSummariesKeywords().toList();
+                              keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
+                              return Column(
+                                children: [
+                                  getModalBottomSheetTitle("Keywords"),
+                                  SingleChildScrollView(
+                                    child: Row(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(left: 8, right: 8),
+                                        child: OutlinedButton(
+                                          onPressed: () {
+                                            setState(() => setListState(() {
+                                                  selectedKeywords
+                                                      .addAll(IsarService().getUniqueVisualSummariesKeywords());
+                                                }));
+                                          },
+                                          child: const Text(showAll),
+                                        ),
+                                      ),
+                                      OutlinedButton(
+                                        onPressed: () {
+                                          setState(() => setListState(() {
+                                                selectedKeywords.clear();
+                                              }));
+                                        },
+                                        child: const Text(clearAll),
+                                      ),
+                                    ]),
+                                  ),
+                                  Expanded(
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.vertical,
+                                      itemCount: keywords.length,
+                                      itemBuilder: (context, index) => CheckboxListTile(
+                                        value: selectedKeywords.contains(keywords[index]),
+                                        onChanged: (val) {
+                                          setState(() => setListState(() {
+                                                if (val!) {
+                                                  selectedKeywords.add(keywords[index]);
+                                                } else {
+                                                  selectedKeywords.remove(keywords[index]);
+                                                }
+                                              }));
+                                        },
+                                        activeColor: Colors.blue,
+                                        title: Text(keywords[index]),
+                                        controlAffinity: ListTileControlAffinity.trailing,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            }),
+                          )),
+                    ),
+                    child: getFilterOutlinedButtonChild("Keywords"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
                         context: context,
                         builder: ((context) => FractionallySizedBox(
                               heightFactor: 1,
@@ -260,72 +326,6 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                               ),
                             ))),
                     child: getFilterOutlinedButtonChild("Year Guideline Published"),
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                    onPressed: () => showModalBottomSheet(
-                      context: context,
-                      builder: ((context) => FractionallySizedBox(
-                            heightFactor: 1,
-                            child: StatefulBuilder(builder: (context, setListState) {
-                              final keywords = IsarService().getUniqueVisualSummariesKeywords().toList();
-                              keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
-                              return Column(
-                                children: [
-                                  getModalBottomSheetTitle("Keywords"),
-                                  SingleChildScrollView(
-                                    child: Row(children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(left: 8, right: 8),
-                                        child: OutlinedButton(
-                                          onPressed: () {
-                                            setState(() => setListState(() {
-                                                  selectedKeywords
-                                                      .addAll(IsarService().getUniqueVisualSummariesKeywords());
-                                                }));
-                                          },
-                                          child: const Text(showAll),
-                                        ),
-                                      ),
-                                      OutlinedButton(
-                                        onPressed: () {
-                                          setState(() => setListState(() {
-                                                selectedKeywords.clear();
-                                              }));
-                                        },
-                                        child: const Text(clearAll),
-                                      ),
-                                    ]),
-                                  ),
-                                  Expanded(
-                                    child: ListView.builder(
-                                      scrollDirection: Axis.vertical,
-                                      itemCount: keywords.length,
-                                      itemBuilder: (context, index) => CheckboxListTile(
-                                        value: selectedKeywords.contains(keywords[index]),
-                                        onChanged: (val) {
-                                          setState(() => setListState(() {
-                                                if (val!) {
-                                                  selectedKeywords.add(keywords[index]);
-                                                } else {
-                                                  selectedKeywords.remove(keywords[index]);
-                                                }
-                                              }));
-                                        },
-                                        activeColor: Colors.blue,
-                                        title: Text(keywords[index]),
-                                        controlAffinity: ListTileControlAffinity.trailing,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }),
-                          )),
-                    ),
-                    child: getFilterOutlinedButtonChild("Keywords"),
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
