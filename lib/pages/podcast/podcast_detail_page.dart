@@ -43,6 +43,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
     _audioHandler.mediaItem.listen((mediaItem) {
       if (mediaItem?.id == podcastArgs?.id) {
         _pageManager = PageManager(null, null);
+        setState(() {});
       }
     });
     setState(() {
