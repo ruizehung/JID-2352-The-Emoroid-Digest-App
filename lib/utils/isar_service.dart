@@ -26,6 +26,10 @@ class IsarService {
     return _db.podcasts.filter().idEqualTo(id).findFirstSync();
   }
 
+  static Podcast? getPodcastStatic(String id) {
+    return _db.podcasts.filter().idEqualTo(id).findFirstSync();
+  }
+
   void saveLastUpdate(LastUpdate lastUpdate) {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }
@@ -35,6 +39,10 @@ class IsarService {
   }
 
   void savePodcast(Podcast podcast) {
+    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
+  }
+
+  static void savePodcastStatic(Podcast podcast) {
     _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
   }
 

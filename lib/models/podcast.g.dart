@@ -17,78 +17,88 @@ const PodcastSchema = CollectionSchema(
   name: r'Podcast',
   id: -1143728065732125040,
   properties: {
-    r'dateReleased': PropertySchema(
+    r'currentDuration': PropertySchema(
       id: 0,
+      name: r'currentDuration',
+      type: IsarType.long,
+    ),
+    r'dateReleased': PropertySchema(
+      id: 1,
       name: r'dateReleased',
       type: IsarType.dateTime,
     ),
     r'giSocietyJournal': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'giSocietyJournal',
       type: IsarType.string,
     ),
     r'guest': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'guest',
       type: IsarType.string,
     ),
     r'guidelineAuthors': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'guidelineAuthors',
       type: IsarType.stringList,
     ),
     r'hasListened': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'hasListened',
       type: IsarType.bool,
     ),
     r'id': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'id',
       type: IsarType.string,
     ),
     r'isFavorite': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'isFavorite',
       type: IsarType.bool,
     ),
     r'keywords': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'keywords',
       type: IsarType.stringList,
     ),
     r'linkGuest': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'linkGuest',
       type: IsarType.string,
     ),
     r'mediaStorage': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'mediaStorage',
       type: IsarType.string,
     ),
     r'mediaUrl': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'mediaUrl',
       type: IsarType.string,
     ),
     r'organSystems': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'organSystems',
       type: IsarType.stringList,
     ),
     r'title': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'title',
       type: IsarType.string,
     ),
+    r'totalDuration': PropertySchema(
+      id: 14,
+      name: r'totalDuration',
+      type: IsarType.long,
+    ),
     r'twitterPodcastLink': PropertySchema(
-      id: 13,
+      id: 15,
       name: r'twitterPodcastLink',
       type: IsarType.string,
     ),
     r'yearGuidelinePublished': PropertySchema(
-      id: 14,
+      id: 16,
       name: r'yearGuidelinePublished',
       type: IsarType.long,
     )
@@ -166,21 +176,23 @@ void _podcastSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeDateTime(offsets[0], object.dateReleased);
-  writer.writeString(offsets[1], object.giSocietyJournal);
-  writer.writeString(offsets[2], object.guest);
-  writer.writeStringList(offsets[3], object.guidelineAuthors);
-  writer.writeBool(offsets[4], object.hasListened);
-  writer.writeString(offsets[5], object.id);
-  writer.writeBool(offsets[6], object.isFavorite);
-  writer.writeStringList(offsets[7], object.keywords);
-  writer.writeString(offsets[8], object.linkGuest);
-  writer.writeString(offsets[9], object.mediaStorage);
-  writer.writeString(offsets[10], object.mediaUrl);
-  writer.writeStringList(offsets[11], object.organSystems);
-  writer.writeString(offsets[12], object.title);
-  writer.writeString(offsets[13], object.twitterPodcastLink);
-  writer.writeLong(offsets[14], object.yearGuidelinePublished);
+  writer.writeLong(offsets[0], object.currentDuration);
+  writer.writeDateTime(offsets[1], object.dateReleased);
+  writer.writeString(offsets[2], object.giSocietyJournal);
+  writer.writeString(offsets[3], object.guest);
+  writer.writeStringList(offsets[4], object.guidelineAuthors);
+  writer.writeBool(offsets[5], object.hasListened);
+  writer.writeString(offsets[6], object.id);
+  writer.writeBool(offsets[7], object.isFavorite);
+  writer.writeStringList(offsets[8], object.keywords);
+  writer.writeString(offsets[9], object.linkGuest);
+  writer.writeString(offsets[10], object.mediaStorage);
+  writer.writeString(offsets[11], object.mediaUrl);
+  writer.writeStringList(offsets[12], object.organSystems);
+  writer.writeString(offsets[13], object.title);
+  writer.writeLong(offsets[14], object.totalDuration);
+  writer.writeString(offsets[15], object.twitterPodcastLink);
+  writer.writeLong(offsets[16], object.yearGuidelinePublished);
 }
 
 Podcast _podcastDeserialize(
@@ -190,21 +202,23 @@ Podcast _podcastDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Podcast();
-  object.dateReleased = reader.readDateTime(offsets[0]);
-  object.giSocietyJournal = reader.readString(offsets[1]);
-  object.guest = reader.readString(offsets[2]);
-  object.guidelineAuthors = reader.readStringList(offsets[3]) ?? [];
-  object.hasListened = reader.readBool(offsets[4]);
-  object.id = reader.readStringOrNull(offsets[5]);
-  object.isFavorite = reader.readBool(offsets[6]);
-  object.keywords = reader.readStringList(offsets[7]) ?? [];
-  object.linkGuest = reader.readString(offsets[8]);
-  object.mediaStorage = reader.readStringOrNull(offsets[9]);
-  object.mediaUrl = reader.readStringOrNull(offsets[10]);
-  object.organSystems = reader.readStringList(offsets[11]) ?? [];
-  object.title = reader.readString(offsets[12]);
-  object.twitterPodcastLink = reader.readString(offsets[13]);
-  object.yearGuidelinePublished = reader.readLong(offsets[14]);
+  object.currentDuration = reader.readLongOrNull(offsets[0]);
+  object.dateReleased = reader.readDateTime(offsets[1]);
+  object.giSocietyJournal = reader.readString(offsets[2]);
+  object.guest = reader.readString(offsets[3]);
+  object.guidelineAuthors = reader.readStringList(offsets[4]) ?? [];
+  object.hasListened = reader.readBool(offsets[5]);
+  object.id = reader.readStringOrNull(offsets[6]);
+  object.isFavorite = reader.readBool(offsets[7]);
+  object.keywords = reader.readStringList(offsets[8]) ?? [];
+  object.linkGuest = reader.readString(offsets[9]);
+  object.mediaStorage = reader.readStringOrNull(offsets[10]);
+  object.mediaUrl = reader.readStringOrNull(offsets[11]);
+  object.organSystems = reader.readStringList(offsets[12]) ?? [];
+  object.title = reader.readString(offsets[13]);
+  object.totalDuration = reader.readLongOrNull(offsets[14]);
+  object.twitterPodcastLink = reader.readString(offsets[15]);
+  object.yearGuidelinePublished = reader.readLong(offsets[16]);
   return object;
 }
 
@@ -216,34 +230,38 @@ P _podcastDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 1:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 2:
       return (reader.readString(offset)) as P;
     case 3:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 4:
-      return (reader.readBool(offset)) as P;
-    case 5:
-      return (reader.readStringOrNull(offset)) as P;
-    case 6:
-      return (reader.readBool(offset)) as P;
-    case 7:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 8:
       return (reader.readString(offset)) as P;
-    case 9:
+    case 4:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 5:
+      return (reader.readBool(offset)) as P;
+    case 6:
       return (reader.readStringOrNull(offset)) as P;
+    case 7:
+      return (reader.readBool(offset)) as P;
+    case 8:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 9:
+      return (reader.readString(offset)) as P;
     case 10:
       return (reader.readStringOrNull(offset)) as P;
     case 11:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 12:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 13:
       return (reader.readString(offset)) as P;
     case 14:
+      return (reader.readLongOrNull(offset)) as P;
+    case 15:
+      return (reader.readString(offset)) as P;
+    case 16:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -338,6 +356,78 @@ extension PodcastQueryWhere on QueryBuilder<Podcast, Podcast, QWhereClause> {
 
 extension PodcastQueryFilter
     on QueryBuilder<Podcast, Podcast, QFilterCondition> {
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      currentDurationIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'currentDuration',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      currentDurationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'currentDuration',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> currentDurationEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'currentDuration',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      currentDurationGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'currentDuration',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> currentDurationLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'currentDuration',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> currentDurationBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'currentDuration',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition> dateReleasedEqualTo(
       DateTime value) {
     return QueryBuilder.apply(this, (query) {
@@ -2098,6 +2188,77 @@ extension PodcastQueryFilter
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> totalDurationIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'totalDuration',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      totalDurationIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'totalDuration',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> totalDurationEqualTo(
+      int? value) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'totalDuration',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      totalDurationGreaterThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'totalDuration',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> totalDurationLessThan(
+    int? value, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'totalDuration',
+        value: value,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> totalDurationBetween(
+    int? lower,
+    int? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'totalDuration',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
       twitterPodcastLinkEqualTo(
     String value, {
@@ -2298,6 +2459,18 @@ extension PodcastQueryLinks
     on QueryBuilder<Podcast, Podcast, QFilterCondition> {}
 
 extension PodcastQuerySortBy on QueryBuilder<Podcast, Podcast, QSortBy> {
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByCurrentDuration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'currentDuration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByCurrentDurationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'currentDuration', Sort.desc);
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByDateReleased() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateReleased', Sort.asc);
@@ -2418,6 +2591,18 @@ extension PodcastQuerySortBy on QueryBuilder<Podcast, Podcast, QSortBy> {
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByTotalDuration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalDuration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByTotalDurationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalDuration', Sort.desc);
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByTwitterPodcastLink() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'twitterPodcastLink', Sort.asc);
@@ -2446,6 +2631,18 @@ extension PodcastQuerySortBy on QueryBuilder<Podcast, Podcast, QSortBy> {
 
 extension PodcastQuerySortThenBy
     on QueryBuilder<Podcast, Podcast, QSortThenBy> {
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByCurrentDuration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'currentDuration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByCurrentDurationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'currentDuration', Sort.desc);
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByDateReleased() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'dateReleased', Sort.asc);
@@ -2578,6 +2775,18 @@ extension PodcastQuerySortThenBy
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByTotalDuration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalDuration', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByTotalDurationDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'totalDuration', Sort.desc);
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByTwitterPodcastLink() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'twitterPodcastLink', Sort.asc);
@@ -2606,6 +2815,12 @@ extension PodcastQuerySortThenBy
 
 extension PodcastQueryWhereDistinct
     on QueryBuilder<Podcast, Podcast, QDistinct> {
+  QueryBuilder<Podcast, Podcast, QDistinct> distinctByCurrentDuration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'currentDuration');
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QDistinct> distinctByDateReleased() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'dateReleased');
@@ -2692,6 +2907,12 @@ extension PodcastQueryWhereDistinct
     });
   }
 
+  QueryBuilder<Podcast, Podcast, QDistinct> distinctByTotalDuration() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'totalDuration');
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QDistinct> distinctByTwitterPodcastLink(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
@@ -2712,6 +2933,12 @@ extension PodcastQueryProperty
   QueryBuilder<Podcast, int, QQueryOperations> isarIdProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'isarId');
+    });
+  }
+
+  QueryBuilder<Podcast, int?, QQueryOperations> currentDurationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'currentDuration');
     });
   }
 
@@ -2791,6 +3018,12 @@ extension PodcastQueryProperty
   QueryBuilder<Podcast, String, QQueryOperations> titleProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'title');
+    });
+  }
+
+  QueryBuilder<Podcast, int?, QQueryOperations> totalDurationProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'totalDuration');
     });
   }
 
