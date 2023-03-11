@@ -1,8 +1,10 @@
 import 'package:emoroid_digest_app/pages/home.dart';
 import 'package:emoroid_digest_app/pages/notification_page.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_bar.dart';
 import 'package:emoroid_digest_app/pages/search_page.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
+import 'package:emoroid_digest_app/services/services_locator.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcasts_list_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summaries_list_page.dart';
@@ -58,6 +60,8 @@ Future<void> main() async {
   IsarService.init();
   LocalFileSystem.init();
   FirebaseAuth.instance.signInAnonymously();
+
+  await setupServiceLocator();
 
   runApp(const TheEmoroidDigestAppWrapper());
 }
@@ -301,6 +305,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
               },
             ),
           ),
+          PodcastBar()
         ],
       ),
     );
