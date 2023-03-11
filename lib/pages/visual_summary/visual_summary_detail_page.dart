@@ -2,6 +2,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -11,6 +12,7 @@ import 'dart:io';
 
 import '../../models/visual_summary.dart';
 import '../../utils/isar_service.dart';
+import '../podcast/podcast_detail_page.dart';
 
 class VisualSummaryDetailPageArguments {
   final String visualSummaryID;
@@ -71,22 +73,26 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
     }
   }
 
+  Widget detailFieldTitle(String title) {
+    return Row(
+      children: [
+        Expanded(
+            child: Text(
+          title,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: fieldFontSize,
+            fontWeight: FontWeight.bold,
+          ),
+        )),
+      ],
+    );
+  }
+
   Widget detailField(String title, String value) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-                child: Text(
-              title,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: fieldFontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
-          ],
-        ),
+        detailFieldTitle(title),
         const SizedBox(
           height: 8,
         ),
@@ -98,6 +104,50 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                 textAlign: TextAlign.start,
                 style: TextStyle(
                   fontSize: fieldFontSize,
+                ),
+              ),
+            )
+          ],
+        ),
+        const Divider(),
+      ],
+    );
+  }
+
+  Widget podcastDetailField(String fieldTitle, String? podcastTitile, BuildContext context) {
+    String podcastID = "N/A";
+    if (podcastTitile != null) {
+      podcastID = IsarService().getPodcastByTitle(podcastTitile)!.id!;
+    }
+    return Column(
+      children: [
+        detailFieldTitle(fieldTitle),
+        const SizedBox(
+          height: 8,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: RichText(
+                text: TextSpan(
+                  text: podcastTitile ?? "N/A",
+                  style: TextStyle(
+                    fontSize: fieldFontSize,
+                    color: podcastTitile != null ? Colors.blue : Colors.black,
+                    decoration: podcastTitile != null ? TextDecoration.underline : null,
+                  ),
+                  recognizer: podcastTitile != null
+                      ? (TapGestureRecognizer()
+                        ..onTap = () {
+                          () async {
+                            Navigator.of(context).pushNamed(
+                              "/podcast/detail",
+                              arguments: PodcastDetailPageArguments(podcastID),
+                            );
+                            setState(() {});
+                          }();
+                        })
+                      : null,
                 ),
               ),
             )
@@ -283,8 +333,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         detailField("Keywords", visualSummary.keywords.join(", ")),
                         detailField("Guideline Authors (First two and last listed author)",
                             visualSummary.guidelineAuthors.join(", ")),
-                        detailField("Recorded Podcast",
-                            visualSummary.recordedPodcastTitle == null ? "N/A" : visualSummary.recordedPodcastTitle!),
+                        podcastDetailField("Recorded Podcast", visualSummary.recordedPodcastTitle, context),
                         detailField("Visual Summary Fellow Author", visualSummary.fellowAuthor),
                         detailField("Visual Summary Release Date",
                             "${visualSummary.dateReleased.year.toString()}-${visualSummary.dateReleased.month.toString().padLeft(2, '0')}-${visualSummary.dateReleased.day.toString().padLeft(2, '0')}"),

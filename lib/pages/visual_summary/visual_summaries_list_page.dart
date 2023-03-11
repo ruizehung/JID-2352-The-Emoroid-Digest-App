@@ -1,4 +1,7 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
 import '../../models/visual_summary.dart';
@@ -26,6 +29,8 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
   String? selectedGISocietyJournal;
   String? selectedYearGuidelinePublished;
   Set<String> selectedKeywords = {};
+  late StreamSubscription<ConnectivityResult> subscription;
+  ConnectivityResult connectivityStatus = ConnectivityResult.none;
 
   @override
   void initState() {
@@ -34,8 +39,12 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
       setState(() {
         isLoading = true;
       });
-      final connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult != ConnectivityResult.none) {
+      subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
+        setState(() {
+          connectivityStatus = result;
+        });
+      });
+      if (connectivityStatus != ConnectivityResult.none) {
         await syncVisualSummariesFromFirestore();
       }
       setState(() {
@@ -45,11 +54,17 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
     });
   }
 
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   Future<List<VisualSummary>> _getFilteredVisualSummaries() async {
     List<VisualSummary> sourceList;
     List<VisualSummary> toRender = [];
 
-    if (await (Connectivity().checkConnectivity()) == ConnectivityResult.none) {
+    if (connectivityStatus == ConnectivityResult.none) {
       sourceList = await IsarService().getDownloadedVisualSummaries();
     } else {
       sourceList = await IsarService().getVisualSummariesWithThumbnail();
@@ -169,88 +184,6 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
                     onPressed: () => showModalBottomSheet(
-                        context: context,
-                        builder: ((context) => FractionallySizedBox(
-                              heightFactor: 1,
-                              child: Column(
-                                children: [
-                                  getModalBottomSheetTitle("GI Society"),
-                                  Expanded(
-                                    child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies =
-                                          IsarService().getUniqueVisualSummariesGISocietyJournal().toList();
-                                      societies.sort();
-                                      societies.insert(0, showAll);
-                                      return ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: societies.length,
-                                        itemBuilder: (context, index) => RadioListTile(
-                                          value: societies[index],
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectedGISocietyJournal = val != showAll ? val : null;
-                                                }));
-                                          },
-                                          activeColor: Colors.blue,
-                                          title: Text(societies[index]),
-                                          groupValue: selectedGISocietyJournal ?? showAll,
-                                          controlAffinity: ListTileControlAffinity.trailing,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
-                            ))),
-                    child: getFilterOutlinedButtonChild("GI Society"),
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                    onPressed: () => showModalBottomSheet(
-                        context: context,
-                        builder: ((context) => FractionallySizedBox(
-                              heightFactor: 1,
-                              child: Column(
-                                children: [
-                                  getModalBottomSheetTitle("Year Guideline Published"),
-                                  Expanded(
-                                    child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService()
-                                          .getUniqueYearGuidelinePublished()
-                                          .map((e) => e.toString())
-                                          .toList();
-                                      societies.sort((a, b) => b.compareTo(a));
-                                      societies.insert(0, showAll);
-                                      return ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: societies.length,
-                                        itemBuilder: (context, index) => RadioListTile(
-                                          value: societies[index],
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectedYearGuidelinePublished = val != showAll ? val : null;
-                                                }));
-                                          },
-                                          activeColor: Colors.blue,
-                                          title: Text(societies[index]),
-                                          groupValue: selectedYearGuidelinePublished ?? showAll,
-                                          controlAffinity: ListTileControlAffinity.trailing,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
-                            ))),
-                    child: getFilterOutlinedButtonChild("Year Guideline Published"),
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                    onPressed: () => showModalBottomSheet(
                       context: context,
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
@@ -311,6 +244,88 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                           )),
                     ),
                     child: getFilterOutlinedButtonChild("Keywords"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("GI Society"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final societies =
+                                          IsarService().getUniqueVisualSummariesGISocietyJournal().toList();
+                                      societies.sort();
+                                      societies.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: societies.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: societies[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedGISocietyJournal = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(societies[index]),
+                                          groupValue: selectedGISocietyJournal ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("GI Society"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("Year Guideline Published"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final societies = IsarService()
+                                          .getUniqueVisualSummariesYearGuidelinePublished()
+                                          .map((e) => e.toString())
+                                          .toList();
+                                      societies.sort((a, b) => b.compareTo(a));
+                                      societies.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: societies.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: societies[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedYearGuidelinePublished = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(societies[index]),
+                                          groupValue: selectedYearGuidelinePublished ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("Year Guideline Published"),
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
@@ -433,24 +448,32 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       if (future.data!.isEmpty) {
+                        String errorText;
+                        if (connectivityStatus == ConnectivityResult.none) {
+                          errorText =
+                              "No internet connection! Please download some visual summaries to have them available offline!\nOr, update your filters!";
+                        } else {
+                          errorText = "Please update your filters!";
+                        }
+
                         return SingleChildScrollView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           child: Column(
-                            children: const [
-                              SizedBox(
+                            children: [
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text("No visual summaries available",
+                              const Text("No visual summaries available",
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontSize: 18,
                                   )),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
-                              Text("Download some visual summaries to have them available offline",
+                              Text(errorText,
                                   textAlign: TextAlign.center,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                     fontSize: 14,
                                   )),
                             ],
@@ -463,6 +486,15 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => VisualSummaryCard(
                           visualSummary: future.data![index],
+                          onTap: (context) {
+                            () async {
+                              await Navigator.of(context).pushNamed(
+                                "/visual-summary/detail",
+                                arguments: VisualSummaryDetailPageArguments(future.data![index].id!),
+                              );
+                              setState(() {});
+                            }();
+                          },
                         ),
                       );
                     }

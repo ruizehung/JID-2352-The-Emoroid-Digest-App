@@ -1,4 +1,5 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/material.dart';
 import '../../utils/isar_service.dart';
 import '../../models/podcast.dart';
@@ -19,6 +20,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;
+  bool loaded = false;
   bool? selectListened;
   bool? selectFavorite;
   Podcast? podcastSelected;
@@ -33,10 +35,14 @@ class _PodcastListPageState extends State<PodcastListPage> {
     Future.delayed(Duration.zero, () async {
       setState(() {
         isLoading = true;
+        loaded = false;
       });
       final connectivityResult = await (Connectivity().checkConnectivity());
       if (connectivityResult != ConnectivityResult.none) {
         await syncPodcastsFromFirestore();
+        setState(() {
+          loaded = true;
+        });
       }
       setState(() {
         selectedKeywords = IsarService().getUniquePodcastsKeywords();
@@ -165,87 +171,6 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
                     onPressed: () => showModalBottomSheet(
-                        context: context,
-                        builder: ((context) => FractionallySizedBox(
-                              heightFactor: 1,
-                              child: Column(
-                                children: [
-                                  getModalBottomSheetTitle("GI Society"),
-                                  Expanded(
-                                    child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService().getUniquePodcastsGISocietyJournal().toList();
-                                      societies.sort();
-                                      societies.insert(0, showAll);
-                                      return ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: societies.length,
-                                        itemBuilder: (context, index) => RadioListTile(
-                                          value: societies[index],
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectedGISocietyJournal = val != showAll ? val : null;
-                                                }));
-                                          },
-                                          activeColor: Colors.blue,
-                                          title: Text(societies[index]),
-                                          groupValue: selectedGISocietyJournal ?? showAll,
-                                          controlAffinity: ListTileControlAffinity.trailing,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
-                            ))),
-                    child: getFilterOutlinedButtonChild("GI Society"),
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                    onPressed: () => showModalBottomSheet(
-                        context: context,
-                        builder: ((context) => FractionallySizedBox(
-                              heightFactor: 1,
-                              child: Column(
-                                children: [
-                                  getModalBottomSheetTitle("Year Guideline Published"),
-                                  Expanded(
-                                    child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService()
-                                          .getUniqueYearGuidelinePublished()
-                                          .map((e) => e.toString())
-                                          .toList();
-                                      societies.sort((a, b) => b.compareTo(a));
-                                      societies.insert(0, showAll);
-                                      return ListView.builder(
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: societies.length,
-                                        itemBuilder: (context, index) => RadioListTile(
-                                          value: societies[index],
-                                          onChanged: (val) {
-                                            setState(() => setListState(() {
-                                                  selectedYearGuidelinePublished = val != showAll ? val : null;
-                                                }));
-                                          },
-                                          activeColor: Colors.blue,
-                                          title: Text(societies[index]),
-                                          groupValue: selectedYearGuidelinePublished ?? showAll,
-                                          controlAffinity: ListTileControlAffinity.trailing,
-                                        ),
-                                      );
-                                    }),
-                                  ),
-                                ],
-                              ),
-                            ))),
-                    child: getFilterOutlinedButtonChild("Year Guideline Published"),
-                  ),
-                  OutlinedButton(
-                    style: ButtonStyle(
-                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
-                    onPressed: () => showModalBottomSheet(
                       context: context,
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
@@ -305,6 +230,87 @@ class _PodcastListPageState extends State<PodcastListPage> {
                           )),
                     ),
                     child: getFilterOutlinedButtonChild("Keywords"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("GI Society"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final societies = IsarService().getUniquePodcastsGISocietyJournal().toList();
+                                      societies.sort();
+                                      societies.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: societies.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: societies[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedGISocietyJournal = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(societies[index]),
+                                          groupValue: selectedGISocietyJournal ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("GI Society"),
+                  ),
+                  OutlinedButton(
+                    style: ButtonStyle(
+                        shape: MaterialStateProperty.all<RoundedRectangleBorder>(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18.0), side: const BorderSide(color: Colors.blue)))),
+                    onPressed: () => showModalBottomSheet(
+                        context: context,
+                        builder: ((context) => FractionallySizedBox(
+                              heightFactor: 1,
+                              child: Column(
+                                children: [
+                                  getModalBottomSheetTitle("Year Guideline Published"),
+                                  Expanded(
+                                    child: StatefulBuilder(builder: (context, setListState) {
+                                      final societies = IsarService()
+                                          .getUniquePodcastsYearGuidelinePublished()
+                                          .map((e) => e.toString())
+                                          .toList();
+                                      societies.sort((a, b) => b.compareTo(a));
+                                      societies.insert(0, showAll);
+                                      return ListView.builder(
+                                        scrollDirection: Axis.vertical,
+                                        itemCount: societies.length,
+                                        itemBuilder: (context, index) => RadioListTile(
+                                          value: societies[index],
+                                          onChanged: (val) {
+                                            setState(() => setListState(() {
+                                                  selectedYearGuidelinePublished = val != showAll ? val : null;
+                                                }));
+                                          },
+                                          activeColor: Colors.blue,
+                                          title: Text(societies[index]),
+                                          groupValue: selectedYearGuidelinePublished ?? showAll,
+                                          controlAffinity: ListTileControlAffinity.trailing,
+                                        ),
+                                      );
+                                    }),
+                                  ),
+                                ],
+                              ),
+                            ))),
+                    child: getFilterOutlinedButtonChild("Year Guideline Published"),
                   ),
                   OutlinedButton(
                     style: ButtonStyle(
@@ -427,29 +433,55 @@ class _PodcastListPageState extends State<PodcastListPage> {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       if (future.data!.isEmpty) {
-                        return SingleChildScrollView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          child: Column(
-                            children: const [
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text("No podcasts available",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 18,
-                                  )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text("Download some podcasts to have them available offline",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                  )),
-                            ],
-                          ),
-                        );
+                        if (loaded) {
+                          return SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No podcasts available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("Please update the filters",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          );
+                        } else {
+                          return SingleChildScrollView(
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            child: Column(
+                              children: const [
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No podcasts available",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                    )),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                Text("No internet connection",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                    )),
+                              ],
+                            ),
+                          );
+                        }
                       }
                       return ListView.builder(
                         scrollDirection: Axis.vertical,
@@ -457,6 +489,15 @@ class _PodcastListPageState extends State<PodcastListPage> {
                         itemCount: future.data!.length,
                         itemBuilder: (context, index) => PodcastCard(
                           podcast: future.data![index],
+                          onTap: (context) {
+                            () async {
+                              Navigator.of(context).pushNamed(
+                                "/podcast/detail",
+                                arguments: PodcastDetailPageArguments(future.data![index].id!),
+                              );
+                              setState(() {});
+                            }();
+                          },
                         ),
                       );
                     }

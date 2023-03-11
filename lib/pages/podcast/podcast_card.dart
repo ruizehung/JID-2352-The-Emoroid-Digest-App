@@ -1,22 +1,19 @@
-import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import '../../models/podcast.dart';
 
 class PodcastCard extends StatelessWidget {
   final double iconSize = 25;
-  const PodcastCard({super.key, required this.podcast});
+  const PodcastCard({super.key, required this.podcast, required this.onTap});
 
   final Podcast podcast;
+  final void Function(BuildContext context) onTap;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
         onTap: () {
-          Navigator.of(context).pushNamed(
-            "/podcast/detail",
-            arguments: PodcastDetailPageArguments(podcast.id!),
-          );
+          onTap(context);
         },
         child: Padding(
             padding: const EdgeInsets.only(left: 16.0, right: 16.0, top: 8),
