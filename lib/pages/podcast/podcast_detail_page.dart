@@ -119,7 +119,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
   Widget build(BuildContext context) {
     final podcast = IsarService().getPodcast(args.podcastID);
     return podcast == null
-        ? Center(child: Text("Unknown visual summary ID: ${args.podcastID}"))
+        ? Center(child: Text("Unknown podcast ID: ${args.podcastID}"))
         : SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
@@ -128,7 +128,9 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                   Row(children: [
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
+                        Navigator.of(context).pushReplacementNamed(
+                          "/podcast",
+                        );
                       },
                       icon: const Icon(Icons.arrow_circle_left_outlined),
                       iconSize: 36,

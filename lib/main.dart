@@ -308,7 +308,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
               },
             ),
           ),
-          PodcastBar()
+          PodcastBar(navigatorKey: navigatorKey)
         ],
       ),
     );
