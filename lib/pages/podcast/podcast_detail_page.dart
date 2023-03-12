@@ -4,6 +4,7 @@ import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_pa
 import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/visual_summary.dart';
 import '../../services/services_locator.dart';
 import '../../utils/isar_service.dart';
@@ -11,6 +12,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import '../bottom_nav_bar_state.dart';
 import 'page_manager.dart';
 
 class PodcastDetailPageArguments {
@@ -158,11 +160,14 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                         decoration: TextDecoration.underline,
                       ),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).pushNamed(
+                        ..onTap = () async {
+                          Provider.of<BottomNavBarState>(context, listen: false).page = 0;
+                          await Navigator.of(context).pushNamed(
                             "/visual-summary/detail",
                             arguments: VisualSummaryDetailPageArguments(vs.id!),
                           );
+                          // ignore: use_build_context_synchronously
+                          Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
                         }),
                 ),
               ),

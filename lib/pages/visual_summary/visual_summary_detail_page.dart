@@ -4,6 +4,7 @@ import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -12,6 +13,7 @@ import 'dart:io';
 
 import '../../models/visual_summary.dart';
 import '../../utils/isar_service.dart';
+import '../bottom_nav_bar_state.dart';
 import '../podcast/podcast_detail_page.dart';
 
 class VisualSummaryDetailPageArguments {
@@ -138,11 +140,14 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                   ),
                   recognizer: podcastTitile != null
                       ? (TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).pushNamed(
+                        ..onTap = () async {
+                          Provider.of<BottomNavBarState>(context, listen: false).page = 2;
+                          await Navigator.of(context).pushNamed(
                             "/podcast/detail",
                             arguments: PodcastDetailPageArguments(podcastID),
                           );
+                          // ignore: use_build_context_synchronously
+                          Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
                         })
                       : null,
                 ),
