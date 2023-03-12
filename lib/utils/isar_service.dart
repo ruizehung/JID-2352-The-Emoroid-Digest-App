@@ -30,7 +30,7 @@ class IsarService {
   static Podcast? getPodcastStatic(String id) {
     return _db.podcasts.filter().idEqualTo(id).findFirstSync();
   }
-    
+
   Podcast? getPodcastByTitle(String title) {
     return _db.podcasts.filter().titleEqualTo(title).findFirstSync();
   }
