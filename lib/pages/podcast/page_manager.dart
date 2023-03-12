@@ -1,12 +1,28 @@
+import 'dart:io';
+
 import 'package:audio_service/audio_service.dart';
 import 'package:audio_session/audio_session.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../services/services_locator.dart';
 import '../../services/audio_handler.dart';
 import '../../utils/isar_service.dart';
 
+ Future<Uri> getImageFileFromAssets() async {
+    final byteData = await rootBundle.load('assets/logo.png');
+    final buffer = byteData.buffer;
+    Directory tempDir =  await getApplicationDocumentsDirectory();
+    String tempPath = tempDir.path;
+    var filePath =
+        tempPath + '/file_01.png'; // file_01.tmp is dump file, can be anything
+    return (await File(filePath).writeAsBytes(
+        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes)))
+        .uri;
+  }
+  
 class PageManager {
   final _audioHandler = getIt<AudioHandler>();
 
@@ -23,7 +39,8 @@ class PageManager {
           duration: podcastArgs.totalDuration != null
               ? Duration(microseconds: (podcastArgs.totalDuration! * 1000).toInt())
               : Duration.zero,
-          // artUri: Uri.parse('https://deow9bq0xqvbj.cloudfront.net/image-logo/12400434/Podcast_log0_2-3brd6x.jpg'),
+          artUri: await getImageFileFromAssets(),
+          artist: "Emoroid Digest Podcast",
           extras: {'url': podcastArgs.mediaUrl});
       var map = {0: podcastArgs, 1: mediaItemVar, 2: newDuration};
       await _audioHandler.customAction('url', map.cast<String, dynamic>());
