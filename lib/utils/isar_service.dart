@@ -23,6 +23,10 @@ class IsarService {
     return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
   }
 
+  List<VisualSummary> getVisualSummaryWithPodcastTitle(String podcastTitle) {
+    return _db.visualSummarys.filter().recordedPodcastTitleEqualTo(podcastTitle).findAllSync();
+  }
+
   Podcast? getPodcast(String id) {
     return _db.podcasts.filter().idEqualTo(id).findFirstSync();
   }
@@ -89,7 +93,7 @@ class IsarService {
   Set<String> getUniquePodcastsGISocietyJournal() {
     final set = <String>{};
     for (var p in _db.podcasts.where().findAllSync()) {
-      set.add(p.giSocietyJournal);
+      set.addAll(p.giSocietyJournal);
     }
     return set;
   }
@@ -121,7 +125,7 @@ class IsarService {
   Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(String value) async {
     return await _db.visualSummarys
         .filter()
-        .titleContains(value, false, caseSensitive: false)
+        .titleContains(value, caseSensitive: false)
         .sortByYearGuidelinePublishedDesc()
         .findAll();
   }
