@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -20,7 +22,6 @@ class _PodcastListPageState extends State<PodcastListPage> {
   final double filterTitleFontSize = 20;
   final IconData filterDropDownIcon = Icons.arrow_drop_down_circle_outlined;
   bool isLoading = false;
-  bool loaded = false;
   bool? selectListened;
   bool? selectFavorite;
   Podcast? podcastSelected;
@@ -28,6 +29,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
   String? selectedGISocietyJournal;
   String? selectedYearGuidelinePublished;
   Set<String> selectedKeywords = {};
+  late StreamSubscription<ConnectivityResult> subscription;
+  ConnectivityResult connectivityStatus = ConnectivityResult.none;
 
   @override
   void initState() {
@@ -35,20 +38,27 @@ class _PodcastListPageState extends State<PodcastListPage> {
     Future.delayed(Duration.zero, () async {
       setState(() {
         isLoading = true;
-        loaded = false;
       });
-      final connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult != ConnectivityResult.none) {
-        await syncPodcastsFromFirestore();
+
+      subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
         setState(() {
-          loaded = true;
+          connectivityStatus = result;
         });
+      });
+      if (connectivityStatus != ConnectivityResult.none) {
+        await syncPodcastsFromFirestore();
       }
       setState(() {
         selectedKeywords = IsarService().getUniquePodcastsKeywords();
         isLoading = false;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
   }
 
   Future<List<Podcast>> _getFilteredPodcasts() async {
@@ -433,7 +443,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                       return const Center(child: CircularProgressIndicator());
                     } else {
                       if (future.data!.isEmpty) {
-                        if (loaded) {
+                        if (connectivityStatus != ConnectivityResult.none) {
                           return SingleChildScrollView(
                             physics: const AlwaysScrollableScrollPhysics(),
                             child: Column(
@@ -491,7 +501,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                           podcast: future.data![index],
                           onTap: (context) {
                             () async {
-                              Navigator.of(context).pushNamed(
+                              await Navigator.of(context).pushNamed(
                                 "/podcast/detail",
                                 arguments: PodcastDetailPageArguments(future.data![index].id!),
                               );
