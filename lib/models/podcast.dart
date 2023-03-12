@@ -22,9 +22,9 @@ class Podcast {
   late bool isFavorite = false;
   late int? currentDuration = null;
   late int? totalDuration = null;
-
-  @Index(type: IndexType.value, caseSensitive: false)
-  List<String> get contentTitle => title.split(' ');
+  
+   @Index(type: IndexType.value, caseSensitive: false)
+   List<String> get contentTitle => title.split(' ');
 }
 
 /// FNV-1a 64bit hash algorithm optimized for Dart Strings
