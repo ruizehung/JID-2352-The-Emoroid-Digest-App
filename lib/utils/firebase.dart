@@ -29,7 +29,7 @@ Future<void> syncPodcastsFromFirestore() async {
         ..linkGuest = data['link_guest']
         ..guidelineAuthors = (data['guidelineAuthors'] as List<dynamic>).cast<String>()
         ..yearGuidelinePublished = data['yearGuidelinePublished']
-        ..giSocietyJournal = data['giSocietyJournal']
+        ..giSocietyJournal = (data['giSocietyJournal'] as List<dynamic>).cast<String>()
         ..organSystems = (data['organSystems'] as List<dynamic>).cast<String>()
         ..keywords = (data['keywords'] as List<dynamic>).cast<String>()
         ..mediaUrl = data['media_url']
