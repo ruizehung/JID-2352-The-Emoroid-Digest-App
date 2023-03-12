@@ -49,7 +49,7 @@ class PodcastCard extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: 70,
-                                child: Text(podcast.giSocietyJournal,
+                                child: Text(podcast.giSocietyJournal.join(", "),
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
                                       fontSize: 15,
