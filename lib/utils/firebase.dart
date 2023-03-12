@@ -40,7 +40,7 @@ Future<void> syncPodcastsFromFirestore() async {
       IsarService().savePodcast(p);
     }));
 
-    // lastUpdateLocal.podcasts = podcastsLastUpdateTime;
+    lastUpdateLocal.podcasts = podcastsLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);
   }
 }

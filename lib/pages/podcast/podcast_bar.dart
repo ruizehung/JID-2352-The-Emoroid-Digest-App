@@ -9,7 +9,9 @@ import 'package:marquee/marquee.dart';
 import '../../services/services_locator.dart';
 
 class PodcastBar extends StatefulWidget {
-  const PodcastBar({super.key});
+  final GlobalKey<NavigatorState> navigatorKey;
+
+  const PodcastBar({super.key, required this.navigatorKey});
 
   @override
   State<PodcastBar> createState() => _PodcastBarState();
@@ -25,7 +27,7 @@ class _PodcastBarState extends State<PodcastBar> {
   var showBar = true;
   // late final _audioHandler;
   PageManager? _pageManager = PageManager(null, null);
-  final navigatorKey = GlobalKey<NavigatorState>();
+  // final navigatorKey = GlobalKey<NavigatorState>();
   final AudioHandler _audioHandler = getIt<AudioHandler>();
   AudioProcessingState processingState = AudioProcessingState.idle;
 
@@ -72,7 +74,7 @@ class _PodcastBarState extends State<PodcastBar> {
                           flex: 6,
                           child: InkWell(
                               onTap: () {
-                                navigatorKey.currentState?.pushReplacementNamed(
+                                widget.navigatorKey.currentState?.pushReplacementNamed(
                                   "/podcast/detail",
                                   arguments: PodcastDetailPageArguments(value.id),
                                 );

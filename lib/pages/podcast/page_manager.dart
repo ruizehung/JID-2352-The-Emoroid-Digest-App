@@ -17,7 +17,7 @@ class PageManager {
   void _init(AudioHandler _audioHandler, Podcast? podcastArgs, Duration? newDuration) async {
     if (podcastArgs != null) {
       var mediaItemVar = MediaItem(
-          id: podcastArgs.id.toString(),
+          id: podcastArgs.id!,
           title: podcastArgs.title,
           displayTitle: podcastArgs.title,
           duration: podcastArgs.totalDuration != null
@@ -48,7 +48,7 @@ class PageManager {
           buffered: playbackState.bufferedPosition,
           total: oldState.total,
           title: oldState.title,
-          id: podcastArgs?.id.toString() ?? '');
+          id: oldState.id);
     });
     AudioService.position.listen((position) {
       final oldState = progressNotifier.value;
@@ -68,6 +68,14 @@ class PageManager {
             IsarService.savePodcastStatic(pod);
           }
         }
+        final oldState = progressNotifier.value;
+        progressNotifier.value = ProgressBarState(
+          current: position,
+          buffered: oldState.buffered,
+          total: oldState.total,
+          title: oldState.title,
+          id: _audioHandler.mediaItem.value!.id,
+        );
       }
     });
 
