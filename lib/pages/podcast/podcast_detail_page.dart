@@ -1,7 +1,10 @@
 import 'package:audio_service/audio_service.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../../models/visual_summary.dart';
 import '../../services/services_locator.dart';
 import '../../utils/isar_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -74,22 +77,26 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
     super.dispose();
   }
 
+  Widget detailFieldTitle(String title) {
+    return Row(
+      children: [
+        Expanded(
+            child: Text(
+          title,
+          textAlign: TextAlign.start,
+          style: TextStyle(
+            fontSize: fieldFontSize,
+            fontWeight: FontWeight.bold,
+          ),
+        )),
+      ],
+    );
+  }
+
   Widget detailField(String title, String value) {
     return Column(
       children: [
-        Row(
-          children: [
-            Expanded(
-                child: Text(
-              title,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                fontSize: fieldFontSize,
-                fontWeight: FontWeight.bold,
-              ),
-            )),
-          ],
-        ),
+        detailFieldTitle(title),
         const SizedBox(
           height: 8,
         ),
@@ -109,6 +116,65 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
         const Divider(),
       ],
     );
+  }
+
+  Widget visualSummaryDetailField(String fieldTitle, String podcastTitile, BuildContext context) {
+    List<VisualSummary> visualSummaries = IsarService().getVisualSummaryWithPodcastTitle(podcastTitile);
+    List<Widget> columnChildren = [
+      detailFieldTitle(fieldTitle),
+      const SizedBox(
+        height: 8,
+      )
+    ];
+
+    if (visualSummaries.isEmpty) {
+      columnChildren.add(
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                "N/A",
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  fontSize: fieldFontSize,
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    } else {
+      for (var vs in visualSummaries) {
+        columnChildren.add(
+          Row(
+            children: [
+              Expanded(
+                child: RichText(
+                  text: TextSpan(
+                      text: vs.title,
+                      style: TextStyle(
+                        fontSize: fieldFontSize,
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushNamed(
+                            "/visual-summary/detail",
+                            arguments: VisualSummaryDetailPageArguments(vs.id!),
+                          );
+                        }),
+                ),
+              ),
+            ],
+          ),
+        );
+      }
+    }
+
+    columnChildren.add(const Divider());
+
+    return Column(children: columnChildren);
   }
 
   @override
@@ -271,14 +337,12 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                         ),
                         detailField("Guest", podcast.guest),
                         detailField("Year Guideline Published", "${podcast.yearGuidelinePublished}"),
-                        // detailField("Society", podcast.giSocietyJournal.join(", ")),
+                        detailField("Society", podcast.giSocietyJournal.join(", ")),
                         detailField("Organ Systems", podcast.organSystems.join(", ")),
                         detailField("Keywords", podcast.keywords.join(", ")),
                         detailField("Guideline Authors (First two and last listed author)",
                             podcast.guidelineAuthors.join(", ")),
-                        // detailField("Recorded Podcast",
-                        //     podcast.recordedPodcastTitle == null ? "N/A" : podcast.recordedPodcastTitle!),
-                        // detailField("Visual Summary Fellow Author", podcast.fellowAuthor),
+                        visualSummaryDetailField("Visual Summary", podcast.title, context),
                         detailField("Podcast Release Date",
                             "${podcast.dateReleased.year.toString()}-${podcast.dateReleased.month.toString().padLeft(2, '0')}-${podcast.dateReleased.day.toString().padLeft(2, '0')}"),
                       ],

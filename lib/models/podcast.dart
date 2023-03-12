@@ -13,7 +13,7 @@ class Podcast {
   late String linkGuest;
   late List<String> guidelineAuthors;
   late int yearGuidelinePublished;
-  late String giSocietyJournal;
+  late List<String> giSocietyJournal;
   late List<String> organSystems;
   late List<String> keywords;
   String? mediaUrl;

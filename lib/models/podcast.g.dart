@@ -17,88 +17,93 @@ const PodcastSchema = CollectionSchema(
   name: r'Podcast',
   id: -1143728065732125040,
   properties: {
-    r'currentDuration': PropertySchema(
+    r'contentTitle': PropertySchema(
       id: 0,
+      name: r'contentTitle',
+      type: IsarType.stringList,
+    ),
+    r'currentDuration': PropertySchema(
+      id: 1,
       name: r'currentDuration',
       type: IsarType.long,
     ),
     r'dateReleased': PropertySchema(
-      id: 1,
+      id: 2,
       name: r'dateReleased',
       type: IsarType.dateTime,
     ),
     r'giSocietyJournal': PropertySchema(
-      id: 2,
+      id: 3,
       name: r'giSocietyJournal',
-      type: IsarType.string,
+      type: IsarType.stringList,
     ),
     r'guest': PropertySchema(
-      id: 3,
+      id: 4,
       name: r'guest',
       type: IsarType.string,
     ),
     r'guidelineAuthors': PropertySchema(
-      id: 4,
+      id: 5,
       name: r'guidelineAuthors',
       type: IsarType.stringList,
     ),
     r'hasListened': PropertySchema(
-      id: 5,
+      id: 6,
       name: r'hasListened',
       type: IsarType.bool,
     ),
     r'id': PropertySchema(
-      id: 6,
+      id: 7,
       name: r'id',
       type: IsarType.string,
     ),
     r'isFavorite': PropertySchema(
-      id: 7,
+      id: 8,
       name: r'isFavorite',
       type: IsarType.bool,
     ),
     r'keywords': PropertySchema(
-      id: 8,
+      id: 9,
       name: r'keywords',
       type: IsarType.stringList,
     ),
     r'linkGuest': PropertySchema(
-      id: 9,
+      id: 10,
       name: r'linkGuest',
       type: IsarType.string,
     ),
     r'mediaStorage': PropertySchema(
-      id: 10,
+      id: 11,
       name: r'mediaStorage',
       type: IsarType.string,
     ),
     r'mediaUrl': PropertySchema(
-      id: 11,
+      id: 12,
       name: r'mediaUrl',
       type: IsarType.string,
     ),
     r'organSystems': PropertySchema(
-      id: 12,
+      id: 13,
       name: r'organSystems',
       type: IsarType.stringList,
     ),
     r'title': PropertySchema(
-      id: 13,
+      id: 14,
       name: r'title',
       type: IsarType.string,
     ),
     r'totalDuration': PropertySchema(
-      id: 14,
+      id: 15,
       name: r'totalDuration',
       type: IsarType.long,
     ),
     r'twitterPodcastLink': PropertySchema(
-      id: 15,
+      id: 16,
       name: r'twitterPodcastLink',
       type: IsarType.string,
     ),
     r'yearGuidelinePublished': PropertySchema(
-      id: 16,
+      id: 17,
       name: r'yearGuidelinePublished',
       type: IsarType.long,
     )
@@ -108,7 +113,21 @@ const PodcastSchema = CollectionSchema(
   deserialize: _podcastDeserialize,
   deserializeProp: _podcastDeserializeProp,
   idName: r'isarId',
-  indexes: {},
+  indexes: {
+    r'contentTitle': IndexSchema(
+      id: -4533701157091173902,
+      name: r'contentTitle',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'contentTitle',
+          type: IndexType.value,
+          caseSensitive: false,
+        )
+      ],
+    )
+  },
   links: {},
   embeddedSchemas: {},
   getId: _podcastGetId,
@@ -123,7 +142,20 @@ int _podcastEstimateSize(
   Map<Type, List<int>> allOffsets,
 ) {
   var bytesCount = offsets.last;
+  bytesCount += 3 + object.contentTitle.length * 3;
+  {
+    for (var i = 0; i < object.contentTitle.length; i++) {
+      final value = object.contentTitle[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.giSocietyJournal.length * 3;
+  {
+    for (var i = 0; i < object.giSocietyJournal.length; i++) {
+      final value = object.giSocietyJournal[i];
+      bytesCount += value.length * 3;
+    }
+  }
   bytesCount += 3 + object.guest.length * 3;
   bytesCount += 3 + object.guidelineAuthors.length * 3;
   {
@@ -176,23 +208,24 @@ void _podcastSerialize(
   List<int> offsets,
   Map<Type, List<int>> allOffsets,
 ) {
-  writer.writeLong(offsets[0], object.currentDuration);
-  writer.writeDateTime(offsets[1], object.dateReleased);
-  writer.writeString(offsets[2], object.giSocietyJournal);
-  writer.writeString(offsets[3], object.guest);
-  writer.writeStringList(offsets[4], object.guidelineAuthors);
-  writer.writeBool(offsets[5], object.hasListened);
-  writer.writeString(offsets[6], object.id);
-  writer.writeBool(offsets[7], object.isFavorite);
-  writer.writeStringList(offsets[8], object.keywords);
-  writer.writeString(offsets[9], object.linkGuest);
-  writer.writeString(offsets[10], object.mediaStorage);
-  writer.writeString(offsets[11], object.mediaUrl);
-  writer.writeStringList(offsets[12], object.organSystems);
-  writer.writeString(offsets[13], object.title);
-  writer.writeLong(offsets[14], object.totalDuration);
-  writer.writeString(offsets[15], object.twitterPodcastLink);
-  writer.writeLong(offsets[16], object.yearGuidelinePublished);
+  writer.writeStringList(offsets[0], object.contentTitle);
+  writer.writeLong(offsets[1], object.currentDuration);
+  writer.writeDateTime(offsets[2], object.dateReleased);
+  writer.writeStringList(offsets[3], object.giSocietyJournal);
+  writer.writeString(offsets[4], object.guest);
+  writer.writeStringList(offsets[5], object.guidelineAuthors);
+  writer.writeBool(offsets[6], object.hasListened);
+  writer.writeString(offsets[7], object.id);
+  writer.writeBool(offsets[8], object.isFavorite);
+  writer.writeStringList(offsets[9], object.keywords);
+  writer.writeString(offsets[10], object.linkGuest);
+  writer.writeString(offsets[11], object.mediaStorage);
+  writer.writeString(offsets[12], object.mediaUrl);
+  writer.writeStringList(offsets[13], object.organSystems);
+  writer.writeString(offsets[14], object.title);
+  writer.writeLong(offsets[15], object.totalDuration);
+  writer.writeString(offsets[16], object.twitterPodcastLink);
+  writer.writeLong(offsets[17], object.yearGuidelinePublished);
 }
 
 Podcast _podcastDeserialize(
@@ -202,23 +235,23 @@ Podcast _podcastDeserialize(
   Map<Type, List<int>> allOffsets,
 ) {
   final object = Podcast();
-  object.currentDuration = reader.readLongOrNull(offsets[0]);
-  object.dateReleased = reader.readDateTime(offsets[1]);
-  object.giSocietyJournal = reader.readString(offsets[2]);
-  object.guest = reader.readString(offsets[3]);
-  object.guidelineAuthors = reader.readStringList(offsets[4]) ?? [];
-  object.hasListened = reader.readBool(offsets[5]);
-  object.id = reader.readStringOrNull(offsets[6]);
-  object.isFavorite = reader.readBool(offsets[7]);
-  object.keywords = reader.readStringList(offsets[8]) ?? [];
-  object.linkGuest = reader.readString(offsets[9]);
-  object.mediaStorage = reader.readStringOrNull(offsets[10]);
-  object.mediaUrl = reader.readStringOrNull(offsets[11]);
-  object.organSystems = reader.readStringList(offsets[12]) ?? [];
-  object.title = reader.readString(offsets[13]);
-  object.totalDuration = reader.readLongOrNull(offsets[14]);
-  object.twitterPodcastLink = reader.readString(offsets[15]);
-  object.yearGuidelinePublished = reader.readLong(offsets[16]);
+  object.currentDuration = reader.readLongOrNull(offsets[1]);
+  object.dateReleased = reader.readDateTime(offsets[2]);
+  object.giSocietyJournal = reader.readStringList(offsets[3]) ?? [];
+  object.guest = reader.readString(offsets[4]);
+  object.guidelineAuthors = reader.readStringList(offsets[5]) ?? [];
+  object.hasListened = reader.readBool(offsets[6]);
+  object.id = reader.readStringOrNull(offsets[7]);
+  object.isFavorite = reader.readBool(offsets[8]);
+  object.keywords = reader.readStringList(offsets[9]) ?? [];
+  object.linkGuest = reader.readString(offsets[10]);
+  object.mediaStorage = reader.readStringOrNull(offsets[11]);
+  object.mediaUrl = reader.readStringOrNull(offsets[12]);
+  object.organSystems = reader.readStringList(offsets[13]) ?? [];
+  object.title = reader.readString(offsets[14]);
+  object.totalDuration = reader.readLongOrNull(offsets[15]);
+  object.twitterPodcastLink = reader.readString(offsets[16]);
+  object.yearGuidelinePublished = reader.readLong(offsets[17]);
   return object;
 }
 
@@ -230,38 +263,40 @@ P _podcastDeserializeProp<P>(
 ) {
   switch (propertyId) {
     case 0:
-      return (reader.readLongOrNull(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 1:
-      return (reader.readDateTime(offset)) as P;
+      return (reader.readLongOrNull(offset)) as P;
     case 2:
-      return (reader.readString(offset)) as P;
+      return (reader.readDateTime(offset)) as P;
     case 3:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 4:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 5:
-      return (reader.readBool(offset)) as P;
-    case 6:
-      return (reader.readStringOrNull(offset)) as P;
-    case 7:
-      return (reader.readBool(offset)) as P;
-    case 8:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 9:
       return (reader.readString(offset)) as P;
-    case 10:
+    case 5:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 6:
+      return (reader.readBool(offset)) as P;
+    case 7:
       return (reader.readStringOrNull(offset)) as P;
+    case 8:
+      return (reader.readBool(offset)) as P;
+    case 9:
+      return (reader.readStringList(offset) ?? []) as P;
+    case 10:
+      return (reader.readString(offset)) as P;
     case 11:
       return (reader.readStringOrNull(offset)) as P;
     case 12:
-      return (reader.readStringList(offset) ?? []) as P;
+      return (reader.readStringOrNull(offset)) as P;
     case 13:
-      return (reader.readString(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 14:
-      return (reader.readLongOrNull(offset)) as P;
-    case 15:
       return (reader.readString(offset)) as P;
+    case 15:
+      return (reader.readLongOrNull(offset)) as P;
     case 16:
+      return (reader.readString(offset)) as P;
+    case 17:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -282,6 +317,14 @@ extension PodcastQueryWhereSort on QueryBuilder<Podcast, Podcast, QWhere> {
   QueryBuilder<Podcast, Podcast, QAfterWhere> anyIsarId() {
     return QueryBuilder.apply(this, (query) {
       return query.addWhereClause(const IdWhereClause.any());
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhere> anyContentTitleElement() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(
+        const IndexWhereClause.any(indexName: r'contentTitle'),
+      );
     });
   }
 }
@@ -352,10 +395,373 @@ extension PodcastQueryWhere on QueryBuilder<Podcast, Podcast, QWhereClause> {
       ));
     });
   }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause> contentTitleElementEqualTo(
+      String contentTitleElement) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'contentTitle',
+        value: [contentTitleElement],
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause>
+      contentTitleElementNotEqualTo(String contentTitleElement) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'contentTitle',
+              lower: [],
+              upper: [contentTitleElement],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'contentTitle',
+              lower: [contentTitleElement],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'contentTitle',
+              lower: [contentTitleElement],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'contentTitle',
+              lower: [],
+              upper: [contentTitleElement],
+              includeUpper: false,
+            ));
+      }
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause>
+      contentTitleElementGreaterThan(
+    String contentTitleElement, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'contentTitle',
+        lower: [contentTitleElement],
+        includeLower: include,
+        upper: [],
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause> contentTitleElementLessThan(
+    String contentTitleElement, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'contentTitle',
+        lower: [],
+        upper: [contentTitleElement],
+        includeUpper: include,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause> contentTitleElementBetween(
+    String lowerContentTitleElement,
+    String upperContentTitleElement, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'contentTitle',
+        lower: [lowerContentTitleElement],
+        includeLower: includeLower,
+        upper: [upperContentTitleElement],
+        includeUpper: includeUpper,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause>
+      contentTitleElementStartsWith(String ContentTitleElementPrefix) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.between(
+        indexName: r'contentTitle',
+        lower: [ContentTitleElementPrefix],
+        upper: ['$ContentTitleElementPrefix\u{FFFFF}'],
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause>
+      contentTitleElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'contentTitle',
+        value: [''],
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterWhereClause>
+      contentTitleElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.lessThan(
+              indexName: r'contentTitle',
+              upper: [''],
+            ))
+            .addWhereClause(IndexWhereClause.greaterThan(
+              indexName: r'contentTitle',
+              lower: [''],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.greaterThan(
+              indexName: r'contentTitle',
+              lower: [''],
+            ))
+            .addWhereClause(IndexWhereClause.lessThan(
+              indexName: r'contentTitle',
+              upper: [''],
+            ));
+      }
+    });
+  }
 }
 
 extension PodcastQueryFilter
     on QueryBuilder<Podcast, Podcast, QFilterCondition> {
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'contentTitle',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementGreaterThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'contentTitle',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementLessThan(
+    String value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'contentTitle',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementBetween(
+    String lower,
+    String upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'contentTitle',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'contentTitle',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'contentTitle',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'contentTitle',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'contentTitle',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'contentTitle',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleElementIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'contentTitle',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'contentTitle',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> contentTitleIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'contentTitle',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'contentTitle',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'contentTitle',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'contentTitle',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      contentTitleLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'contentTitle',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
       currentDurationIsNull() {
     return QueryBuilder.apply(this, (query) {
@@ -481,7 +887,8 @@ extension PodcastQueryFilter
     });
   }
 
-  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> giSocietyJournalEqualTo(
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalElementEqualTo(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -495,7 +902,7 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalGreaterThan(
+      giSocietyJournalElementGreaterThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -511,7 +918,7 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalLessThan(
+      giSocietyJournalElementLessThan(
     String value, {
     bool include = false,
     bool caseSensitive = true,
@@ -526,7 +933,8 @@ extension PodcastQueryFilter
     });
   }
 
-  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> giSocietyJournalBetween(
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalElementBetween(
     String lower,
     String upper, {
     bool includeLower = true,
@@ -546,7 +954,7 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalStartsWith(
+      giSocietyJournalElementStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -560,7 +968,7 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalEndsWith(
+      giSocietyJournalElementEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -574,7 +982,8 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalContains(String value, {bool caseSensitive = true}) {
+      giSocietyJournalElementContains(String value,
+          {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.contains(
         property: r'giSocietyJournal',
@@ -584,9 +993,9 @@ extension PodcastQueryFilter
     });
   }
 
-  QueryBuilder<Podcast, Podcast, QAfterFilterCondition> giSocietyJournalMatches(
-      String pattern,
-      {bool caseSensitive = true}) {
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalElementMatches(String pattern,
+          {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.matches(
         property: r'giSocietyJournal',
@@ -597,7 +1006,7 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalIsEmpty() {
+      giSocietyJournalElementIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.equalTo(
         property: r'giSocietyJournal',
@@ -607,12 +1016,101 @@ extension PodcastQueryFilter
   }
 
   QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
-      giSocietyJournalIsNotEmpty() {
+      giSocietyJournalElementIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'giSocietyJournal',
         value: '',
       ));
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalLengthEqualTo(int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        length,
+        true,
+        length,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        0,
+        true,
+        0,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        0,
+        false,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        0,
+        true,
+        length,
+        include,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        length,
+        include,
+        999999,
+        true,
+      );
+    });
+  }
+
+  QueryBuilder<Podcast, Podcast, QAfterFilterCondition>
+      giSocietyJournalLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.listLength(
+        r'giSocietyJournal',
+        lower,
+        includeLower,
+        upper,
+        includeUpper,
+      );
     });
   }
 
@@ -2483,18 +2981,6 @@ extension PodcastQuerySortBy on QueryBuilder<Podcast, Podcast, QSortBy> {
     });
   }
 
-  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByGiSocietyJournal() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByGiSocietyJournalDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.desc);
-    });
-  }
-
   QueryBuilder<Podcast, Podcast, QAfterSortBy> sortByGuest() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'guest', Sort.asc);
@@ -2655,18 +3141,6 @@ extension PodcastQuerySortThenBy
     });
   }
 
-  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByGiSocietyJournal() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.asc);
-    });
-  }
-
-  QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByGiSocietyJournalDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'giSocietyJournal', Sort.desc);
-    });
-  }
-
   QueryBuilder<Podcast, Podcast, QAfterSortBy> thenByGuest() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'guest', Sort.asc);
@@ -2815,6 +3289,12 @@ extension PodcastQuerySortThenBy
 
 extension PodcastQueryWhereDistinct
     on QueryBuilder<Podcast, Podcast, QDistinct> {
+  QueryBuilder<Podcast, Podcast, QDistinct> distinctByContentTitle() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'contentTitle');
+    });
+  }
+
   QueryBuilder<Podcast, Podcast, QDistinct> distinctByCurrentDuration() {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'currentDuration');
@@ -2827,11 +3307,9 @@ extension PodcastQueryWhereDistinct
     });
   }
 
-  QueryBuilder<Podcast, Podcast, QDistinct> distinctByGiSocietyJournal(
-      {bool caseSensitive = true}) {
+  QueryBuilder<Podcast, Podcast, QDistinct> distinctByGiSocietyJournal() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'giSocietyJournal',
-          caseSensitive: caseSensitive);
+      return query.addDistinctBy(r'giSocietyJournal');
     });
   }
 
@@ -2936,6 +3414,12 @@ extension PodcastQueryProperty
     });
   }
 
+  QueryBuilder<Podcast, List<String>, QQueryOperations> contentTitleProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'contentTitle');
+    });
+  }
+
   QueryBuilder<Podcast, int?, QQueryOperations> currentDurationProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'currentDuration');
@@ -2948,7 +3432,8 @@ extension PodcastQueryProperty
     });
   }
 
-  QueryBuilder<Podcast, String, QQueryOperations> giSocietyJournalProperty() {
+  QueryBuilder<Podcast, List<String>, QQueryOperations>
+      giSocietyJournalProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'giSocietyJournal');
     });

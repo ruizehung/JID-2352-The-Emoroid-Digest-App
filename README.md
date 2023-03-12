@@ -16,7 +16,23 @@ For help getting started with Flutter development, view the
 samples, guidance on mobile development, and a full API reference.
 
 # Release Notes
-## Version 0.1.0:
+
+## Version 0.2.0
+### New Features
+* Browse podcasts based on categories (like medical society, organ systems, keywords, and the year the guideline was released)
+* Add podcast detail page and can listen to podcast
+* Mark podcasts as listened or un-listened and favorite
+* Navigate from visual summaries to associated podcast and the other direction
+* Receive notification when new podcasts are available
+* A search page for searching both visual summaries and podcasts
+* An about page that displays information about The Emoroid Digest App
+
+### Bug Fixes
+N/A
+
+---
+
+## Version 0.1.0
 ### New Features
 * Browse visual summaries based on categories (like medical society, organ systems, keywords, and the year the guideline was released)
 * Download visual summaries for offline access

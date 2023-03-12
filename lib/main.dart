@@ -292,11 +292,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                   case "/search":
                     page = const SearchPage();
                     break;
-                  // case "/about":
-                  //   page = const AboutPage();
-                  //   break;
                   default:
-                    page = Text('Unknown page: ${settings.name!}');
+                    page = const HomePage();
+                    print('Unknown page: ${settings.name!}');
                 }
 
                 return PageRouteBuilder(
