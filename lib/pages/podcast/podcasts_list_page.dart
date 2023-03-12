@@ -55,6 +55,12 @@ class _PodcastListPageState extends State<PodcastListPage> {
     });
   }
 
+  @override
+  void dispose() {
+    subscription.cancel();
+    super.dispose();
+  }
+
   Future<List<Podcast>> _getFilteredPodcasts() async {
     List<Podcast> sourceList;
     List<Podcast> toRender = [];
