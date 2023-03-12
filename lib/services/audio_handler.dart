@@ -59,6 +59,8 @@ class AudioPlayerHandler extends BaseAudioHandler {
           id: oldMedia.id.toString(),
           title: oldMedia.title,
           displayTitle: oldMedia.title,
+          artUri: oldMedia.artUri,
+          artist: oldMedia.artist,
           duration: duration,
           playable: true,
           extras: {'url': oldMedia.extras!['url']}));
