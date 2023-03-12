@@ -7,12 +7,8 @@ import '../../utils/isar_service.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'dart:async';
-import 'dart:io';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'page_manager.dart';
-import '../../services/audio_handler.dart';
 
 class PodcastDetailPageArguments {
   final String podcastID;
@@ -271,7 +267,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                         const SizedBox(
                           height: 8,
                         ),
-                        detailField("Guest", "${podcast.guest}"),
+                        detailField("Guest", podcast.guest),
                         detailField("Year Guideline Published", "${podcast.yearGuidelinePublished}"),
                         // detailField("Society", podcast.giSocietyJournal.join(", ")),
                         detailField("Organ Systems", podcast.organSystems.join(", ")),
