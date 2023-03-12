@@ -17,7 +17,7 @@ samples, guidance on mobile development, and a full API reference.
 
 # Release Notes
 
-## Version 0.2.0:
+## Version 0.2.0
 ### New Features
 * Browse podcasts based on categories (like medical society, organ systems, keywords, and the year the guideline was released)
 * Add podcast detail page and can listen to podcast
@@ -32,7 +32,7 @@ N/A
 
 ---
 
-## Version 0.1.0:
+## Version 0.1.0
 ### New Features
 * Browse visual summaries based on categories (like medical society, organ systems, keywords, and the year the guideline was released)
 * Download visual summaries for offline access
