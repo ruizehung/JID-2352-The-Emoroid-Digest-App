@@ -10,8 +10,9 @@ import '../../services/services_locator.dart';
 
 class PodcastBar extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
+  final Future<void> Function(int) onNavTap;
 
-  const PodcastBar({super.key, required this.navigatorKey});
+  const PodcastBar({super.key, required this.navigatorKey, required this.onNavTap});
 
   @override
   State<PodcastBar> createState() => _PodcastBarState();
@@ -74,6 +75,7 @@ class _PodcastBarState extends State<PodcastBar> {
                           flex: 6,
                           child: InkWell(
                               onTap: () {
+                                widget.onNavTap(2);
                                 widget.navigatorKey.currentState?.pushReplacementNamed(
                                   "/podcast/detail",
                                   arguments: PodcastDetailPageArguments(value.id),
