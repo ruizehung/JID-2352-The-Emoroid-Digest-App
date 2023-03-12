@@ -1,3 +1,4 @@
+import 'package:emoroid_digest_app/pages/bottom_nav_bar_state.dart';
 import 'package:emoroid_digest_app/pages/home.dart';
 import 'package:emoroid_digest_app/pages/notification_page.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_bar.dart';
@@ -12,6 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -82,7 +84,10 @@ class TheEmoroidDigestAppWrapper extends StatelessWidget {
           secondary: Colors.blue.shade800,
         ),
       ),
-      home: TheEmoroidDigestApp(title: title),
+      home: ChangeNotifierProvider(
+        create: (BuildContext context) => BottomNavBarState(),
+        child: TheEmoroidDigestApp(title: title),
+      ),
     );
   }
 }
@@ -240,10 +245,10 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     navigatorKey.currentState!.pushNamed("/notification");
   }
 
-  Future<void> _onNavButtonTapped(int index) async {
-    if (index == _pageIndex) return;
-    setState(() => _pageIndex = index);
-    switch (index) {
+  Future<void> _onNavButtonTapped(int newIndex, BottomNavBarState bottomNavBarState) async {
+    if (newIndex == bottomNavBarState.page) return;
+    bottomNavBarState.page = newIndex;
+    switch (newIndex) {
       case 0:
         navigatorKey.currentState!.pushReplacementNamed("/visual-summary");
         break;
@@ -256,10 +261,11 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     }
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BottomNavBarState bottomNavBarState) {
     return WillPopScope(
       onWillPop: () async {
-        navigatorKey.currentState!.maybePop();
+        await navigatorKey.currentState!.maybePop();
+        bottomNavBarState.updateBasedOnRoute();
         return false;
       },
       child: Column(
@@ -306,7 +312,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
               },
             ),
           ),
-          PodcastBar(navigatorKey: navigatorKey, onNavTap: _onNavButtonTapped)
+          PodcastBar(navigatorKey: navigatorKey)
         ],
       ),
     );
@@ -316,6 +322,8 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
   Widget build(BuildContext context) {
     final ThemeData theme = Theme.of(context);
     final TextStyle textStyle = theme.textTheme.bodyMedium!;
+    final bottomNavBarState = Provider.of<BottomNavBarState>(context);
+    bottomNavBarState.navigatorKey = navigatorKey;
     final List<Widget> aboutBoxChildren = <Widget>[
       const SizedBox(height: 24),
       RichText(
@@ -380,7 +388,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           ),
         ],
       ),
-      body: _buildBody(),
+      body: _buildBody(bottomNavBarState),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         items: const [
@@ -397,9 +405,11 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
             label: "Podcasts",
           ),
         ],
-        currentIndex: _pageIndex,
+        currentIndex: bottomNavBarState.page,
         selectedItemColor: Colors.blue[800],
-        onTap: _onNavButtonTapped,
+        onTap: (int val) {
+          _onNavButtonTapped(val, bottomNavBarState);
+        },
       ),
       drawer: Drawer(
         child: Column(children: [
