@@ -139,13 +139,10 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                   recognizer: podcastTitile != null
                       ? (TapGestureRecognizer()
                         ..onTap = () {
-                          () async {
-                            Navigator.of(context).pushNamed(
-                              "/podcast/detail",
-                              arguments: PodcastDetailPageArguments(podcastID),
-                            );
-                            setState(() {});
-                          }();
+                          Navigator.of(context).pushNamed(
+                            "/podcast/detail",
+                            arguments: PodcastDetailPageArguments(podcastID),
+                          );
                         })
                       : null,
                 ),
