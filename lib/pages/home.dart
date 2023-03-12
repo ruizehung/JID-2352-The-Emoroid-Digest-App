@@ -4,11 +4,13 @@ import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_card.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/firebase.dart';
 import '../utils/isar_service.dart';
 import '../models/podcast.dart';
 import '../models/visual_summary.dart';
+import 'bottom_nav_bar_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -77,6 +79,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final bottomNavBarState = Provider.of<BottomNavBarState>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -105,6 +108,7 @@ class _HomePageState extends State<HomePage> {
                   visualSummary: future.data!,
                   onTap: (context) {
                     () async {
+                      bottomNavBarState.page = 0;
                       await Navigator.of(context).pushNamed(
                         "/visual-summary/detail",
                         arguments: VisualSummaryDetailPageArguments(future.data!.id!),
@@ -140,7 +144,8 @@ class _HomePageState extends State<HomePage> {
                   podcast: future.data!,
                   onTap: (context) {
                     () async {
-                      Navigator.of(context).pushNamed(
+                      bottomNavBarState.page = 2;
+                      await Navigator.of(context).pushNamed(
                         "/podcast/detail",
                         arguments: PodcastDetailPageArguments(future.data!.id!),
                       );

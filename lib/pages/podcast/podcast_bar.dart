@@ -1,18 +1,17 @@
 import 'package:audio_service/audio_service.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:emoroid_digest_app/pages/podcast/page_manager.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:marquee/marquee.dart';
+import 'package:provider/provider.dart';
 
 import '../../services/services_locator.dart';
+import '../bottom_nav_bar_state.dart';
 
 class PodcastBar extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
-  final Future<void> Function(int) onNavTap;
 
-  const PodcastBar({super.key, required this.navigatorKey, required this.onNavTap});
+  const PodcastBar({super.key, required this.navigatorKey});
 
   @override
   State<PodcastBar> createState() => _PodcastBarState();
@@ -23,18 +22,13 @@ extension DurationDivision on Duration {
 }
 
 class _PodcastBarState extends State<PodcastBar> {
-  @override
-  // final _audioHandler = getIt<AudioHandler>();
   var showBar = true;
-  // late final _audioHandler;
   PageManager? _pageManager = PageManager(null, null);
-  // final navigatorKey = GlobalKey<NavigatorState>();
   final AudioHandler _audioHandler = getIt<AudioHandler>();
   AudioProcessingState processingState = AudioProcessingState.idle;
 
   @override
   void didChangeDependencies() async {
-    // _pageManager = PageManager(_audioHandler);
     _audioHandler.playbackState.listen((playbackState) {
       processingState = playbackState.processingState;
       setState(() {});
@@ -44,9 +38,10 @@ class _PodcastBarState extends State<PodcastBar> {
 
   @override
   Widget build(BuildContext context) {
-    // },
+    final bottomNavBarState = Provider.of<BottomNavBarState>(context);
+
     return (processingState != AudioProcessingState.idle
-        ? Container(
+        ? SizedBox(
             height: 50,
             child: ValueListenableBuilder<ProgressBarState>(
               valueListenable: _pageManager!.progressNotifier,
@@ -64,7 +59,7 @@ class _PodcastBarState extends State<PodcastBar> {
                       // children: [Container(width: 100, height: 20, child: Marquee(text: value.title))],
                       children: <Widget>[
                         Expanded(
-                            child: Container(
+                            child: SizedBox(
                                 height: 45,
                                 child: IconButton(
                                   icon: const Icon(Icons.highlight_remove),
@@ -74,16 +69,16 @@ class _PodcastBarState extends State<PodcastBar> {
                         Expanded(
                           flex: 6,
                           child: InkWell(
-                              onTap: () {
-                                widget.onNavTap(2);
-                                widget.navigatorKey.currentState?.pushReplacementNamed(
+                              onTap: () async {
+                                bottomNavBarState.page = 2;
+                                await widget.navigatorKey.currentState?.pushReplacementNamed(
                                   "/podcast/detail",
                                   arguments: PodcastDetailPageArguments(value.id),
                                 );
+                                bottomNavBarState.updateBasedOnRoute();
                               },
                               child: Center(
-                                  child: Container(
-                                // width: 10000,
+                                  child: SizedBox(
                                 height: 45,
                                 child: Marquee(
                                     text: value.title,
@@ -91,18 +86,18 @@ class _PodcastBarState extends State<PodcastBar> {
                                     crossAxisAlignment: CrossAxisAlignment.center,
                                     blankSpace: 50.0,
                                     velocity: 30.0,
-                                    pauseAfterRound: Duration(seconds: 1),
+                                    pauseAfterRound: const Duration(seconds: 1),
                                     startPadding: 10.0,
                                     // accelerationDuration: Duration(seconds: 1),
                                     accelerationCurve: Curves.linear,
                                     // decelerationDuration: Duration(milliseconds: 500),
                                     decelerationCurve: Curves.easeOut,
-                                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
+                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                               ))),
                         ),
                         Expanded(
                           flex: 2,
-                          child: Container(
+                          child: SizedBox(
                               height: 45,
                               // width: 45,
                               child: ValueListenableBuilder<ButtonState>(
@@ -114,7 +109,7 @@ class _PodcastBarState extends State<PodcastBar> {
                                           margin: const EdgeInsets.all(10.0),
                                           // width: 45.0,
                                           // height: 32.0,
-                                          child: Center(child: CircularProgressIndicator()),
+                                          child: const Center(child: CircularProgressIndicator()),
                                         );
                                       case ButtonState.paused:
                                         return IconButton(
@@ -133,10 +128,6 @@ class _PodcastBarState extends State<PodcastBar> {
                         ),
                       ],
                     )
-                    // Container(
-                    //   height: 15,
-                    //   child: Marquee(text: value.title),
-                    // )
                   ],
                 );
               },
