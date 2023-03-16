@@ -19,7 +19,7 @@ class HomePageDrawer extends StatelessWidget {
             TextSpan(
                 style: textStyle,
                 text: "The Emoroid Digest App is a mobile app available on both iOS and Android platforms that allow"
-                    "users to access the visual summaries and podcasts released by The Emoroid Digest."
+                    "users to access the visual summaries and podcasts released by The Emoroid Digest. "
                     "Users are able to view and download visual summaries and listen to podcasts. See "),
             TextSpan(
                 style: textStyle.copyWith(color: theme.colorScheme.primary),
