@@ -107,3 +107,8 @@ Future<List?> downloadFileFromStorage(String path) async {
   }
   return null;
 }
+
+Future<String> getPrivacyPolicyURLFromFirestore() async {
+  final privacyDoc = await FirebaseFirestore.instance.collection('Privacy Policy').doc("privacy_policy").get();
+  return privacyDoc.get("url") as String;
+}
