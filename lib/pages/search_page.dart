@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:emoroid_digest_app/models/search_result_item.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_card.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_card.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 
 class SearchPage extends StatefulWidget {
@@ -82,6 +85,7 @@ class _SearchPageState extends State<SearchPage> {
                                 visualSummary: future.data![index].visualSummary!,
                                 onTap: (context) {
                                   () async {
+                                    FirebaseAnalytics.instance.logSearch(searchTerm: query);
                                     await Navigator.of(context).pushNamed(
                                       "/visual-summary/detail",
                                       arguments:
@@ -97,6 +101,7 @@ class _SearchPageState extends State<SearchPage> {
                                 podcast: future.data![index].podcast!,
                                 onTap: (context) {
                                   () async {
+                                    FirebaseAnalytics.instance.logSearch(searchTerm: query);
                                     Navigator.of(context).pushNamed(
                                       "/podcast/detail",
                                       arguments: PodcastDetailPageArguments(future.data![index].podcast!.id!),
