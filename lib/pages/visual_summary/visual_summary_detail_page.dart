@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -294,6 +295,13 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                               onPressed: () async {
                                 final uri = Uri.parse(visualSummary.linkOriginalManuscript);
                                 if (await canLaunchUrl(uri)) {
+                                  await FirebaseAnalytics.instance.logEvent(
+                                    name: 'view original manuscript',
+                                    parameters: {
+                                      "visual summary title": visualSummary.title,
+                                      "url": uri.toString(),
+                                    },
+                                  );
                                   await launchUrl(uri);
                                 } else {
                                   throw 'Could not launch ${visualSummary.linkOriginalManuscript}';
