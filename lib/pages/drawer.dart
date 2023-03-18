@@ -9,9 +9,9 @@ class HomePageDrawer extends StatelessWidget {
   });
 
   List<Widget> getAboutBoxChildren(BuildContext context) {
-  final ThemeData theme = Theme.of(context);
-  final TextStyle textStyle = theme.textTheme.bodyMedium!;
-  return <Widget>[
+    final ThemeData theme = Theme.of(context);
+    final TextStyle textStyle = theme.textTheme.bodyMedium!;
+    return <Widget>[
       const SizedBox(height: 24),
       RichText(
         text: TextSpan(
@@ -30,7 +30,7 @@ class HomePageDrawer extends StatelessWidget {
         ),
       ),
     ];
-}
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -65,30 +65,43 @@ class HomePageDrawer extends StatelessWidget {
                   children: getAboutBoxChildren(context),
                 );
               },
-            )
+            )),
+        ListTile(
+          leading: const Icon(
+            Icons.privacy_tip_outlined,
+            size: 20,
+          ),
+          title: const Text(
+            "Privacy Policy",
+            style: TextStyle(
+              fontSize: 20,
             ),
-            ListTile(
-              leading: const Icon(
-                Icons.privacy_tip_outlined,
-                size: 20,
-              ),
-              title: const Text(
-                "Privacy Policy",
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              onTap: () async {
-                Navigator.of(context).pop();
-                final urlString = await getPrivacyPolicyURLFromFirestore();
-                final uri = Uri.parse(urlString);
-                if (await canLaunchUrl(uri)) {
-                  await launchUrl(uri);
-                } else {
-                  throw 'Could not launch $urlString';
-                }
-              },
-            )
+          ),
+          onTap: () async {
+            Navigator.of(context).pop();
+            final urlString = await getPrivacyPolicyURLFromFirestore();
+            final uri = Uri.parse(urlString);
+            if (await canLaunchUrl(uri)) {
+              await launchUrl(uri);
+            } else {
+              throw 'Could not launch $urlString';
+            }
+          },
+        ),
+        ListTile(
+          leading: const Icon(
+            Icons.feedback_outlined,
+            size: 20,
+          ),
+          title: const Text(
+            "Feedback",
+            style: TextStyle(
+              fontSize: 20,
+            ),
+          ),
+          //Need to add the Navigator function
+          onTap: null,
+        ),
       ]),
     );
   }
