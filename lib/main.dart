@@ -1,5 +1,6 @@
 import 'package:emoroid_digest_app/pages/bottom_nav_bar_state.dart';
 import 'package:emoroid_digest_app/pages/drawer.dart';
+import 'package:emoroid_digest_app/pages/feedback.dart';
 import 'package:emoroid_digest_app/pages/home.dart';
 import 'package:emoroid_digest_app/pages/notification_page.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_bar.dart';
@@ -299,6 +300,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                   case "/search":
                     page = const SearchPage();
                     break;
+                  case "/feedback":
+                    page = const FeedBackPage();
+                    break;
                   default:
                     page = const HomePage();
                     print('Unknown page: ${settings.name!}');
@@ -391,7 +395,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           _onNavButtonTapped(val, bottomNavBarState);
         },
       ),
-      drawer: const HomePageDrawer(),
+      drawer: HomePageDrawer(rootNavigatorKey: navigatorKey),
     );
   }
 }

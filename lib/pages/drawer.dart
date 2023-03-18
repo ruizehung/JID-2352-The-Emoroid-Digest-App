@@ -5,8 +5,10 @@ import '../utils/firebase.dart';
 
 class HomePageDrawer extends StatelessWidget {
   const HomePageDrawer({
-    super.key,
+    super.key, required this.rootNavigatorKey
   });
+
+  final GlobalKey<NavigatorState> rootNavigatorKey;
 
   List<Widget> getAboutBoxChildren(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -100,7 +102,10 @@ class HomePageDrawer extends StatelessWidget {
             ),
           ),
           //Need to add the Navigator function
-          onTap: null,
+          onTap: () {
+            Navigator.of(context).pop();
+            rootNavigatorKey.currentState!.pushNamed("/feedback");
+          },
         ),
       ]),
     );
