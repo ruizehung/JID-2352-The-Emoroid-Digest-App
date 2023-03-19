@@ -50,11 +50,16 @@ class _SearchPageState extends State<SearchPage> {
                       },
                       controller: _searchController,
                       autofocus: true,
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           labelText: "Search",
-                          hintText: "Search title",
-                          prefixIcon: Icon(Icons.search),
-                          border: OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25))))),
+                          hintText: "Search title", // TODO
+                          prefixIcon: const Icon(Icons.search),
+                          suffixIcon: RadioListTile(
+                              value: {"a", "s"},
+                              groupValue: groupValue,
+                              onChanged:
+                                  _onSearchButtonPressed()), // IconButton(onPressed: _onSearchButtonPressed, icon: const Icon(Icons.abc_outlined)),
+                          border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25))))),
                 ))
               ],
             )),
@@ -113,5 +118,9 @@ class _SearchPageState extends State<SearchPage> {
                 })),
       ],
     );
+  }
+
+  void _onSearchButtonPressed() {
+    print("search button clicked");
   }
 }

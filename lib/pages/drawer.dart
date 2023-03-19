@@ -88,20 +88,6 @@ class HomePageDrawer extends StatelessWidget {
             }
           },
         ),
-        ListTile(
-          leading: const Icon(
-            Icons.feedback_outlined,
-            size: 20,
-          ),
-          title: const Text(
-            "Feedback",
-            style: TextStyle(
-              fontSize: 20,
-            ),
-          ),
-          //Need to add the Navigator function
-          onTap: null,
-        ),
       ]),
     );
   }
