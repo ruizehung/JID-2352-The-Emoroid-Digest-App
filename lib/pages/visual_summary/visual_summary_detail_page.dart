@@ -296,7 +296,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 final uri = Uri.parse(visualSummary.linkOriginalManuscript);
                                 if (await canLaunchUrl(uri)) {
                                   await FirebaseAnalytics.instance.logEvent(
-                                    name: 'View_Original_Manuscript',
+                                    name: 'view_original_manuscript',
                                     parameters: {
                                       "visual summary title": visualSummary.title,
                                       "url": uri.toString(),
