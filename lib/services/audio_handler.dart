@@ -50,10 +50,10 @@ class AudioPlayerHandler extends BaseAudioHandler {
     });
     _player.durationStream.listen((duration) {
       MediaItem oldMedia = mediaItem.value!;
-      Podcast? pod = IsarService.getPodcastStatic(oldMedia.id);
+      Podcast? pod = IsarService().getPodcast(oldMedia.id);
       if (pod != null && duration != null) {
         pod.totalDuration = duration.inMilliseconds;
-        IsarService.savePodcastStatic(pod);
+        IsarService().savePodcast(pod);
       }
       mediaItem.add(MediaItem(
           id: oldMedia.id.toString(),
