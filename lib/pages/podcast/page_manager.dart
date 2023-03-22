@@ -76,11 +76,11 @@ class PageManager {
       );
 
       if (_audioHandler.mediaItem.value != null) {
-        Podcast? pod = IsarService.getPodcastStatic(_audioHandler.mediaItem.value!.id);
+        Podcast? pod = IsarService().getPodcast(_audioHandler.mediaItem.value!.id);
         if (pod != null && pod.id == _audioHandler.mediaItem.value!.id) {
           pod.currentDuration = position.inMilliseconds;
           if (pod.currentDuration != 0) {
-            IsarService.savePodcastStatic(pod);
+            IsarService().savePodcast(pod);
           }
         }
         final oldState = progressNotifier.value;
