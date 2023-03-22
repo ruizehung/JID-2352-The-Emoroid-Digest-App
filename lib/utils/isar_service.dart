@@ -19,108 +19,7 @@ class IsarService {
 
   IsarService._internal();
 
-  VisualSummary? getVisualSummary(String id) {
-    return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
-  }
-
-  List<VisualSummary> getVisualSummaryWithPodcastTitle(String podcastTitle) {
-    return _db.visualSummarys.filter().recordedPodcastTitleEqualTo(podcastTitle).findAllSync();
-  }
-
-  Podcast? getPodcast(String id) {
-    return _db.podcasts.filter().idEqualTo(id).findFirstSync();
-  }
-
-  static Podcast? getPodcastStatic(String id) {
-    return _db.podcasts.filter().idEqualTo(id).findFirstSync();
-  }
-
-  Podcast? getPodcastByTitle(String title) {
-    return _db.podcasts.filter().titleEqualTo(title).findFirstSync();
-  }
-
-  void saveLastUpdate(LastUpdate lastUpdate) {
-    _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
-  }
-
-  void saveVisualSummary(VisualSummary visualSummary) {
-    _db.writeTxnSync<int>(() => _db.visualSummarys.putSync(visualSummary));
-  }
-
-  void savePodcast(Podcast podcast) {
-    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
-  }
-
-  static void savePodcastStatic(Podcast podcast) {
-    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
-  }
-
-  Future<LastUpdate?> getLastUpdate() async {
-    if (await _db.lastUpdates.filter().idEqualTo(0).findFirst() == null) {
-      _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(LastUpdate()));
-    }
-    return await _db.lastUpdates.filter().idEqualTo(0).findFirst();
-  }
-
-  Future<List<VisualSummary>> getVisualSummariesWithThumbnail() {
-    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
-  }
-
-  Future<List<Podcast>> getPodcasts() async {
-    return await _db.podcasts.filter().idIsNotNull().findAll();
-  }
-
-  Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
-    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
-  }
-
-  Set<String> getUniqueOrganSystems() {
-    final set = <String>{};
-    for (var vs in _db.visualSummarys.where().findAllSync()) {
-      set.addAll(vs.organSystems);
-    }
-    return set;
-  }
-
-  Set<String> getUniqueVisualSummariesGISocietyJournal() {
-    final set = <String>{};
-    for (var vs in _db.visualSummarys.where().findAllSync()) {
-      set.addAll(vs.giSocietyJournal);
-    }
-    return set;
-  }
-
-  Set<String> getUniquePodcastsGISocietyJournal() {
-    final set = <String>{};
-    for (var p in _db.podcasts.where().findAllSync()) {
-      set.addAll(p.giSocietyJournal);
-    }
-    return set;
-  }
-
-  Set<String> getUniqueVisualSummariesKeywords() {
-    final set = <String>{};
-    for (var vs in _db.visualSummarys.where().findAllSync()) {
-      set.addAll(vs.keywords);
-    }
-    return set;
-  }
-
-  Set<String> getUniquePodcastsKeywords() {
-    final set = <String>{};
-    for (var p in _db.podcasts.where().findAllSync()) {
-      set.addAll(p.keywords);
-    }
-    return set;
-  }
-
-  Set<int> getUniqueVisualSummariesYearGuidelinePublished() {
-    final set = <int>{};
-    for (var vs in _db.visualSummarys.where().findAllSync()) {
-      set.add(vs.yearGuidelinePublished);
-    }
-    return set;
-  }
+  // ******************* Search *******************
 
   Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(String value) async {
     return await _db.visualSummarys
@@ -167,12 +66,128 @@ class IsarService {
     return msSet.toList();
   }
 
+  // ******************* VisualSummary *******************
+
+  VisualSummary? getVisualSummary(String id) {
+    return _db.visualSummarys.filter().idEqualTo(id).findFirstSync();
+  }
+
+  void deleteVisualSummary(String id) {
+    _db.writeTxnSync<int>(() => _db.visualSummarys.filter().idEqualTo(id).deleteAllSync());
+  }
+
+  List<VisualSummary> getVisualSummaryWithPodcastTitle(String podcastTitle) {
+    return _db.visualSummarys.filter().recordedPodcastTitleEqualTo(podcastTitle).findAllSync();
+  }
+
+  void saveVisualSummary(VisualSummary visualSummary) {
+    _db.writeTxnSync<int>(() => _db.visualSummarys.putSync(visualSummary));
+  }
+
+  Future<List<VisualSummary>> getVisualSummariesWithThumbnail() {
+    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+  }
+
+  Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
+    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+  }
+
+  Future<List<VisualSummary>> getAllVisualSummaries() async {
+    return _db.visualSummarys.filter().idIsNotNull().findAll();
+  }
+
+  Set<String> getUniqueOrganSystems() {
+    final set = <String>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.addAll(vs.organSystems);
+    }
+    return set;
+  }
+
+  Set<String> getUniqueVisualSummariesGISocietyJournal() {
+    final set = <String>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.addAll(vs.giSocietyJournal);
+    }
+    return set;
+  }
+
+  Set<String> getUniqueVisualSummariesKeywords() {
+    final set = <String>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.addAll(vs.keywords);
+    }
+    return set;
+  }
+
+  // ******************* Podcast *******************
+
+  Podcast? getPodcast(String id) {
+    return _db.podcasts.filter().idEqualTo(id).findFirstSync();
+  }
+
+  Future<List<Podcast>> getAllPodcasts() async {
+    return _db.podcasts.filter().idIsNotNull().findAll();
+  }
+
+  void deletePodcast(String id) {
+    _db.writeTxnSync<int>(() => _db.podcasts.filter().idEqualTo(id).deleteAllSync());
+  }
+
+  void savePodcast(Podcast podcast) {
+    _db.writeTxnSync<int>(() => _db.podcasts.putSync(podcast));
+  }
+
+  Podcast? getPodcastByTitle(String title) {
+    return _db.podcasts.filter().titleEqualTo(title).findFirstSync();
+  }
+
+  Future<List<Podcast>> getPodcasts() async {
+    return await _db.podcasts.filter().idIsNotNull().findAll();
+  }
+
+  Set<String> getUniquePodcastsKeywords() {
+    final set = <String>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.addAll(p.keywords);
+    }
+    return set;
+  }
+
+  Set<int> getUniqueVisualSummariesYearGuidelinePublished() {
+    final set = <int>{};
+    for (var vs in _db.visualSummarys.where().findAllSync()) {
+      set.add(vs.yearGuidelinePublished);
+    }
+    return set;
+  }
+
   Set<int> getUniquePodcastsYearGuidelinePublished() {
     final set = <int>{};
     for (var p in _db.podcasts.where().findAllSync()) {
       set.add(p.yearGuidelinePublished);
     }
     return set;
+  }
+
+  Set<String> getUniquePodcastsGISocietyJournal() {
+    final set = <String>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.addAll(p.giSocietyJournal);
+    }
+    return set;
+  }
+
+  // Last Update
+  void saveLastUpdate(LastUpdate lastUpdate) {
+    _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
+  }
+
+  Future<LastUpdate?> getLastUpdate() async {
+    if (await _db.lastUpdates.filter().idEqualTo(0).findFirst() == null) {
+      _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(LastUpdate()));
+    }
+    return await _db.lastUpdates.filter().idEqualTo(0).findFirst();
   }
 
   static Future<Isar> _openDB() async {
