@@ -122,6 +122,15 @@ class IsarService {
     return set;
   }
 
+  Set<int> getUniquePodcastsYearGuidelinePublished() {
+    final set = <int>{};
+    for (var p in _db.podcasts.where().findAllSync()) {
+      set.add(p.yearGuidelinePublished);
+    }
+    return set;
+  }
+
+  //Search VS by Title
   Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(String value) async {
     return await _db.visualSummarys
         .filter()
@@ -130,6 +139,7 @@ class IsarService {
         .findAll();
   }
 
+  //Search Podcast by Title
   Future<List<Podcast>> getPodcastsResultAfterSearch(String value) async {
     return await _db.podcasts
         .filter()
@@ -165,14 +175,6 @@ class IsarService {
       });
     }
     return msSet.toList();
-  }
-
-  Set<int> getUniquePodcastsYearGuidelinePublished() {
-    final set = <int>{};
-    for (var p in _db.podcasts.where().findAllSync()) {
-      set.add(p.yearGuidelinePublished);
-    }
-    return set;
   }
 
   static Future<Isar> _openDB() async {

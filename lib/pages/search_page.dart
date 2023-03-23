@@ -18,28 +18,29 @@ class _SearchPageState extends State<SearchPage> {
   final TextEditingController _searchController = TextEditingController();
   Future<List<SearchResultItem>> result = IsarService().getSearchResultItems("");
   String query = "";
+  String? _searchBy = "title";
 
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
         Padding(
-            padding: const EdgeInsets.only(left: 5, right: 16, top: 10),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(right: 12, bottom: 12),
-                  child: IconButton(
-                    onPressed: () => Navigator.of(context).pop(),
-                    icon: const Icon(
-                      Icons.arrow_circle_left_outlined,
-                      color: Colors.blue,
-                      size: 45,
-                    ),
+          padding: const EdgeInsets.only(left: 5, right: 16, top: 10),
+          child: Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 12, bottom: 12),
+                child: IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(
+                    Icons.arrow_circle_left_outlined,
+                    color: Colors.blue,
+                    size: 45,
                   ),
                 ),
-                Flexible(
-                    child: SizedBox(
+              ),
+              Flexible(
+                child: SizedBox(
                   height: 50,
                   child: TextField(
                       onChanged: (query) {
@@ -52,17 +53,74 @@ class _SearchPageState extends State<SearchPage> {
                       autofocus: true,
                       decoration: InputDecoration(
                           labelText: "Search",
-                          hintText: "Search title", // TODO
+                          hintText: "search $_searchBy", // TODO
                           prefixIcon: const Icon(Icons.search),
-                          suffixIcon: RadioListTile(
-                              value: {"a", "s"},
-                              groupValue: groupValue,
-                              onChanged:
-                                  _onSearchButtonPressed()), // IconButton(onPressed: _onSearchButtonPressed, icon: const Icon(Icons.abc_outlined)),
                           border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25))))),
-                ))
-              ],
-            )),
+                ),
+              ),
+              Center(
+                child: IconButton(
+                  icon: const Icon(
+                    Icons.filter_list_rounded,
+                    color: Colors.blue,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Search by'),
+                          content: Column(mainAxisSize: MainAxisSize.min, children: [
+                            RadioListTile(
+                              value: 'title',
+                              onChanged: (String? val) {
+                                setState(() {
+                                  _searchBy = val;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              //activeColor: Colors.blue,
+                              title: const Text("Title"),
+                              groupValue: _searchBy,
+                              controlAffinity: ListTileControlAffinity.leading,
+                            ),
+                            RadioListTile(
+                              value: 'keywords',
+                              onChanged: (String? val) {
+                                setState(() {
+                                  _searchBy = val;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              //activeColor: Colors.blue,
+                              title: const Text("Keywords"),
+                              groupValue: _searchBy,
+                              controlAffinity: ListTileControlAffinity.leading,
+                            ),
+                            RadioListTile(
+                              value: 'organs',
+                              onChanged: (String? val) {
+                                setState(() {
+                                  _searchBy = val;
+                                });
+                                Navigator.of(context).pop();
+                              },
+                              //activeColor: Colors.blue,
+                              title: const Text("Organs"),
+                              groupValue: _searchBy,
+                              controlAffinity: ListTileControlAffinity.leading,
+                            ),
+                          ]),
+                        );
+                      },
+                    );
+                  },
+                ),
+              )
+            ],
+          ),
+        ),
         Flexible(
             fit: FlexFit.loose,
             child: FutureBuilder<List<SearchResultItem>>(
@@ -120,7 +178,5 @@ class _SearchPageState extends State<SearchPage> {
     );
   }
 
-  void _onSearchButtonPressed() {
-    print("search button clicked");
-  }
+  void _onFilterButtonPressed() {}
 }
