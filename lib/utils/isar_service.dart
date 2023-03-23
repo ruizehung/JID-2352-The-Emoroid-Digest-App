@@ -131,7 +131,7 @@ class IsarService {
   }
 
   //Search VS by Title
-  Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(String value) async {
+  Future<List<VisualSummary>> getVisualSummariesResultAfterSearchTitle(String value) async {
     return await _db.visualSummarys
         .filter()
         .titleContains(value, caseSensitive: false)
@@ -140,7 +140,7 @@ class IsarService {
   }
 
   //Search Podcast by Title
-  Future<List<Podcast>> getPodcastsResultAfterSearch(String value) async {
+  Future<List<Podcast>> getPodcastsResultAfterSearchTitle(String value) async {
     return await _db.podcasts
         .filter()
         .titleContains(value, caseSensitive: false)
@@ -148,8 +148,44 @@ class IsarService {
         .findAll();
   }
 
+  //Search VS by Keywords
+  Future<List<VisualSummary>> getVisualSummariesResultAfterSearchKeywords(String value) async {
+    return await _db.visualSummarys
+        .filter()
+        .keywordsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
+  //Search Podcast by Keywords
+  Future<List<Podcast>> getPodcastsResultAfterSearchKeywords(String value) async {
+    return await _db.podcasts
+        .filter()
+        .keywordsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
+  //Search VS by Organs
+  Future<List<VisualSummary>> getVisualSummariesResultAfterSearchOrgans(String value) async {
+    return await _db.visualSummarys
+        .filter()
+        .organSystemsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
+  //Search Podcast by Organs
+  Future<List<Podcast>> getPodcastsResultAfterSearchOrgans(String value) async {
+    return await _db.podcasts
+        .filter()
+        .organSystemsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll();
+  }
+
   //List of all Visual Summaries and Podcasts
-  Future<List<SearchResultItem>> getSearchResultItems(String value) async {
+  Future<List<SearchResultItem>> getSearchResultItems(String searchBy, String value) async {
     Set<SearchResultItem> msSet = {};
     if (value.isEmpty) {
       await getPodcasts().then((podcasts) {
@@ -163,16 +199,40 @@ class IsarService {
         }
       });
     } else {
-      await getPodcastsResultAfterSearch(value).then((podcasts) {
-        for (var p in podcasts) {
-          msSet.add(SearchResultItem()..podcast = p);
-        }
-      });
-      await getVisualSummariesResultAfterSearch(value).then((visualSummaries) {
-        for (var vs in visualSummaries) {
-          msSet.add(SearchResultItem()..visualSummary = vs);
-        }
-      });
+      if (searchBy == "keywords") {
+        await getVisualSummariesResultAfterSearchKeywords(value).then((visualSummaries) {
+          for (var vs in visualSummaries) {
+            msSet.add(SearchResultItem()..visualSummary = vs);
+          }
+        });
+        await getPodcastsResultAfterSearchKeywords(value).then((podcasts) {
+          for (var p in podcasts) {
+            msSet.add(SearchResultItem()..podcast = p);
+          }
+        });
+      } else if (searchBy == "organs") {
+        await getVisualSummariesResultAfterSearchOrgans(value).then((visualSummaries) {
+          for (var vs in visualSummaries) {
+            msSet.add(SearchResultItem()..visualSummary = vs);
+          }
+        });
+        await getPodcastsResultAfterSearchOrgans(value).then((podcasts) {
+          for (var p in podcasts) {
+            msSet.add(SearchResultItem()..podcast = p);
+          }
+        });
+      } else {
+        await getVisualSummariesResultAfterSearchTitle(value).then((visualSummaries) {
+          for (var vs in visualSummaries) {
+            msSet.add(SearchResultItem()..visualSummary = vs);
+          }
+        });
+        await getPodcastsResultAfterSearchTitle(value).then((podcasts) {
+          for (var p in podcasts) {
+            msSet.add(SearchResultItem()..podcast = p);
+          }
+        });
+      }
     }
     return msSet.toList();
   }

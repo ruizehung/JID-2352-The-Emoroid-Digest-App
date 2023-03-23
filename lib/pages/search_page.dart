@@ -16,9 +16,10 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final searchList = <String>{};
   final TextEditingController _searchController = TextEditingController();
-  Future<List<SearchResultItem>> result = IsarService().getSearchResultItems("");
+  String searchBy = "title";
+
+  Future<List<SearchResultItem>> result = IsarService().getSearchResultItems("title", "");
   String query = "";
-  String? _searchBy = "title";
 
   @override
   Widget build(BuildContext context) {
@@ -46,14 +47,14 @@ class _SearchPageState extends State<SearchPage> {
                       onChanged: (query) {
                         setState(() {
                           this.query = query;
-                          result = IsarService().getSearchResultItems(query);
+                          result = IsarService().getSearchResultItems(searchBy, query);
                         });
                       },
                       controller: _searchController,
                       autofocus: true,
                       decoration: InputDecoration(
                           labelText: "Search",
-                          hintText: "search $_searchBy", // TODO
+                          hintText: "search $searchBy",
                           prefixIcon: const Icon(Icons.search),
                           border: const OutlineInputBorder(borderRadius: BorderRadius.all(Radius.circular(25))))),
                 ),
@@ -70,45 +71,52 @@ class _SearchPageState extends State<SearchPage> {
                       context: context,
                       builder: (BuildContext context) {
                         return AlertDialog(
+                          actions: [
+                            TextButton(
+                              child: const Text("Back"),
+                              onPressed: () => Navigator.of(context).pop(),
+                            ),
+                          ],
                           title: const Text('Search by'),
                           content: Column(mainAxisSize: MainAxisSize.min, children: [
                             RadioListTile(
                               value: 'title',
                               onChanged: (String? val) {
                                 setState(() {
-                                  _searchBy = val;
+                                  searchBy = val!;
                                 });
                                 Navigator.of(context).pop();
                               },
                               //activeColor: Colors.blue,
                               title: const Text("Title"),
-                              groupValue: _searchBy,
+                              groupValue: searchBy,
                               controlAffinity: ListTileControlAffinity.leading,
                             ),
                             RadioListTile(
                               value: 'keywords',
                               onChanged: (String? val) {
                                 setState(() {
-                                  _searchBy = val;
+                                  searchBy = val!;
                                 });
                                 Navigator.of(context).pop();
                               },
                               //activeColor: Colors.blue,
                               title: const Text("Keywords"),
-                              groupValue: _searchBy,
+                              groupValue: searchBy,
                               controlAffinity: ListTileControlAffinity.leading,
                             ),
                             RadioListTile(
                               value: 'organs',
+
                               onChanged: (String? val) {
                                 setState(() {
-                                  _searchBy = val;
+                                  searchBy = val!;
                                 });
                                 Navigator.of(context).pop();
                               },
                               //activeColor: Colors.blue,
-                              title: const Text("Organs"),
-                              groupValue: _searchBy,
+                              title: const Text("Organs System"),
+                              groupValue: searchBy,
                               controlAffinity: ListTileControlAffinity.leading,
                             ),
                           ]),
@@ -151,7 +159,7 @@ class _SearchPageState extends State<SearchPage> {
                                           VisualSummaryDetailPageArguments(future.data![index].visualSummary!.id!),
                                     );
                                     setState(() {
-                                      result = IsarService().getSearchResultItems(query);
+                                      result = IsarService().getSearchResultItems(searchBy, query);
                                     });
                                   }();
                                 },
@@ -165,7 +173,7 @@ class _SearchPageState extends State<SearchPage> {
                                       arguments: PodcastDetailPageArguments(future.data![index].podcast!.id!),
                                     );
                                     setState(() {
-                                      result = IsarService().getSearchResultItems(query);
+                                      result = IsarService().getSearchResultItems(searchBy, query);
                                     });
                                   }();
                                 },
@@ -177,6 +185,4 @@ class _SearchPageState extends State<SearchPage> {
       ],
     );
   }
-
-  void _onFilterButtonPressed() {}
 }
