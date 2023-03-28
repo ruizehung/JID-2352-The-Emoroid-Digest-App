@@ -298,8 +298,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                   await FirebaseAnalytics.instance.logEvent(
                                     name: 'view_original_manuscript',
                                     parameters: {
-                                      "visual summary title": visualSummary.title,
-                                      "url": uri.toString(),
+                                      "view_original_manuscript_title": visualSummary.title.length <= 100 ? visualSummary.title : visualSummary.title.substring(0, 99),
                                     },
                                   );
                                   await launchUrl(uri);
