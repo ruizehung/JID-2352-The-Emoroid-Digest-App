@@ -195,9 +195,8 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                   Row(children: [
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacementNamed(
-                          "/podcast",
-                        );
+                        Navigator.of(context).pop();
+                        Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
                       },
                       icon: const Icon(Icons.arrow_circle_left_outlined),
                       iconSize: 36,
