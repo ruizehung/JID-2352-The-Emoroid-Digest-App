@@ -181,6 +181,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
+                        Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
                       },
                       icon: const Icon(Icons.arrow_circle_left_outlined),
                       iconSize: 36,
