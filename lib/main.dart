@@ -144,7 +144,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
         if (uri != null && uri.path == '/visualSummary/detail') {
           debugPrint('Received deep link: ${uri.toString()}');
           final id = uri.queryParameters['id'];
-
+          Provider.of<BottomNavBarState>(context, listen: false).page = 0;
           navigatorKey.currentState!.pushNamed(
             "/visual-summary/detail",
             arguments: VisualSummaryDetailPageArguments(id.toString()),
@@ -152,7 +152,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
         } else if (uri != null && uri.path == '/podcast/detail') {
           debugPrint('Received deep link: ${uri.toString()}');
           final id = uri.queryParameters['id'];
-
+          Provider.of<BottomNavBarState>(context, listen: false).page = 2;
           navigatorKey.currentState!.pushNamed(
             "/podcast/detail",
             arguments: VisualSummaryDetailPageArguments(id.toString()),
