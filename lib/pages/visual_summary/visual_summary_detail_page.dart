@@ -314,7 +314,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             const SizedBox(width: 10),
                             IconButton(
                               onPressed: () {
-                                Share.share('check out my website https://example.com');
+                                Share.share('Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
                               },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
