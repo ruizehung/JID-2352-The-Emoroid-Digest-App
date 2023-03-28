@@ -63,6 +63,7 @@ dependencies:
   marquee: ^2.2.3
   flutter_native_splash: ^2.2.18
   provider: ^5.0.0
+  share_plus: ^6.3.1
 
 dev_dependencies:
   flutter_test:

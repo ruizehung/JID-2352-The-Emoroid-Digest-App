@@ -27,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <category android:name="android.intent.category.DEFAULT" />
+                <data android:scheme="emoroiddigestapp" android:host="deeplink"/>
             </intent-filter>
         </activity>
         <service android:name="com.ryanheise.audioservice.AudioService"
