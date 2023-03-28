@@ -155,7 +155,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           Provider.of<BottomNavBarState>(context, listen: false).page = 2;
           navigatorKey.currentState!.pushNamed(
             "/podcast/detail",
-            arguments: VisualSummaryDetailPageArguments(id.toString()),
+            arguments: PodcastDetailPageArguments(id.toString()),
           );
         }
       }, onError: (Object err) {
