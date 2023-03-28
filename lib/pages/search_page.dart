@@ -85,7 +85,8 @@ class _SearchPageState extends State<SearchPage> {
                                 visualSummary: future.data![index].visualSummary!,
                                 onTap: (context) {
                                   () async {
-                                    FirebaseAnalytics.instance.logSearch(searchTerm: query);
+                                    String lowerCaseQuery = query.toLowerCase();
+                                    FirebaseAnalytics.instance.logSearch(searchTerm: lowerCaseQuery.length <= 100 ? lowerCaseQuery : lowerCaseQuery.substring(0, 99));
                                     await Navigator.of(context).pushNamed(
                                       "/visual-summary/detail",
                                       arguments:
