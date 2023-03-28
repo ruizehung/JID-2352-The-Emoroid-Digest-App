@@ -22,11 +22,38 @@ class IsarService {
   // ******************* Search *******************
 
   Future<List<VisualSummary>> getVisualSummariesResultAfterSearch(String value) async {
-    return await _db.visualSummarys
+    Set<VisualSummary> vsSet = {};
+    await _db.visualSummarys
         .filter()
         .titleContains(value, caseSensitive: false)
         .sortByYearGuidelinePublishedDesc()
-        .findAll();
+        .findAll()
+        .then((visualSummaries) {
+      for (var vs in visualSummaries) {
+        vsSet.add(vs);
+      }
+    });
+    await _db.visualSummarys
+        .filter()
+        .keywordsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll()
+        .then((visualSummaries) {
+      for (var vs in visualSummaries) {
+        vsSet.add(vs);
+      }
+    });
+    await _db.visualSummarys
+        .filter()
+        .organSystemsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll()
+        .then((visualSummaries) {
+      for (var vs in visualSummaries) {
+        vsSet.add(vs);
+      }
+    });
+    return vsSet.toSet().toList();
   }
 
   Future<List<Podcast>> getPodcastsResultAfterSearch(String value) async {
