@@ -488,6 +488,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                           visualSummary: future.data![index],
                           onTap: (context) {
                             () async {
+                              // ignore: use_build_context_synchronously
                               await Navigator.of(context).pushNamed(
                                 "/visual-summary/detail",
                                 arguments: VisualSummaryDetailPageArguments(future.data![index].id!),
