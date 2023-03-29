@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -185,6 +186,14 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
   @override
   Widget build(BuildContext context) {
     final podcast = IsarService().getPodcast(args.podcastID);
+
+    // FirebaseAnalytics.instance.logEvent(
+    //         name: 'podcast_play',
+    //         parameters: {
+    //           "podcast_play": podcast.title!.length <= 100 ? podcast.title! : podcast.title!.substring(0, 99),
+    //         },
+    //       );
+    
     return podcast == null
         ? Center(child: Text("Unknown podcast ID: ${args.podcastID}"))
         : SingleChildScrollView(
