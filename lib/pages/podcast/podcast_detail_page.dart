@@ -187,13 +187,6 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
   Widget build(BuildContext context) {
     final podcast = IsarService().getPodcast(args.podcastID);
 
-    // FirebaseAnalytics.instance.logEvent(
-    //         name: 'podcast_play',
-    //         parameters: {
-    //           "podcast_play": podcast.title!.length <= 100 ? podcast.title! : podcast.title!.substring(0, 99),
-    //         },
-    //       );
-    
     return podcast == null
         ? Center(child: Text("Unknown podcast ID: ${args.podcastID}"))
         : SingleChildScrollView(
@@ -244,7 +237,17 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                             return IconButton(
                               icon: const Icon(Icons.play_arrow),
                               iconSize: 32.0,
-                              onPressed: _pageManager!.play,
+                              onPressed: () async {
+                                // TODO: Currently, it logs an event every time the play button is pressed.
+                                // Use a better algorithm to determine how many times a podcast is played.
+                                await FirebaseAnalytics.instance.logEvent(
+                                  name: 'podcast_play',
+                                  parameters: {
+                                    "podcast_play": podcast.title.length <= 100 ? podcast.title : podcast.title.substring(0, 99),
+                                  },
+                                );
+                                _pageManager!.play();
+                              },
                             );
                           case ButtonState.playing:
                             return IconButton(
