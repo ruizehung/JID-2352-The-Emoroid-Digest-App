@@ -57,11 +57,38 @@ class IsarService {
   }
 
   Future<List<Podcast>> getPodcastsResultAfterSearch(String value) async {
-    return await _db.podcasts
+    Set<Podcast> pSet = {};
+    await _db.podcasts
         .filter()
         .titleContains(value, caseSensitive: false)
         .sortByYearGuidelinePublishedDesc()
-        .findAll();
+        .findAll()
+        .then((podcasts) {
+      for (var p in podcasts) {
+        pSet.add(p);
+      }
+    });
+    await _db.podcasts
+        .filter()
+        .keywordsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll()
+        .then((podcasts) {
+      for (var p in podcasts) {
+        pSet.add(p);
+      }
+    });
+    await _db.podcasts
+        .filter()
+        .organSystemsElementContains(value, caseSensitive: false)
+        .sortByYearGuidelinePublishedDesc()
+        .findAll()
+        .then((podcasts) {
+      for (var p in podcasts) {
+        pSet.add(p);
+      }
+    });
+    return pSet.toSet().toList();
   }
 
   //List of all Visual Summaries and Podcasts
