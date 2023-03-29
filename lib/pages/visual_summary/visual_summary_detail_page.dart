@@ -55,6 +55,13 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
         _isLoading = false;
       });
     }
+    await FirebaseAnalytics.instance.logEvent(
+      name: 'visual_summary_download',
+      parameters: {
+        "visual_summary_download":
+            visualSummary.title.length <= 100 ? visualSummary.title : visualSummary.title.substring(0, 99),
+      },
+    );
   }
 
   Future<void> deleteVisualSummary(VisualSummary visualSummary) async {
@@ -170,6 +177,15 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
       localVisualSummary = File(getFilePath(visualSummary.linkVisualSummaryStorage!));
     }
 
+    FirebaseAnalytics.instance.logEvent(
+      name: 'visual_summary_view',
+      parameters: {
+        "visual_summary_view": visualSummary!.title.length <= 100
+            ? visualSummary.title
+            : visualSummary.title.substring(0, 99),
+      },
+    );
+
     return visualSummary == null
         ? Center(child: Text("Unknown visual summary ID: ${args.visualSummaryID}"))
         : SingleChildScrollView(
@@ -255,6 +271,13 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             const SizedBox(width: 10),
                             IconButton(
                               onPressed: () {
+                                if (!visualSummary.isFavorite) {
+                                  FirebaseAnalytics.instance.logEvent(name: 'visual_summary_favorite', parameters: {
+                                    "visual_summary_favorite": visualSummary.title.length <= 100
+                                        ? visualSummary.title
+                                        : visualSummary.title.substring(0, 99),
+                                  });
+                                }
                                 setState(() {
                                   visualSummary.isFavorite = !visualSummary.isFavorite;
                                 });
@@ -299,7 +322,9 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                   await FirebaseAnalytics.instance.logEvent(
                                     name: 'view_original_manuscript',
                                     parameters: {
-                                      "view_original_manuscript_title": visualSummary.title.length <= 100 ? visualSummary.title : visualSummary.title.substring(0, 99),
+                                      "view_original_manuscript_title": visualSummary.title.length <= 100
+                                          ? visualSummary.title
+                                          : visualSummary.title.substring(0, 99),
                                     },
                                   );
                                   await launchUrl(uri);
