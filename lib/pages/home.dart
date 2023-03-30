@@ -109,6 +109,7 @@ class _HomePageState extends State<HomePage> {
                   onTap: (context) {
                     () async {
                       bottomNavBarState.page = 0;
+                      // ignore: use_build_context_synchronously
                       await Navigator.of(context).pushNamed(
                         "/visual-summary/detail",
                         arguments: VisualSummaryDetailPageArguments(future.data!.id!),
