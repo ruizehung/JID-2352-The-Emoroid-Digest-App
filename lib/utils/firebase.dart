@@ -9,12 +9,17 @@ import 'package:mime/mime.dart';
 import 'isar_service.dart';
 
 Future<void> syncPodcastsFromFirestore() async {
-  final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();
+  final lastUpdateCloud = await FirebaseFirestore.instance.collection('Last Update').doc("lastUpdate").get();
   final podcastsLastUpdateTime = (lastUpdateCloud.data()!["podcasts"] as Timestamp).toDate();
   var lastUpdateLocal = await IsarService().getLastUpdate();
 
   if (lastUpdateLocal!.podcasts == null || lastUpdateLocal.podcasts!.compareTo(podcastsLastUpdateTime) < 0) {
     CollectionReference collection = FirebaseFirestore.instance.collection('Podcasts');
+    List<Podcast> localPodcasts = await IsarService().getAllPodcasts();
+    Set<String> localPodcastIDs = <String>{};
+    for (Podcast p in localPodcasts) {
+      localPodcastIDs.add(p.id!);
+    }
 
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await collection.get();
@@ -39,6 +44,11 @@ Future<void> syncPodcastsFromFirestore() async {
 
       IsarService().savePodcast(p);
     }));
+    
+    // Delete podcasts that are no longer in the collection
+    for (String id in localPodcastIDs) {
+      IsarService().deletePodcast(id);
+    }
 
     lastUpdateLocal.podcasts = podcastsLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);
@@ -46,18 +56,24 @@ Future<void> syncPodcastsFromFirestore() async {
 }
 
 Future<void> syncVisualSummariesFromFirestore() async {
-  final lastUpdateCloud = await FirebaseFirestore.instance.collection('Update').doc("lastUpdate").get();
+  final lastUpdateCloud = await FirebaseFirestore.instance.collection('Last Update').doc("lastUpdate").get();
   final visualSummariesLastUpdateTime = (lastUpdateCloud.data()!["visualSummaries"] as Timestamp).toDate();
   var lastUpdateLocal = await IsarService().getLastUpdate();
 
   if (lastUpdateLocal!.visualSummaries == null ||
       lastUpdateLocal.visualSummaries!.compareTo(visualSummariesLastUpdateTime) < 0) {
-    CollectionReference collection = FirebaseFirestore.instance.collection('Visual Summaries');
+    List<VisualSummary> localVisualSummaries = await IsarService().getAllVisualSummaries();
+    Set<String> localVisualSummaryIDs = <String>{};
+    for (VisualSummary vs in localVisualSummaries) {
+      localVisualSummaryIDs.add(vs.id!);
+    }
 
+    CollectionReference collection = FirebaseFirestore.instance.collection('Visual Summaries');
     // Get docs from collection reference
     QuerySnapshot querySnapshot = await collection.get();
     await Future.wait(querySnapshot.docs.map((doc) async {
       final data = (doc.data() as Map<String, dynamic>);
+      localVisualSummaryIDs.remove(doc.id);
       IsarService().saveVisualSummary(VisualSummary()
         ..id = doc.id
         ..title = data['title']
@@ -73,17 +89,16 @@ Future<void> syncVisualSummariesFromFirestore() async {
         ..linkTwitter = data['linkTwitter']
         ..mimeTypeVisualSummary = data['mimeTypeVisualSummary']
         ..mimeTypeVisualSummaryThumbnail = data['mimeTypeVisualSummaryThumbnail']
-        ..mimeTypeVisualInfographic = data['mimeTypeVisualInfographic']
-        ..mimeTypeVisualInfographicThumbnail = data['mimeTypeVisualInfographicThumbnail']
         ..linkVisualSummaryStorage = data['linkVisualSummaryStorage']
         ..linkVisualSummarySource = data['linkVisualSummarySource']
         ..linkVisualSummaryThumbnailStorage = data['linkVisualSummaryThumbnailStorage']
-        ..linkVisualSummaryThumbnailSource = data['linkVisualSummaryThumbnailSource']
-        ..linkVisualInfographicStorage = data['linkVisualInfographicStorage']
-        ..linkVisualInfographicSource = data['linkVisualInfographicSource']
-        ..linkVisualInfographicThumbnailStorage = data['linkVisualInfographicThumbnailStorage']
-        ..linkVisualInfographicThumbnailSource = data['linkVisualInfographicThumbnailSource']);
+        ..linkVisualSummaryThumbnailSource = data['linkVisualSummaryThumbnailSource']);
     }));
+
+    // Delete visual summaries that are no longer in the collection
+    for (String id in localVisualSummaryIDs) {
+      IsarService().deleteVisualSummary(id);
+    }
 
     lastUpdateLocal.visualSummaries = visualSummariesLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);

@@ -77,83 +77,63 @@ const VisualSummarySchema = CollectionSchema(
       name: r'linkTwitter',
       type: IsarType.string,
     ),
-    r'linkVisualInfographicSource': PropertySchema(
-      id: 12,
-      name: r'linkVisualInfographicSource',
-      type: IsarType.string,
-    ),
-    r'linkVisualInfographicStorage': PropertySchema(
-      id: 13,
-      name: r'linkVisualInfographicStorage',
-      type: IsarType.string,
-    ),
-    r'linkVisualInfographicThumbnailSource': PropertySchema(
-      id: 14,
-      name: r'linkVisualInfographicThumbnailSource',
-      type: IsarType.string,
-    ),
-    r'linkVisualInfographicThumbnailStorage': PropertySchema(
-      id: 15,
-      name: r'linkVisualInfographicThumbnailStorage',
-      type: IsarType.string,
-    ),
     r'linkVisualSummarySource': PropertySchema(
-      id: 16,
+      id: 12,
       name: r'linkVisualSummarySource',
       type: IsarType.string,
     ),
     r'linkVisualSummaryStorage': PropertySchema(
-      id: 17,
+      id: 13,
       name: r'linkVisualSummaryStorage',
       type: IsarType.string,
     ),
     r'linkVisualSummaryThumbnailSource': PropertySchema(
-      id: 18,
+      id: 14,
       name: r'linkVisualSummaryThumbnailSource',
       type: IsarType.string,
     ),
     r'linkVisualSummaryThumbnailStorage': PropertySchema(
-      id: 19,
+      id: 15,
       name: r'linkVisualSummaryThumbnailStorage',
       type: IsarType.string,
     ),
     r'mimeTypeVisualInfographic': PropertySchema(
-      id: 20,
+      id: 16,
       name: r'mimeTypeVisualInfographic',
       type: IsarType.string,
     ),
     r'mimeTypeVisualInfographicThumbnail': PropertySchema(
-      id: 21,
+      id: 17,
       name: r'mimeTypeVisualInfographicThumbnail',
       type: IsarType.string,
     ),
     r'mimeTypeVisualSummary': PropertySchema(
-      id: 22,
+      id: 18,
       name: r'mimeTypeVisualSummary',
       type: IsarType.string,
     ),
     r'mimeTypeVisualSummaryThumbnail': PropertySchema(
-      id: 23,
+      id: 19,
       name: r'mimeTypeVisualSummaryThumbnail',
       type: IsarType.string,
     ),
     r'organSystems': PropertySchema(
-      id: 24,
+      id: 20,
       name: r'organSystems',
       type: IsarType.stringList,
     ),
     r'recordedPodcastTitle': PropertySchema(
-      id: 25,
+      id: 21,
       name: r'recordedPodcastTitle',
       type: IsarType.string,
     ),
     r'title': PropertySchema(
-      id: 26,
+      id: 22,
       name: r'title',
       type: IsarType.string,
     ),
     r'yearGuidelinePublished': PropertySchema(
-      id: 27,
+      id: 23,
       name: r'yearGuidelinePublished',
       type: IsarType.long,
     )
@@ -230,30 +210,6 @@ int _visualSummaryEstimateSize(
   bytesCount += 3 + object.linkOriginalManuscript.length * 3;
   {
     final value = object.linkTwitter;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.linkVisualInfographicSource;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.linkVisualInfographicStorage;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.linkVisualInfographicThumbnailSource;
-    if (value != null) {
-      bytesCount += 3 + value.length * 3;
-    }
-  }
-  {
-    final value = object.linkVisualInfographicThumbnailStorage;
     if (value != null) {
       bytesCount += 3 + value.length * 3;
     }
@@ -341,22 +297,18 @@ void _visualSummarySerialize(
   writer.writeStringList(offsets[9], object.keywords);
   writer.writeString(offsets[10], object.linkOriginalManuscript);
   writer.writeString(offsets[11], object.linkTwitter);
-  writer.writeString(offsets[12], object.linkVisualInfographicSource);
-  writer.writeString(offsets[13], object.linkVisualInfographicStorage);
-  writer.writeString(offsets[14], object.linkVisualInfographicThumbnailSource);
-  writer.writeString(offsets[15], object.linkVisualInfographicThumbnailStorage);
-  writer.writeString(offsets[16], object.linkVisualSummarySource);
-  writer.writeString(offsets[17], object.linkVisualSummaryStorage);
-  writer.writeString(offsets[18], object.linkVisualSummaryThumbnailSource);
-  writer.writeString(offsets[19], object.linkVisualSummaryThumbnailStorage);
-  writer.writeString(offsets[20], object.mimeTypeVisualInfographic);
-  writer.writeString(offsets[21], object.mimeTypeVisualInfographicThumbnail);
-  writer.writeString(offsets[22], object.mimeTypeVisualSummary);
-  writer.writeString(offsets[23], object.mimeTypeVisualSummaryThumbnail);
-  writer.writeStringList(offsets[24], object.organSystems);
-  writer.writeString(offsets[25], object.recordedPodcastTitle);
-  writer.writeString(offsets[26], object.title);
-  writer.writeLong(offsets[27], object.yearGuidelinePublished);
+  writer.writeString(offsets[12], object.linkVisualSummarySource);
+  writer.writeString(offsets[13], object.linkVisualSummaryStorage);
+  writer.writeString(offsets[14], object.linkVisualSummaryThumbnailSource);
+  writer.writeString(offsets[15], object.linkVisualSummaryThumbnailStorage);
+  writer.writeString(offsets[16], object.mimeTypeVisualInfographic);
+  writer.writeString(offsets[17], object.mimeTypeVisualInfographicThumbnail);
+  writer.writeString(offsets[18], object.mimeTypeVisualSummary);
+  writer.writeString(offsets[19], object.mimeTypeVisualSummaryThumbnail);
+  writer.writeStringList(offsets[20], object.organSystems);
+  writer.writeString(offsets[21], object.recordedPodcastTitle);
+  writer.writeString(offsets[22], object.title);
+  writer.writeLong(offsets[23], object.yearGuidelinePublished);
 }
 
 VisualSummary _visualSummaryDeserialize(
@@ -377,27 +329,21 @@ VisualSummary _visualSummaryDeserialize(
   object.keywords = reader.readStringList(offsets[9]) ?? [];
   object.linkOriginalManuscript = reader.readString(offsets[10]);
   object.linkTwitter = reader.readStringOrNull(offsets[11]);
-  object.linkVisualInfographicSource = reader.readStringOrNull(offsets[12]);
-  object.linkVisualInfographicStorage = reader.readStringOrNull(offsets[13]);
-  object.linkVisualInfographicThumbnailSource =
-      reader.readStringOrNull(offsets[14]);
-  object.linkVisualInfographicThumbnailStorage =
-      reader.readStringOrNull(offsets[15]);
-  object.linkVisualSummarySource = reader.readStringOrNull(offsets[16]);
-  object.linkVisualSummaryStorage = reader.readStringOrNull(offsets[17]);
+  object.linkVisualSummarySource = reader.readStringOrNull(offsets[12]);
+  object.linkVisualSummaryStorage = reader.readStringOrNull(offsets[13]);
   object.linkVisualSummaryThumbnailSource =
-      reader.readStringOrNull(offsets[18]);
+      reader.readStringOrNull(offsets[14]);
   object.linkVisualSummaryThumbnailStorage =
-      reader.readStringOrNull(offsets[19]);
-  object.mimeTypeVisualInfographic = reader.readStringOrNull(offsets[20]);
+      reader.readStringOrNull(offsets[15]);
+  object.mimeTypeVisualInfographic = reader.readStringOrNull(offsets[16]);
   object.mimeTypeVisualInfographicThumbnail =
-      reader.readStringOrNull(offsets[21]);
-  object.mimeTypeVisualSummary = reader.readStringOrNull(offsets[22]);
-  object.mimeTypeVisualSummaryThumbnail = reader.readStringOrNull(offsets[23]);
-  object.organSystems = reader.readStringList(offsets[24]) ?? [];
-  object.recordedPodcastTitle = reader.readStringOrNull(offsets[25]);
-  object.title = reader.readString(offsets[26]);
-  object.yearGuidelinePublished = reader.readLong(offsets[27]);
+      reader.readStringOrNull(offsets[17]);
+  object.mimeTypeVisualSummary = reader.readStringOrNull(offsets[18]);
+  object.mimeTypeVisualSummaryThumbnail = reader.readStringOrNull(offsets[19]);
+  object.organSystems = reader.readStringList(offsets[20]) ?? [];
+  object.recordedPodcastTitle = reader.readStringOrNull(offsets[21]);
+  object.title = reader.readString(offsets[22]);
+  object.yearGuidelinePublished = reader.readLong(offsets[23]);
   return object;
 }
 
@@ -449,20 +395,12 @@ P _visualSummaryDeserializeProp<P>(
     case 19:
       return (reader.readStringOrNull(offset)) as P;
     case 20:
-      return (reader.readStringOrNull(offset)) as P;
+      return (reader.readStringList(offset) ?? []) as P;
     case 21:
       return (reader.readStringOrNull(offset)) as P;
     case 22:
-      return (reader.readStringOrNull(offset)) as P;
-    case 23:
-      return (reader.readStringOrNull(offset)) as P;
-    case 24:
-      return (reader.readStringList(offset) ?? []) as P;
-    case 25:
-      return (reader.readStringOrNull(offset)) as P;
-    case 26:
       return (reader.readString(offset)) as P;
-    case 27:
+    case 23:
       return (reader.readLong(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
@@ -2332,630 +2270,6 @@ extension VisualSummaryQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(FilterCondition.greaterThan(
         property: r'linkTwitter',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'linkVisualInfographicSource',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'linkVisualInfographicSource',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'linkVisualInfographicSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'linkVisualInfographicSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'linkVisualInfographicSource',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'linkVisualInfographicSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'linkVisualInfographicSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'linkVisualInfographicSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'linkVisualInfographicSource',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicSource',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicSourceIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'linkVisualInfographicSource',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'linkVisualInfographicStorage',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'linkVisualInfographicStorage',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'linkVisualInfographicStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'linkVisualInfographicStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'linkVisualInfographicStorage',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'linkVisualInfographicStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'linkVisualInfographicStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'linkVisualInfographicStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'linkVisualInfographicStorage',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicStorage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicStorageIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'linkVisualInfographicStorage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'linkVisualInfographicThumbnailSource',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'linkVisualInfographicThumbnailSource',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicThumbnailSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'linkVisualInfographicThumbnailSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'linkVisualInfographicThumbnailSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'linkVisualInfographicThumbnailSource',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'linkVisualInfographicThumbnailSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'linkVisualInfographicThumbnailSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'linkVisualInfographicThumbnailSource',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'linkVisualInfographicThumbnailSource',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicThumbnailSource',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailSourceIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'linkVisualInfographicThumbnailSource',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNull(
-        property: r'linkVisualInfographicThumbnailStorage',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsNotNull() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(const FilterCondition.isNotNull(
-        property: r'linkVisualInfographicThumbnailStorage',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageEqualTo(
-    String? value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageGreaterThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        include: include,
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageLessThan(
-    String? value, {
-    bool include = false,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.lessThan(
-        include: include,
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageBetween(
-    String? lower,
-    String? upper, {
-    bool includeLower = true,
-    bool includeUpper = true,
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.between(
-        property: r'linkVisualInfographicThumbnailStorage',
-        lower: lower,
-        includeLower: includeLower,
-        upper: upper,
-        includeUpper: includeUpper,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.startsWith(
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.endsWith(
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageContains(String value,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.contains(
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: value,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageMatches(String pattern,
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.matches(
-        property: r'linkVisualInfographicThumbnailStorage',
-        wildcard: pattern,
-        caseSensitive: caseSensitive,
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.equalTo(
-        property: r'linkVisualInfographicThumbnailStorage',
-        value: '',
-      ));
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterFilterCondition>
-      linkVisualInfographicThumbnailStorageIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(FilterCondition.greaterThan(
-        property: r'linkVisualInfographicThumbnailStorage',
         value: '',
       ));
     });
@@ -4895,65 +4209,6 @@ extension VisualSummaryQuerySortBy
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicSource() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicSource', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicSourceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicSource', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicStorage() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicStorage', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicStorageDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicStorage', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailSource() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicThumbnailSource', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailSourceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailSource', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailStorage() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      sortByLinkVisualInfographicThumbnailStorageDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       sortByLinkVisualSummarySource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummarySource', Sort.asc);
@@ -5227,65 +4482,6 @@ extension VisualSummaryQuerySortThenBy
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicSource() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicSource', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicSourceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicSource', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicStorage() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicStorage', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicStorageDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicStorage', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailSource() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(r'linkVisualInfographicThumbnailSource', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailSourceDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailSource', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailStorage() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.asc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
-      thenByLinkVisualInfographicThumbnailStorageDesc() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-          r'linkVisualInfographicThumbnailStorage', Sort.desc);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QAfterSortBy>
       thenByLinkVisualSummarySource() {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(r'linkVisualSummarySource', Sort.asc);
@@ -5523,40 +4719,6 @@ extension VisualSummaryQueryWhereDistinct
   }
 
   QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicSource({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicSource',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicStorage({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicStorage',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicThumbnailSource(
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicThumbnailSource',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
-      distinctByLinkVisualInfographicThumbnailStorage(
-          {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(r'linkVisualInfographicThumbnailStorage',
-          caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<VisualSummary, VisualSummary, QDistinct>
       distinctByLinkVisualSummarySource({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'linkVisualSummarySource',
@@ -5734,34 +4896,6 @@ extension VisualSummaryQueryProperty
   QueryBuilder<VisualSummary, String?, QQueryOperations> linkTwitterProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'linkTwitter');
-    });
-  }
-
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicSourceProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'linkVisualInfographicSource');
-    });
-  }
-
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicStorageProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'linkVisualInfographicStorage');
-    });
-  }
-
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicThumbnailSourceProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'linkVisualInfographicThumbnailSource');
-    });
-  }
-
-  QueryBuilder<VisualSummary, String?, QQueryOperations>
-      linkVisualInfographicThumbnailStorageProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addPropertyName(r'linkVisualInfographicThumbnailStorage');
     });
   }
 

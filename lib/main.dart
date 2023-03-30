@@ -56,6 +56,8 @@ Future<void> main() async {
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  
+  FirebaseAuth.instance.signInAnonymously();
 
   // Work in Progress - Notifications
   await FirebaseMessaging.instance.getInitialMessage();
@@ -63,7 +65,6 @@ Future<void> main() async {
 
   IsarService.init();
   LocalFileSystem.init();
-  FirebaseAuth.instance.signInAnonymously();
 
   await setupServiceLocator();
 

@@ -2,6 +2,7 @@ import 'package:audio_service/audio_service.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -185,6 +186,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
   @override
   Widget build(BuildContext context) {
     final podcast = IsarService().getPodcast(args.podcastID);
+
     return podcast == null
         ? Center(child: Text("Unknown podcast ID: ${args.podcastID}"))
         : SingleChildScrollView(
@@ -195,9 +197,8 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                   Row(children: [
                     IconButton(
                       onPressed: () {
-                        Navigator.of(context).pushReplacementNamed(
-                          "/podcast",
-                        );
+                        Navigator.of(context).pop();
+                        Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
                       },
                       icon: const Icon(Icons.arrow_circle_left_outlined),
                       iconSize: 36,
@@ -236,7 +237,17 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                             return IconButton(
                               icon: const Icon(Icons.play_arrow),
                               iconSize: 32.0,
-                              onPressed: _pageManager!.play,
+                              onPressed: () async {
+                                // TODO: Currently, it logs an event every time the play button is pressed.
+                                // Use a better algorithm to determine how many times a podcast is played.
+                                await FirebaseAnalytics.instance.logEvent(
+                                  name: 'podcast_play',
+                                  parameters: {
+                                    "podcast_play": podcast.title.length <= 100 ? podcast.title : podcast.title.substring(0, 99),
+                                  },
+                                );
+                                _pageManager!.play();
+                              },
                             );
                           case ButtonState.playing:
                             return IconButton(
