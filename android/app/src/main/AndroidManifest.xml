@@ -22,15 +22,15 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
+            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <action android:name="android.intent.action.BROWSABLE"/>
-                <action android:name="android.intent.action.DEFAULT"/>
+                <!-- <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" /> -->
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="emoroiddigestapp" android:host="deeplink"/>
+                <data android:scheme="emoroiddigestapp" android:host="host" />
             </intent-filter>
         </activity>
         <service android:name="com.ryanheise.audioservice.AudioService"
