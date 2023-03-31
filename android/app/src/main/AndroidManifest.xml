@@ -6,6 +6,17 @@
         android:label="emoroid_digest_app"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
+        <activity android:name="com.myapp.DeepLinkActivity" android:exported="true">
+          <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+          <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.BROWSABLE" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <data
+                  android:host="emoroiddigestapp"
+                  android:scheme="/host" />
+          </intent-filter>
+        </activity>
         <activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:exported="true"
@@ -22,15 +33,10 @@
               android:name="io.flutter.embedding.android.NormalTheme"
               android:resource="@style/NormalTheme"
               />
-            <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
             <intent-filter>
-                <!-- <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.BROWSABLE" /> -->
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
                 <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:scheme="emoroiddigestapp" android:host="host" />
             </intent-filter>
         </activity>
         <service android:name="com.ryanheise.audioservice.AudioService"
