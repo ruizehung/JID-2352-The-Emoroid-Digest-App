@@ -9,18 +9,15 @@ import 'package:path_provider/path_provider.dart';
 import '../../services/services_locator.dart';
 import '../../utils/isar_service.dart';
 
- Future<Uri> getImageFileFromAssets() async {
-    final byteData = await rootBundle.load('assets/logo.png');
-    final buffer = byteData.buffer;
-    Directory tempDir =  await getApplicationDocumentsDirectory();
-    String tempPath = tempDir.path;
-    var filePath =
-        tempPath + '/file_01.png'; // file_01.tmp is dump file, can be anything
-    return (await File(filePath).writeAsBytes(
-        buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes)))
-        .uri;
-  }
-  
+Future<Uri> getImageFileFromAssets() async {
+  final byteData = await rootBundle.load('assets/logo.png');
+  final buffer = byteData.buffer;
+  Directory tempDir = await getApplicationDocumentsDirectory();
+  String tempPath = tempDir.path;
+  var filePath = tempPath + '/file_01.png'; // file_01.tmp is dump file, can be anything
+  return (await File(filePath).writeAsBytes(buffer.asUint8List(byteData.offsetInBytes, byteData.lengthInBytes))).uri;
+}
+
 class PageManager {
   final _audioHandler = getIt<AudioHandler>();
 
@@ -57,6 +54,7 @@ class PageManager {
         _audioHandler.seek(Duration.zero);
         _audioHandler.pause();
       }
+      speedNotifier.value = SpeedState(speed: playbackState.speed);
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
           current: playbackState.position,
@@ -123,6 +121,18 @@ class PageManager {
     _audioHandler.seek(position);
   }
 
+  void fastForward() {
+    _audioHandler.fastForward();
+  }
+
+  void rewind() {
+    _audioHandler.rewind();
+  }
+
+  void setSpeed(double speed) {
+    _audioHandler.setSpeed(speed);
+  }
+
   final progressNotifier = ValueNotifier<ProgressBarState>(
     ProgressBarState(
       current: Duration.zero,
@@ -133,6 +143,7 @@ class PageManager {
     ),
   );
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
+  final speedNotifier = ValueNotifier<SpeedState>((SpeedState(speed: 1)));
 }
 
 class ProgressBarState {
@@ -151,3 +162,10 @@ class ProgressBarState {
 }
 
 enum ButtonState { paused, playing, loading }
+
+class SpeedState {
+  SpeedState({
+    required this.speed,
+  });
+  final double speed;
+}
