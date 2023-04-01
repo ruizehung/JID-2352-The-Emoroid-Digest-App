@@ -16,9 +16,22 @@ Future<AudioHandler> initAudioService() async {
       androidNotificationChannelName: 'Emoroid Digest App',
       androidNotificationOngoing: true,
       androidStopForegroundOnPause: true,
+      rewindInterval: Duration(seconds: 10),
+      fastForwardInterval: Duration(seconds: 10),
     ),
   );
 }
+
+MediaControl forward10 = const MediaControl(
+  androidIcon: 'drawable/ic_forward_10',
+  label: 'Forward 10 Seconds',
+  action: MediaAction.fastForward,
+);
+MediaControl rewind10 = const MediaControl(
+  androidIcon: 'drawable/ic_replay_10',
+  label: 'Rewind 10 Seconds',
+  action: MediaAction.rewind,
+);
 
 class AudioPlayerHandler extends BaseAudioHandler {
   final _player = AudioPlayer();
@@ -28,9 +41,9 @@ class AudioPlayerHandler extends BaseAudioHandler {
       final playing = _player.playing;
       playbackState.add(playbackState.value.copyWith(
         controls: [
-          MediaControl.rewind,
+          rewind10,
           if (playing) MediaControl.pause else MediaControl.play,
-          MediaControl.fastForward,
+          forward10,
         ],
         systemActions: const {MediaAction.rewind, MediaAction.seek, MediaAction.fastForward},
         androidCompactActionIndices: const [0, 1, 2],
@@ -87,6 +100,7 @@ class AudioPlayerHandler extends BaseAudioHandler {
         controls: [MediaControl.play],
         processingState: AudioProcessingState.loading,
       ));
+      _player.setSpeed(1);
       _player.setUrl(extras?[0].mediaUrl).then((_) {
         playbackState.add(playbackState.value.copyWith(
           processingState: AudioProcessingState.ready,
@@ -105,6 +119,18 @@ class AudioPlayerHandler extends BaseAudioHandler {
 
   @override
   Future<void> seek(Duration position) => _player.seek(position);
+
+  @override
+  Future<void> rewind() => _player.seek(Duration(seconds: _player.position.inSeconds - 10));
+
+  @override
+  Future<void> fastForward() => _player.seek(Duration(seconds: _player.position.inSeconds + 10));
+
+  @override
+  Future<void> setSpeed(double speed) async {
+    _player.setSpeed(speed);
+    playbackState.add(playbackState.value.copyWith(speed: speed));
+  }
 
   @override
   Future<void> customStop() => _player.dispose();
