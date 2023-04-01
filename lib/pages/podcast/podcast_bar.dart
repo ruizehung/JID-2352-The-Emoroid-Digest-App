@@ -71,7 +71,7 @@ class _PodcastBarState extends State<PodcastBar> {
                           child: InkWell(
                               onTap: () async {
                                 bottomNavBarState.page = 2;
-                                await widget.navigatorKey.currentState?.pushReplacementNamed(
+                                await widget.navigatorKey.currentState?.pushNamed(
                                   "/podcast/detail",
                                   arguments: PodcastDetailPageArguments(value.id),
                                 );
