@@ -183,6 +183,43 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
     return Column(children: columnChildren);
   }
 
+  Widget getModalBottomSheetTitle(String title) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5.5),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 30,
+        ),
+      ),
+    );
+  }
+
+  Widget setSpeedButton(double speed, double speedNotifier, context) {
+    return Row(children: [
+      Expanded(
+          child: (TextButton(
+              style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                      speed == speedNotifier ? const Color.fromARGB(255, 212, 231, 246) : Colors.transparent),
+                  padding: MaterialStateProperty.all<EdgeInsets>(
+                    const EdgeInsets.symmetric(vertical: 15.5),
+                  )),
+              onPressed: () {
+                _pageManager!.setSpeed(speed);
+                Navigator.pop(context);
+              },
+              child: Text(
+                "${speed % 1 == 0 ? speed.toInt() : speed}x",
+                style: TextStyle(
+                    color: speed == speedNotifier ? Colors.blue : Colors.black,
+                    fontSize: 25.0,
+                    fontWeight: speed == speedNotifier ? FontWeight.w900 : FontWeight.w500),
+              ))))
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     final podcast = IsarService().getPodcast(args.podcastID);
@@ -222,41 +259,103 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                       },
                     ),
                   if (_pageManager != null)
-                    ValueListenableBuilder<ButtonState>(
-                      valueListenable: _pageManager!.buttonNotifier,
-                      builder: (_, value, __) {
-                        switch (value) {
-                          case ButtonState.loading:
-                            return Container(
-                              margin: const EdgeInsets.all(8.0),
-                              width: 32.0,
-                              height: 32.0,
-                              child: const CircularProgressIndicator(),
-                            );
-                          case ButtonState.paused:
-                            return IconButton(
-                              icon: const Icon(Icons.play_arrow),
-                              iconSize: 32.0,
-                              onPressed: () async {
-                                // TODO: Currently, it logs an event every time the play button is pressed.
-                                // Use a better algorithm to determine how many times a podcast is played.
-                                await FirebaseAnalytics.instance.logEvent(
-                                  name: 'podcast_play',
-                                  parameters: {
-                                    "podcast_play": podcast.title.length <= 100 ? podcast.title : podcast.title.substring(0, 99),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      // crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.blue),
+                            ),
+                            onPressed: () => showModalBottomSheet(
+                                context: context,
+                                isScrollControlled: true,
+                                builder: ((context) => FractionallySizedBox(
+                                    heightFactor: 1,
+                                    child: ValueListenableBuilder<SpeedState>(
+                                      valueListenable: _pageManager!.speedNotifier,
+                                      builder: (_, value, __) {
+                                        return ListView(scrollDirection: Axis.vertical, children: [
+                                          Center(child: getModalBottomSheetTitle("Change speed")),
+                                          setSpeedButton(0.5, value.speed, context),
+                                          setSpeedButton(0.8, value.speed, context),
+                                          setSpeedButton(1, value.speed, context),
+                                          setSpeedButton(1.2, value.speed, context),
+                                          setSpeedButton(1.8, value.speed, context),
+                                          setSpeedButton(2, value.speed, context),
+                                          setSpeedButton(2.5, value.speed, context),
+                                          setSpeedButton(3, value.speed, context),
+                                          setSpeedButton(3.5, value.speed, context),
+                                        ]);
+                                      },
+                                    )))),
+                            child: ValueListenableBuilder<SpeedState>(
+                              valueListenable: _pageManager!.speedNotifier,
+                              builder: (_, value, __) {
+                                return Text(
+                                  "${value.speed % 1 == 0 ? value.speed.toInt() : value.speed}x",
+                                  style: TextStyle(
+                                    color: value.speed == 1 ? Colors.black : Colors.blue,
+                                    fontSize: 18.0,
+                                  ),
+                                );
+                              },
+                            )),
+                        IconButton(
+                          icon: const Icon(Icons.replay_10),
+                          iconSize: 32.0,
+                          onPressed: () async {
+                            _pageManager!.rewind();
+                          },
+                        ),
+                        ValueListenableBuilder<ButtonState>(
+                          valueListenable: _pageManager!.buttonNotifier,
+                          builder: (_, value, __) {
+                            switch (value) {
+                              case ButtonState.loading:
+                                return Container(
+                                  margin: const EdgeInsets.all(8.0),
+                                  width: 32.0,
+                                  height: 32.0,
+                                  child: const CircularProgressIndicator(),
+                                );
+                              case ButtonState.paused:
+                                return IconButton(
+                                  icon: const Icon(Icons.play_arrow),
+                                  iconSize: 32.0,
+                                  onPressed: () async {
+                                    // TODO: Currently, it logs an event every time the play button is pressed.
+                                    // Use a better algorithm to determine how many times a podcast is played.
+                                    await FirebaseAnalytics.instance.logEvent(
+                                      name: 'podcast_play',
+                                      parameters: {
+                                        "podcast_play": podcast.title.length <= 100
+                                            ? podcast.title
+                                            : podcast.title.substring(0, 99),
+                                      },
+                                    );
+                                    _pageManager!.play();
                                   },
                                 );
-                                _pageManager!.play();
-                              },
-                            );
-                          case ButtonState.playing:
-                            return IconButton(
-                              icon: const Icon(Icons.pause),
-                              iconSize: 32.0,
-                              onPressed: _pageManager!.pause,
-                            );
-                        }
-                      },
+                              case ButtonState.playing:
+                                return IconButton(
+                                  icon: const Icon(Icons.pause),
+                                  iconSize: 32.0,
+                                  onPressed: _pageManager!.pause,
+                                );
+                            }
+                          },
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.forward_10),
+                          iconSize: 32.0,
+                          onPressed: () async {
+                            _pageManager!.fastForward();
+                          },
+                        ),
+                        // Empty textbutton to have the same dimension as the first button in the row
+                        const TextButton(onPressed: null, child: Text(""))
+                      ],
                     ),
                   if (_pageManager == null)
                     ProgressBar(
