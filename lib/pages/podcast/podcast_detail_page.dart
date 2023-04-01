@@ -204,7 +204,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                   backgroundColor: MaterialStateProperty.all<Color>(
                       speed == speedNotifier ? const Color.fromARGB(255, 212, 231, 246) : Colors.transparent),
                   padding: MaterialStateProperty.all<EdgeInsets>(
-                    const EdgeInsets.symmetric(vertical: 15.5),
+                    const EdgeInsets.symmetric(vertical: 13.5),
                   )),
               onPressed: () {
                 _pageManager!.setSpeed(speed);
@@ -281,6 +281,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                           setSpeedButton(0.8, value.speed, context),
                                           setSpeedButton(1, value.speed, context),
                                           setSpeedButton(1.2, value.speed, context),
+                                          setSpeedButton(1.5, value.speed, context),
                                           setSpeedButton(1.8, value.speed, context),
                                           setSpeedButton(2, value.speed, context),
                                           setSpeedButton(2.5, value.speed, context),
