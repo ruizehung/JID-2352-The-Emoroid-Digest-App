@@ -6,7 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 class GoogleSheet {
   static String _credentials = "";
 
-  static const _sheetId = '1HSHdN_IxuL4sKaPvazovcZYiEcQJVS7lAGhb2pe8Jv4';
+  static const _sheetId = '1QPOCESdO2rpAy4KF9LIB2yfbUq0SGc-U6TUNZ130aiM';
 
   static Worksheet? _feedbackSheet;
 
@@ -16,13 +16,13 @@ class GoogleSheet {
 
     final gsheet = GSheets(_credentials);
     final sheet = await gsheet.spreadsheet(_sheetId);
-    _feedbackSheet = await _getWorkSheet(sheet, title: 'Sheet1');
+    _feedbackSheet = await _getWorkSheet(sheet, title: 'Feedback');
 
     try {
       final firstRow = FeedbackModel.getFields();
       _feedbackSheet!.values.insertRow(1, firstRow);
     } catch (e) {
-      print("Error with  adding first row");
+      print("Error with adding first row");
     }
   }
 
