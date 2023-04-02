@@ -58,7 +58,7 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await FirebaseAuth.instance.signInAnonymously();
+  FirebaseAuth.instance.signInAnonymously();
 
   // Work in Progress - Notifications
   await FirebaseMessaging.instance.getInitialMessage();
