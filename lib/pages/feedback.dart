@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+
+import '../models/feedback_model.dart';
+import '../utils/googleSheet.dart';
 
 class FeedBackPage extends StatefulWidget {
   const FeedBackPage({super.key});
@@ -14,31 +15,29 @@ class _FeedBackPageState extends State<FeedBackPage> {
 
   /// Controllers
   TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
   TextEditingController medicalController = TextEditingController();
   TextEditingController detailController = TextEditingController();
 
   void _submitForm() async {
-    if (_formKey.currentState!.validate()) {
-      const String scriptURL =
-          "https://script.google.com/macros/s/AKfycbyk6vsnpVODhTh65u394rGpjatVZKCy9sOageFmHZoJftTZMniXeI586LhV2rDy5m6emQ/exec";
-      DateTime currentDate = DateTime.now();
-      String time = '${currentDate.year}-${currentDate.month}-${currentDate.day}';
-      String name = nameController.text;
-      String medicalInsitution = medicalController.text;
-      String detail = detailController.text;
+    DateTime currentDate = DateTime.now();
+    String time = '${currentDate.year}-${currentDate.month}-${currentDate.day}';
+    String name = nameController.text;
+    String medicalInsitution = medicalController.text;
+    String detail = detailController.text;
+    String email = emailController.text;
+    final feedback = {
+      FeedbackModel.time: time,
+      FeedbackModel.email: email,
+      FeedbackModel.name: name,
+      FeedbackModel.medical: medicalInsitution,
+      FeedbackModel.detail: detail
+    };
+    await GoogleSheet.insert([feedback]);
 
-      String queryString = "?time=$time&?name=$name&sex=$medicalInsitution&age=$detail";
-
-      var finalURI = Uri.parse(scriptURL + queryString);
-      var response = await http.get(finalURI);
-
-      if (response.statusCode == 200) {
-        var bodyR = convert.jsonDecode(response.body);
-        print(bodyR);
-      }
-      _clear();
-      Navigator.of(context).pop();
-    }
+    _clear();
+    Navigator.of(context).pop();
   }
 
   void _clear() {
@@ -72,10 +71,13 @@ class _FeedBackPageState extends State<FeedBackPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
-                      'What is your name?',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    Row(children: const <Text>[
+                      Text(
+                        'What is your name? ',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text('*', style: TextStyle(color: Colors.red, fontSize: 18)),
+                    ]),
                     const SizedBox(height: 8),
                     TextFormField(
                       minLines: 1,
@@ -99,6 +101,26 @@ class _FeedBackPageState extends State<FeedBackPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     const Text(
+                      'What is your email address?',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    const SizedBox(height: 8),
+                    TextFormField(
+                      minLines: 1,
+                      maxLines: 2,
+                      decoration: InputDecoration(
+                        hintText: 'Enter your email address here',
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
+                      ),
+                      controller: emailController,
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    const Text(
                       'What is your medical insitution?',
                       style: TextStyle(fontSize: 18),
                     ),
@@ -110,12 +132,6 @@ class _FeedBackPageState extends State<FeedBackPage> {
                         hintText: 'Enter your medical insitution here',
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(20.0)),
                       ),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your answer';
-                        }
-                        return null;
-                      },
                       controller: medicalController,
                     ),
                     const SizedBox(height: 20),
@@ -124,10 +140,13 @@ class _FeedBackPageState extends State<FeedBackPage> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
-                      'Please describe your feedback:',
-                      style: TextStyle(fontSize: 18),
-                    ),
+                    Row(children: const <Text>[
+                      Text(
+                        'Please describe your feedback: ',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      Text('*', style: TextStyle(color: Colors.red, fontSize: 18)),
+                    ]),
                     const SizedBox(height: 8),
                     TextFormField(
                       minLines: 4,
@@ -151,8 +170,11 @@ class _FeedBackPageState extends State<FeedBackPage> {
                   height: 10,
                 ),
                 ElevatedButton(
-                  onPressed: () {
-                    _submitForm();
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
+                      _submitForm();
+                    }
                   },
                   child: const Text('Submit Feedback'),
                 ),

@@ -8,6 +8,7 @@ import 'package:emoroid_digest_app/pages/search_page.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/services/services_locator.dart';
+import 'package:emoroid_digest_app/utils/googleSheet.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcasts_list_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summaries_list_page.dart';
@@ -56,7 +57,7 @@ Future<void> main() async {
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   await FirebaseAuth.instance.signInAnonymously();
 
   // Work in Progress - Notifications
@@ -65,6 +66,7 @@ Future<void> main() async {
 
   IsarService.init();
   LocalFileSystem.init();
+  GoogleSheet.init();
 
   await setupServiceLocator();
 
