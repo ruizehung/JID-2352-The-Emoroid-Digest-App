@@ -51,3 +51,5 @@ app.*.map.json
 
 /linux
 /windows
+
+/assets/google_sheet_key.json
