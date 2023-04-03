@@ -17,6 +17,18 @@ samples, guidance on mobile development, and a full API reference.
 
 # Release Notes
 
+## Version 0.3.0
+### New Features
+* Log anonymous visual summary view, download, and favorite events to Google Analytics
+* Log anonymous visual summary original manuscript click events to Google Analytics
+* Log anonymous podcast play events to Google Analytics
+
+### Bug Fixes
+* Sometimes the app failed to load visual summaries and podcasts after fresh install
+* Podcast detail page back button navigation failure
+
+---
+
 ## Version 0.2.0
 ### New Features
 * Browse podcasts based on categories (like medical society, organ systems, keywords, and the year the guideline was released)
