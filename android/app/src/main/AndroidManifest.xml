@@ -34,17 +34,17 @@
 				<action android:name="android.intent.action.MAIN"/>
 				<category android:name="android.intent.category.LAUNCHER"/>
 			</intent-filter>
-      <intent-filter>
+      		<intent-filter>
 				<action android:name="android.intent.action.VIEW" />
 				<category android:name="android.intent.category.BROWSABLE" />
 				<category android:name="android.intent.category.DEFAULT" />
 				<data
-                android:scheme="emoroiddigestapp"
-                android:host="host" />
+					android:scheme="emoroiddigestapp"
+					android:host="host" />
 			</intent-filter>
-      <intent-filter>
-        <action android:name="FLUTTER_NOTIFICATION_CLICK" />
-      </intent-filter>
+			<intent-filter>
+				<action android:name="FLUTTER_NOTIFICATION_CLICK" />
+			</intent-filter>
 		</activity>
 		<service android:name="com.ryanheise.audioservice.AudioService"
                 android:foregroundServiceType="mediaPlayback"
