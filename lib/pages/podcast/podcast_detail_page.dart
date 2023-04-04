@@ -6,6 +6,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import '../../models/visual_summary.dart';
 import '../../services/services_locator.dart';
 import '../../utils/isar_service.dart';
@@ -390,7 +391,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 CupertinoIcons.ear,
                                 color: podcast.hasListened ? Colors.green : Colors.black,
                                 size: iconSize,
-                                semanticLabel: 'An eye icon to indicate if a user has read a visual summary',
+                                semanticLabel: 'An eye icon to indicate if a user has listened a podcast',
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -406,12 +407,14 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 color: podcast.isFavorite ? Colors.pink : Colors.black,
                                 size: iconSize,
                                 semanticLabel:
-                                    'A heart icon to indicate if a user has marked a visual summary as favorite',
+                                    'A heart icon to indicate if a user has marked a podcast as favorite',
                               ),
                             ),
                             const SizedBox(width: 10),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Share.share('Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
+                              },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
                             ),

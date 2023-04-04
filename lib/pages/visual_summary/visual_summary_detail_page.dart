@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -337,7 +338,9 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             ),
                             const SizedBox(width: 10),
                             IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Share.share('Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
+                              },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
                             ),

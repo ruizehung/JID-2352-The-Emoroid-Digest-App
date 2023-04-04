@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:emoroid_digest_app/pages/bottom_nav_bar_state.dart';
 import 'package:emoroid_digest_app/pages/drawer.dart';
 import 'package:emoroid_digest_app/pages/home.dart';
@@ -11,14 +13,17 @@ import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcasts_list_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summaries_list_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'utils/local_file.dart';
 
@@ -48,6 +53,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
       0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
       payload: message.data['body']);
 }
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -126,6 +132,37 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
     // Work in Progress - Notifications
     initNotification();
+
+    // Deep Links
+    Uri? _currentURI;
+    StreamSubscription? _streamSubscription;
+
+    if (!kIsWeb) {
+      _streamSubscription = uriLinkStream.listen((Uri? uri) {
+        _currentURI = uri;  
+        debugPrint('Received URI: $uri');
+        
+        if (uri != null && uri.path == '/visualSummary/detail') {
+          debugPrint('Received deep link: ${uri.toString()}');
+          final id = uri.queryParameters['id'];
+          Provider.of<BottomNavBarState>(context, listen: false).page = 0;
+          navigatorKey.currentState!.pushNamed(
+            "/visual-summary/detail",
+            arguments: VisualSummaryDetailPageArguments(id.toString()),
+          );
+        } else if (uri != null && uri.path == '/podcast/detail') {
+          debugPrint('Received deep link: ${uri.toString()}');
+          final id = uri.queryParameters['id'];
+          Provider.of<BottomNavBarState>(context, listen: false).page = 2;
+          navigatorKey.currentState!.pushNamed(
+            "/podcast/detail",
+            arguments: PodcastDetailPageArguments(id.toString()),
+          );
+        }
+      }, onError: (Object err) {
+        debugPrint('Error occurred: $err');
+      });
+    }
   }
 
   // Work in Progress - Notifications
