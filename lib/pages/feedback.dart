@@ -1,3 +1,4 @@
+import 'package:emoroid_digest_app/utils/firebase.dart';
 import 'package:flutter/material.dart';
 import '../models/feedback_model.dart';
 import '../utils/google_sheet.dart';
@@ -232,7 +233,8 @@ class _FeedBackPageState extends State<FeedBackPage> {
       FeedbackModel.feedbackOrBugs: _feedbackOrBugs,
       FeedbackModel.detail: detail,
     };
-    await GoogleSheet.insert([feedback]);
+    testsFirestore();
+    //await GoogleSheet.insert([feedback]);
     _clear();
   }
 

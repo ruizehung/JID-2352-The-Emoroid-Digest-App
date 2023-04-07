@@ -66,7 +66,7 @@ Future<void> main() async {
 
   IsarService.init();
   LocalFileSystem.init();
-  GoogleSheet.init();
+  //GoogleSheet.init();
 
   await setupServiceLocator();
 
