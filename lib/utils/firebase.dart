@@ -44,7 +44,7 @@ Future<void> syncPodcastsFromFirestore() async {
 
       IsarService().savePodcast(p);
     }));
-    
+
     // Delete podcasts that are no longer in the collection
     for (String id in localPodcastIDs) {
       IsarService().deletePodcast(id);
@@ -126,4 +126,10 @@ Future<List?> downloadFileFromStorage(String path) async {
 Future<String> getPrivacyPolicyURLFromFirestore() async {
   final privacyDoc = await FirebaseFirestore.instance.collection('Privacy Policy').doc("privacy_policy").get();
   return privacyDoc.get("url") as String;
+}
+
+void testsFirestore() async {
+  final test = await FirebaseFirestore.instance.collection('test').doc('AqWMbZv4p3cH7xzBMOgb').get();
+  final s = test.get('test') as String;
+  print(s);
 }
