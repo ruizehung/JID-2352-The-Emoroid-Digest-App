@@ -1,5 +1,6 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summaries_thumbnail.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_pdf.dart';
 import 'package:emoroid_digest_app/utils/local_file.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/cupertino.dart';
@@ -7,7 +8,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'dart:async';
@@ -15,7 +15,7 @@ import 'dart:io';
 
 import '../../models/visual_summary.dart';
 import '../../utils/isar_service.dart';
-import '../bottom_nav_bar_state.dart';
+import '../global_navigation_state.dart';
 import '../podcast/podcast_detail_page.dart';
 
 class VisualSummaryDetailPageArguments {
@@ -150,13 +150,13 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                   recognizer: podcastTitile != null
                       ? (TapGestureRecognizer()
                         ..onTap = () async {
-                          Provider.of<BottomNavBarState>(context, listen: false).page = 2;
+                          Provider.of<GlobalNavigationState>(context, listen: false).page = 2;
                           await Navigator.of(context).pushNamed(
                             "/podcast/detail",
                             arguments: PodcastDetailPageArguments(podcastID),
                           );
                           // ignore: use_build_context_synchronously
-                          Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
+                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                         })
                       : null,
                 ),
@@ -181,9 +181,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
     FirebaseAnalytics.instance.logEvent(
       name: 'visual_summary_view',
       parameters: {
-        "visual_summary_view": visualSummary!.title.length <= 100
-            ? visualSummary.title
-            : visualSummary.title.substring(0, 99),
+        "visual_summary_view":
+            visualSummary!.title.length <= 100 ? visualSummary.title : visualSummary.title.substring(0, 99),
       },
     );
 
@@ -198,7 +197,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
+                        Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                       },
                       icon: const Icon(Icons.arrow_circle_left_outlined),
                       iconSize: 36,
@@ -209,46 +208,16 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                     textAlign: TextAlign.center,
                     style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  FutureBuilder(
-                      future: localVisualSummary!.exists(),
-                      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-                        if (snapshot.data == null) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (visualSummary.mimeTypeVisualSummary == "application/pdf") {
-                          if (snapshot.data! == false) {
-                            return SizedBox(
-                              height: 240,
-                              child: SfPdfViewer.network(
-                                visualSummary.linkVisualSummarySource!,
-                                onDocumentLoadFailed: (details) async {
-                                  if (await (Connectivity().checkConnectivity()) == ConnectivityResult.none) {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                          const SnackBar(content: Text("No internet connection. Failed to load PDF.")));
-                                    }
-                                  } else {
-                                    if (context.mounted) {
-                                      ScaffoldMessenger.of(context)
-                                          .showSnackBar(SnackBar(content: Text(details.description)));
-                                    }
-                                  }
-                                },
-                              ),
-                            );
-                          } else {
-                            return SizedBox(height: 240, child: SfPdfViewer.file(localVisualSummary!));
-                          }
-                        } else {
-                          if (snapshot.data! == false) {
-                            return Image.network(visualSummary.linkVisualSummarySource!);
-                          } else {
-                            return Image.file(localVisualSummary!);
-                          }
-                        }
-                      }),
+                  InkWell(
+                    child: VisualSummaryThumbnail(visualSummary: visualSummary),
+                    onTap: () async {
+                      await Navigator.push(
+                        Provider.of<GlobalNavigationState>(context, listen: false).context,
+                        MaterialPageRoute(
+                            builder: (context) => VisualSummaryPDFPage(visualSummaryID: visualSummary.id!)),
+                      );
+                    },
+                  ),
                   Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8),
                     child: Column(
@@ -339,7 +308,8 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             const SizedBox(width: 10),
                             IconButton(
                               onPressed: () {
-                                Share.share('Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
+                                Share.share(
+                                    'Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
                               },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,

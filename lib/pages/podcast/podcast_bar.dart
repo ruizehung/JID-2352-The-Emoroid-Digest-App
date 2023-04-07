@@ -6,7 +6,7 @@ import 'package:marquee/marquee.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/services_locator.dart';
-import '../bottom_nav_bar_state.dart';
+import '../global_navigation_state.dart';
 
 class PodcastBar extends StatefulWidget {
   final GlobalKey<NavigatorState> navigatorKey;
@@ -38,7 +38,7 @@ class _PodcastBarState extends State<PodcastBar> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomNavBarState = Provider.of<BottomNavBarState>(context);
+    final globalNavigationState = Provider.of<GlobalNavigationState>(context);
 
     return (processingState != AudioProcessingState.idle
         ? SizedBox(
@@ -70,12 +70,12 @@ class _PodcastBarState extends State<PodcastBar> {
                           flex: 6,
                           child: InkWell(
                               onTap: () async {
-                                bottomNavBarState.page = 2;
+                                globalNavigationState.page = 2;
                                 await widget.navigatorKey.currentState?.pushNamed(
                                   "/podcast/detail",
                                   arguments: PodcastDetailPageArguments(value.id),
                                 );
-                                bottomNavBarState.updateBasedOnRoute();
+                                globalNavigationState.updateBasedOnRoute();
                               },
                               child: Center(
                                   child: SizedBox(
