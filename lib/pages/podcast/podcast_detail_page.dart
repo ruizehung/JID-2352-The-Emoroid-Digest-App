@@ -14,7 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import '../bottom_nav_bar_state.dart';
+import '../global_navigation_state.dart';
 import 'page_manager.dart';
 
 class PodcastDetailPageArguments {
@@ -163,13 +163,13 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          Provider.of<BottomNavBarState>(context, listen: false).page = 0;
+                          Provider.of<GlobalNavigationState>(context, listen: false).page = 0;
                           await Navigator.of(context).pushNamed(
                             "/visual-summary/detail",
                             arguments: VisualSummaryDetailPageArguments(vs.id!),
                           );
                           // ignore: use_build_context_synchronously
-                          Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
+                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                         }),
                 ),
               ),
@@ -236,7 +236,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                     IconButton(
                       onPressed: () {
                         Navigator.of(context).pop();
-                        Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
+                        Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                       },
                       icon: const Icon(Icons.arrow_circle_left_outlined),
                       iconSize: 36,

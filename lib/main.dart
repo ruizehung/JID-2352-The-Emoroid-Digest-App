@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:emoroid_digest_app/pages/bottom_nav_bar_state.dart';
+import 'package:emoroid_digest_app/pages/global_navigation_state.dart';
 import 'package:emoroid_digest_app/pages/drawer.dart';
 import 'package:emoroid_digest_app/pages/home.dart';
 import 'package:emoroid_digest_app/pages/notification_page.dart';
@@ -8,6 +8,7 @@ import 'package:emoroid_digest_app/pages/podcast/podcast_bar.dart';
 import 'package:emoroid_digest_app/pages/search_page.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
+import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_pdf.dart';
 import 'package:emoroid_digest_app/services/services_locator.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcasts_list_page.dart';
@@ -54,14 +55,13 @@ Future<void> backgroundHandler(RemoteMessage message) async {
       payload: message.data['body']);
 }
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
+
   await FirebaseAuth.instance.signInAnonymously();
 
   // Work in Progress - Notifications
@@ -93,7 +93,7 @@ class TheEmoroidDigestAppWrapper extends StatelessWidget {
         ),
       ),
       home: ChangeNotifierProvider(
-        create: (BuildContext context) => BottomNavBarState(),
+        create: (BuildContext context) => GlobalNavigationState(context: context),
         child: TheEmoroidDigestApp(title: title),
       ),
     );
@@ -121,8 +121,7 @@ class TheEmoroidDigestApp extends StatefulWidget {
 class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsBindingObserver {
   int _pageIndex = 1;
   int notificationCount = 0;
-  final navigatorKey = GlobalKey<NavigatorState>();
-  final visualSummaryNavigatorKey = GlobalKey<NavigatorState>();
+  final navigatorKeyBody = GlobalKey<NavigatorState>();
   late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   @override
@@ -139,22 +138,22 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
     if (!kIsWeb) {
       _streamSubscription = uriLinkStream.listen((Uri? uri) {
-        _currentURI = uri;  
+        _currentURI = uri;
         debugPrint('Received URI: $uri');
-        
+
         if (uri != null && uri.path == '/visualSummary/detail') {
           debugPrint('Received deep link: ${uri.toString()}');
           final id = uri.queryParameters['id'];
-          Provider.of<BottomNavBarState>(context, listen: false).page = 0;
-          navigatorKey.currentState!.pushNamed(
+          Provider.of<GlobalNavigationState>(context, listen: false).page = 0;
+          navigatorKeyBody.currentState!.pushNamed(
             "/visual-summary/detail",
             arguments: VisualSummaryDetailPageArguments(id.toString()),
           );
         } else if (uri != null && uri.path == '/podcast/detail') {
           debugPrint('Received deep link: ${uri.toString()}');
           final id = uri.queryParameters['id'];
-          Provider.of<BottomNavBarState>(context, listen: false).page = 2;
-          navigatorKey.currentState!.pushNamed(
+          Provider.of<GlobalNavigationState>(context, listen: false).page = 2;
+          navigatorKeyBody.currentState!.pushNamed(
             "/podcast/detail",
             arguments: PodcastDetailPageArguments(id.toString()),
           );
@@ -254,7 +253,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
   Future<void> _onSearchTapped() async {
     String currentRoute = "";
-    Navigator.popUntil(navigatorKey.currentContext!, (route) {
+    Navigator.popUntil(navigatorKeyBody.currentContext!, (route) {
       currentRoute = route.settings.name!;
       if (currentRoute.startsWith("/notification")) {
         return false;
@@ -265,12 +264,12 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     setState(() {
       notificationCount = 0;
     });
-    navigatorKey.currentState!.pushNamed("/search");
+    navigatorKeyBody.currentState!.pushNamed("/search");
   }
 
   Future<void> _onNotificationTapped() async {
     String currentRoute = "";
-    Navigator.popUntil(navigatorKey.currentContext!, (route) {
+    Navigator.popUntil(navigatorKeyBody.currentContext!, (route) {
       currentRoute = route.settings.name!;
       if (currentRoute.startsWith("/search")) {
         return false;
@@ -281,29 +280,29 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     setState(() {
       notificationCount = 0;
     });
-    navigatorKey.currentState!.pushNamed("/notification");
+    navigatorKeyBody.currentState!.pushNamed("/notification");
   }
 
-  Future<void> _onNavButtonTapped(int newIndex, BottomNavBarState bottomNavBarState) async {
+  Future<void> _onNavButtonTapped(int newIndex, GlobalNavigationState bottomNavBarState) async {
     if (newIndex == bottomNavBarState.page) return;
     bottomNavBarState.page = newIndex;
     switch (newIndex) {
       case 0:
-        navigatorKey.currentState!.pushReplacementNamed("/visual-summary");
+        navigatorKeyBody.currentState!.pushReplacementNamed("/visual-summary");
         break;
       case 1:
-        navigatorKey.currentState!.pushReplacementNamed("/home");
+        navigatorKeyBody.currentState!.pushReplacementNamed("/home");
         break;
       case 2:
-        navigatorKey.currentState!.pushReplacementNamed("/podcast");
+        navigatorKeyBody.currentState!.pushReplacementNamed("/podcast");
         break;
     }
   }
 
-  Widget _buildBody(BottomNavBarState bottomNavBarState) {
+  Widget _buildBody(GlobalNavigationState bottomNavBarState) {
     return WillPopScope(
       onWillPop: () async {
-        await navigatorKey.currentState!.maybePop();
+        await navigatorKeyBody.currentState!.maybePop();
         bottomNavBarState.updateBasedOnRoute();
         return false;
       },
@@ -311,7 +310,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
         children: [
           Expanded(
             child: Navigator(
-              key: navigatorKey,
+              key: navigatorKeyBody,
               initialRoute: "/home",
               onGenerateRoute: (settings) {
                 Widget page;
@@ -351,7 +350,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
               },
             ),
           ),
-          PodcastBar(navigatorKey: navigatorKey)
+          PodcastBar(navigatorKey: navigatorKeyBody)
         ],
       ),
     );
@@ -359,8 +358,8 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
   @override
   Widget build(BuildContext context) {
-    final bottomNavBarState = Provider.of<BottomNavBarState>(context);
-    bottomNavBarState.navigatorKey = navigatorKey;
+    final bottomNavBarState = Provider.of<GlobalNavigationState>(context);
+    bottomNavBarState.navigatorKey = navigatorKeyBody;
 
     return Scaffold(
       appBar: AppBar(
