@@ -250,7 +250,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         }
                       }),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    padding: const EdgeInsets.only(left: 4, right: 4),
                     child: Column(
                       children: [
                         Row(
@@ -269,7 +269,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 semanticLabel: 'An eye icon to indicate if a user has read a visual summary',
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             IconButton(
                               onPressed: () {
                                 if (!visualSummary.isFavorite) {
@@ -292,7 +292,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                     'A heart icon to indicate if a user has marked a visual summary as favorite',
                               ),
                             ),
-                            SizedBox(width: _isLoading ? 21.5 : 10),
+                            SizedBox(width: _isLoading ? 21.5 : 8),
                             if (_isLoading == true)
                               const SizedBox(
                                 height: 25.0,
@@ -315,7 +315,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                                 icon: const Icon(Icons.delete),
                                 iconSize: iconSize,
                               ),
-                            SizedBox(width: _isLoading ? 21.5 : 10),
+                            SizedBox(width: _isLoading ? 21.5 : 8),
                             IconButton(
                               onPressed: () async {
                                 final uri = Uri.parse(visualSummary.linkOriginalManuscript);
@@ -336,7 +336,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                               icon: const Icon(Icons.description_outlined),
                               iconSize: iconSize,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             IconButton(
                               onPressed: () {
                                 Share.share('Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
@@ -344,7 +344,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             if (visualSummary.linkTwitter != null)
                               IconButton(
                                 //Button to jump to twitter for discussion

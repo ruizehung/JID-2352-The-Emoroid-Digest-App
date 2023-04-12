@@ -31,7 +31,7 @@ class PodcastDetailPage extends StatefulWidget {
 }
 
 class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSystem {
-  final double iconSize = 30;
+  final double iconSize = 25;
   final double fieldFontSize = 16;
   PageManager? _pageManager;
   late AudioHandler _audioHandler;
@@ -375,7 +375,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                       onPressed: setNewAudio,
                     ),
                   Padding(
-                    padding: const EdgeInsets.only(left: 8, right: 8),
+                    padding: const EdgeInsets.only(left: 4, right: 4),
                     child: Column(
                       children: [
                         Row(
@@ -394,7 +394,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 semanticLabel: 'An eye icon to indicate if a user has listened a podcast',
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             IconButton(
                               onPressed: () {
                                 setState(() {
@@ -410,7 +410,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                     'A heart icon to indicate if a user has marked a podcast as favorite',
                               ),
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             IconButton(
                               onPressed: () {
                                 Share.share('Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
@@ -418,7 +418,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
                             ),
-                            const SizedBox(width: 10),
+                            const SizedBox(width: 8),
                             if (podcast.twitterPodcastLink != null)
                               IconButton(
                                 //Button to jump to twitter for discussion
