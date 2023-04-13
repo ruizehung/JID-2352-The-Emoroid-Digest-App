@@ -232,16 +232,6 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
               padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
               child: Column(
                 children: [
-                  Row(children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
-                      },
-                      icon: const Icon(Icons.arrow_circle_left_outlined),
-                      iconSize: 36,
-                    )
-                  ]),
                   Text(
                     podcast.title,
                     textAlign: TextAlign.center,
@@ -406,14 +396,14 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 podcast.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                                 color: podcast.isFavorite ? Colors.pink : Colors.black,
                                 size: iconSize,
-                                semanticLabel:
-                                    'A heart icon to indicate if a user has marked a podcast as favorite',
+                                semanticLabel: 'A heart icon to indicate if a user has marked a podcast as favorite',
                               ),
                             ),
                             const SizedBox(width: 10),
                             IconButton(
                               onPressed: () {
-                                Share.share('Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
+                                Share.share(
+                                    'Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
                               },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
@@ -464,6 +454,12 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                         visualSummaryDetailField("Visual Summary", podcast.title, context),
                         detailField("Podcast Release Date",
                             "${podcast.dateReleased.year.toString()}-${podcast.dateReleased.month.toString().padLeft(2, '0')}-${podcast.dateReleased.day.toString().padLeft(2, '0')}"),
+                        ElevatedButton(
+                            child: const Text("Go Back"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
+                            })
                       ],
                     ),
                   ),
