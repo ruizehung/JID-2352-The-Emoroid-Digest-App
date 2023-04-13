@@ -39,14 +39,20 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
       setState(() {
         isLoading = true;
       });
+      final connectivity = await (Connectivity().checkConnectivity());
+      setState(() {
+        connectivityStatus = connectivity;
+      });
       subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
         setState(() {
           connectivityStatus = result;
         });
       });
+      
       if (connectivityStatus != ConnectivityResult.none) {
         await syncVisualSummariesFromFirestore();
       }
+      
       setState(() {
         selectedKeywords = IsarService().getUniqueVisualSummariesKeywords();
         isLoading = false;
@@ -63,7 +69,6 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
   Future<List<VisualSummary>> _getFilteredVisualSummaries() async {
     List<VisualSummary> sourceList;
     List<VisualSummary> toRender = [];
-
     if (connectivityStatus == ConnectivityResult.none) {
       sourceList = await IsarService().getDownloadedVisualSummaries();
     } else {
@@ -129,7 +134,9 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
         if (connectivityResult != ConnectivityResult.none) {
           await syncVisualSummariesFromFirestore();
         }
-        setState(() {});
+        setState(() {
+          connectivityStatus = connectivityResult;
+        });
         await Future.delayed(const Duration(seconds: 1));
       },
       child: Column(
