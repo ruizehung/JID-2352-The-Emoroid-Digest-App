@@ -223,140 +223,139 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(left: 8, right: 8),
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          setState(() {
-                            visualSummary.hasRead = !visualSummary.hasRead;
-                          });
-                          IsarService().saveVisualSummary(visualSummary);
-                        },
-                        icon: Icon(
-                          CupertinoIcons.eye,
-                          color: visualSummary.hasRead ? Colors.green : Colors.black,
-                          size: iconSize,
-                          semanticLabel: 'An eye icon to indicate if a user has read a visual summary',
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        onPressed: () {
-                          if (!visualSummary.isFavorite) {
-                            FirebaseAnalytics.instance.logEvent(name: 'visual_summary_favorite', parameters: {
-                              "visual_summary_favorite": visualSummary.title.length <= 100
-                                  ? visualSummary.title
-                                  : visualSummary.title.substring(0, 99),
+                padding: const EdgeInsets.only(left: 4, right: 4),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        IconButton(
+                          onPressed: () {
+                            setState(() {
+                              visualSummary.hasRead = !visualSummary.hasRead;
                             });
-                          }
-                          setState(() {
-                            visualSummary.isFavorite = !visualSummary.isFavorite;
-                          });
-                          IsarService().saveVisualSummary(visualSummary);
-                        },
-                        icon: Icon(
-                          visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
-                          color: visualSummary.isFavorite ? Colors.pink : Colors.black,
-                          size: iconSize,
-                          semanticLabel: 'A heart icon to indicate if a user has marked a visual summary as favorite',
-                        ),
-                      ),
-                      SizedBox(width: _isLoading ? 21.5 : 10),
-                      if (_isLoading == true)
-                        const SizedBox(
-                          height: 25.0,
-                          width: 25.0,
-                          child: CircularProgressIndicator(),
-                        ),
-                      if (visualSummary.isDownloaded == false && _isLoading == false)
-                        IconButton(
-                          onPressed: () async {
-                            await downloadVisualSummary(visualSummary);
+                            IsarService().saveVisualSummary(visualSummary);
                           },
-                          icon: const Icon(Icons.file_download_outlined),
-                          iconSize: iconSize,
+                          icon: Icon(
+                            CupertinoIcons.eye,
+                            color: visualSummary.hasRead ? Colors.green : Colors.black,
+                            size: iconSize,
+                            semanticLabel: 'An eye icon to indicate if a user has read a visual summary',
+                          ),
                         ),
-                      if (visualSummary.isDownloaded == true && _isLoading == false)
+                        const SizedBox(width: 8),
                         IconButton(
-                          onPressed: () async {
-                            await deleteVisualSummary(visualSummary);
-                          },
-                          icon: const Icon(Icons.delete),
-                          iconSize: iconSize,
-                        ),
-                      SizedBox(width: _isLoading ? 21.5 : 10),
-                      IconButton(
-                        onPressed: () async {
-                          final uri = Uri.parse(visualSummary.linkOriginalManuscript);
-                          if (await canLaunchUrl(uri)) {
-                            await FirebaseAnalytics.instance.logEvent(
-                              name: 'view_original_manuscript',
-                              parameters: {
-                                "view_original_manuscript_title": visualSummary.title.length <= 100
+                          onPressed: () {
+                            if (!visualSummary.isFavorite) {
+                              FirebaseAnalytics.instance.logEvent(name: 'visual_summary_favorite', parameters: {
+                                "visual_summary_favorite": visualSummary.title.length <= 100
                                     ? visualSummary.title
                                     : visualSummary.title.substring(0, 99),
-                              },
-                            );
-                            await launchUrl(uri);
-                          } else {
-                            throw 'Could not launch ${visualSummary.linkOriginalManuscript}';
-                          }
-                        },
-                        icon: const Icon(Icons.description_outlined),
-                        iconSize: iconSize,
-                      ),
-                      const SizedBox(width: 10),
-                      IconButton(
-                        onPressed: () {
-                          Share.share(
-                              'Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
-                        },
-                        icon: const Icon(Icons.share_outlined),
-                        iconSize: iconSize,
-                      ),
-                      const SizedBox(width: 10),
-                      if (visualSummary.linkTwitter != null)
+                              });
+                            }
+                            setState(() {
+                              visualSummary.isFavorite = !visualSummary.isFavorite;
+                            });
+                            IsarService().saveVisualSummary(visualSummary);
+                          },
+                          icon: Icon(
+                            visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
+                            color: visualSummary.isFavorite ? Colors.pink : Colors.black,
+                            size: iconSize,
+                            semanticLabel: 'A heart icon to indicate if a user has marked a visual summary as favorite',
+                          ),
+                        ),
+                        SizedBox(width: _isLoading ? 21.5 : 8),
+                        if (_isLoading == true)
+                          const SizedBox(
+                            height: 25.0,
+                            width: 25.0,
+                            child: CircularProgressIndicator(),
+                          ),
+                        if (visualSummary.isDownloaded == false && _isLoading == false)
+                          IconButton(
+                            onPressed: () async {
+                              await downloadVisualSummary(visualSummary);
+                            },
+                            icon: const Icon(Icons.file_download_outlined),
+                            iconSize: iconSize,
+                          ),
+                        if (visualSummary.isDownloaded == true && _isLoading == false)
+                          IconButton(
+                            onPressed: () async {
+                              await deleteVisualSummary(visualSummary);
+                            },
+                            icon: const Icon(Icons.delete),
+                            iconSize: iconSize,
+                          ),
+                        SizedBox(width: _isLoading ? 21.5 : 8),
                         IconButton(
-                          //Button to jump to twitter for discussion
                           onPressed: () async {
-                            final url = visualSummary.linkTwitter.toString();
-                            final uri = Uri.parse(url);
+                            final uri = Uri.parse(visualSummary.linkOriginalManuscript);
                             if (await canLaunchUrl(uri)) {
+                              await FirebaseAnalytics.instance.logEvent(
+                                name: 'view_original_manuscript',
+                                parameters: {
+                                  "view_original_manuscript_title": visualSummary.title.length <= 100
+                                      ? visualSummary.title
+                                      : visualSummary.title.substring(0, 99),
+                                },
+                              );
                               await launchUrl(uri);
                             } else {
-                              throw "Could not launch $url";
+                              throw 'Could not launch ${visualSummary.linkOriginalManuscript}';
                             }
                           },
-                          icon: const Icon(FontAwesomeIcons.twitter, color: Colors.blue),
+                          icon: const Icon(Icons.description_outlined),
                           iconSize: iconSize,
-                        )
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 8,
-                  ),
-                  detailField("Year Guideline Published", "${visualSummary.yearGuidelinePublished}"),
-                  detailField("Society", visualSummary.giSocietyJournal.join(", ")),
-                  detailField("Organ Systems", visualSummary.organSystems.join(", ")),
-                  detailField("Keywords", visualSummary.keywords.join(", ")),
-                  detailField("Guideline Authors (First two and last listed author)",
-                      visualSummary.guidelineAuthors.join(", ")),
-                  podcastDetailField("Recorded Podcast", visualSummary.recordedPodcastTitle, context),
-                  detailField("Visual Summary Fellow Author", visualSummary.fellowAuthor),
-                  detailField("Visual Summary Release Date",
-                      "${visualSummary.dateReleased.year.toString()}-${visualSummary.dateReleased.month.toString().padLeft(2, '0')}-${visualSummary.dateReleased.day.toString().padLeft(2, '0')}"),
-                  ElevatedButton(
-                      child: const Text("Go Back"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
-                      })
-                ],
-              ),
+                        ),
+                        const SizedBox(width: 8),
+                        IconButton(
+                          onPressed: () {
+                            Share.share(
+                                'Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
+                          },
+                          icon: const Icon(Icons.share_outlined),
+                          iconSize: iconSize,
+                        ),
+                        const SizedBox(width: 8),
+                        if (visualSummary.linkTwitter != null)
+                          IconButton(
+                            //Button to jump to twitter for discussion
+                            onPressed: () async {
+                              final url = visualSummary.linkTwitter.toString();
+                              final uri = Uri.parse(url);
+                              if (await canLaunchUrl(uri)) {
+                                await launchUrl(uri);
+                              } else {
+                                throw "Could not launch $url";
+                              }
+                            },
+                            icon: const Icon(FontAwesomeIcons.twitter, color: Colors.blue),
+                            iconSize: iconSize,
+                          )
+                      ],
+                    ),
+                  ],
+                )),
+            const SizedBox(
+              height: 8,
             ),
+            detailField("Year Guideline Published", "${visualSummary.yearGuidelinePublished}"),
+            detailField("Society", visualSummary.giSocietyJournal.join(", ")),
+            detailField("Organ Systems", visualSummary.organSystems.join(", ")),
+            detailField("Keywords", visualSummary.keywords.join(", ")),
+            detailField(
+                "Guideline Authors (First two and last listed author)", visualSummary.guidelineAuthors.join(", ")),
+            podcastDetailField("Recorded Podcast", visualSummary.recordedPodcastTitle, context),
+            detailField("Visual Summary Fellow Author", visualSummary.fellowAuthor),
+            detailField("Visual Summary Release Date",
+                "${visualSummary.dateReleased.year.toString()}-${visualSummary.dateReleased.month.toString().padLeft(2, '0')}-${visualSummary.dateReleased.day.toString().padLeft(2, '0')}"),
+            ElevatedButton(
+                child: const Text("Go Back"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
+                })
           ],
         ),
       ),
