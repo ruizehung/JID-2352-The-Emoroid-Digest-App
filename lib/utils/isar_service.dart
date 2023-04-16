@@ -143,7 +143,7 @@ class IsarService {
   }
 
   Future<List<VisualSummary>> getDownloadedVisualSummaries() async {
-    return _db.visualSummarys.filter().linkVisualSummaryThumbnailSourceIsNotNull().findAll();
+    return _db.visualSummarys.filter().isDownloadedEqualTo(true).findAll();
   }
 
   Future<List<VisualSummary>> getAllVisualSummaries() async {

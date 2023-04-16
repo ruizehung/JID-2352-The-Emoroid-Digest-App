@@ -14,7 +14,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import '../bottom_nav_bar_state.dart';
+import '../global_navigation_state.dart';
 import 'page_manager.dart';
 
 class PodcastDetailPageArguments {
@@ -163,13 +163,13 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                       ),
                       recognizer: TapGestureRecognizer()
                         ..onTap = () async {
-                          Provider.of<BottomNavBarState>(context, listen: false).page = 0;
+                          Provider.of<GlobalNavigationState>(context, listen: false).page = 0;
                           await Navigator.of(context).pushNamed(
                             "/visual-summary/detail",
                             arguments: VisualSummaryDetailPageArguments(vs.id!),
                           );
                           // ignore: use_build_context_synchronously
-                          Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
+                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                         }),
                 ),
               ),
@@ -232,16 +232,6 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
               padding: const EdgeInsets.only(left: 16, right: 16, top: 8),
               child: Column(
                 children: [
-                  Row(children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                        Provider.of<BottomNavBarState>(context, listen: false).updateBasedOnRoute();
-                      },
-                      icon: const Icon(Icons.arrow_circle_left_outlined),
-                      iconSize: 36,
-                    )
-                  ]),
                   Text(
                     podcast.title,
                     textAlign: TextAlign.center,
@@ -406,14 +396,14 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 podcast.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
                                 color: podcast.isFavorite ? Colors.pink : Colors.black,
                                 size: iconSize,
-                                semanticLabel:
-                                    'A heart icon to indicate if a user has marked a podcast as favorite',
+                                semanticLabel: 'A heart icon to indicate if a user has marked a podcast as favorite',
                               ),
                             ),
                             const SizedBox(width: 8),
                             IconButton(
                               onPressed: () {
-                                Share.share('Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
+                                Share.share(
+                                    'Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
                               },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
@@ -464,6 +454,12 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                         visualSummaryDetailField("Visual Summary", podcast.title, context),
                         detailField("Podcast Release Date",
                             "${podcast.dateReleased.year.toString()}-${podcast.dateReleased.month.toString().padLeft(2, '0')}-${podcast.dateReleased.day.toString().padLeft(2, '0')}"),
+                        ElevatedButton(
+                            child: const Text("Go Back"),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
+                            })
                       ],
                     ),
                   ),

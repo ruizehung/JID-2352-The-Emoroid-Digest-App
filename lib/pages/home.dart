@@ -10,7 +10,7 @@ import '../utils/firebase.dart';
 import '../utils/isar_service.dart';
 import '../models/podcast.dart';
 import '../models/visual_summary.dart';
-import 'bottom_nav_bar_state.dart';
+import 'global_navigation_state.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final bottomNavBarState = Provider.of<BottomNavBarState>(context);
+    final bottomNavBarState = Provider.of<GlobalNavigationState>(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

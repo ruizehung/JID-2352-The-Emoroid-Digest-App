@@ -16,7 +16,8 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
   final VisualSummary visualSummary;
 
   Future<bool> downloadAndCompressThumbnail() async {
-    String localThumbnailPath = getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!);
+    String localThumbnailPath =
+        getVisualSummaryThumbnailCompressedPath(visualSummary.linkVisualSummaryThumbnailStorage!);
     localThumbnailPath = localThumbnailPath.replaceAll(".png", ".jpg");
     var mimeType = ".${localThumbnailPath.split('.').last}";
     if (mimeType == ".pdf") {
@@ -39,7 +40,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
     }
 
     if (!await File(localThumbnailPath).parent.exists()) {
-      File(localThumbnailPath).parent.create();
+      File(localThumbnailPath).parent.createSync(recursive: true);
     }
 
     if (mimeType == ".png") {
@@ -49,7 +50,7 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
     try {
       await FlutterImageCompress.compressAndGetFile(File(tempPath).absolute.path, localThumbnailPath,
           quality: 1, format: CompressFormat.jpeg);
-      File(tempPath).delete();
+      File(tempPath).deleteSync();
       return true;
     } catch (error) {
       return false;
@@ -58,8 +59,9 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
 
   @override
   Widget build(BuildContext context) {
-    final localThumbnail =
-        File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!).replaceAll(".png", ".jpg"));
+    final localThumbnail = File(
+        getVisualSummaryThumbnailCompressedPath(visualSummary.linkVisualSummaryThumbnailStorage!)
+            .replaceAll(".png", ".jpg"));
     return FutureBuilder(
         future: downloadAndCompressThumbnail(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
@@ -68,7 +70,6 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
               child: CircularProgressIndicator(),
             );
           }
-
           if (visualSummary.mimeTypeVisualSummaryThumbnail == "application/pdf") {
             if (snapshot.data! == false) {
               return SizedBox(
@@ -91,7 +92,14 @@ class VisualSummaryThumbnail extends StatelessWidget with LocalFileSystem {
                     }
                   });
             }
-            return Image.file(localThumbnail);
+            return Image.file(
+              localThumbnail,
+              errorBuilder: (context, error, stackTrace) {
+                print(stackTrace);
+                localThumbnail.deleteSync();
+                return const Icon(Icons.broken_image);
+              },
+            );
           }
         });
   }

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 
-class BottomNavBarState with ChangeNotifier {
+class GlobalNavigationState with ChangeNotifier {
   int _page = 1;
-  GlobalKey<NavigatorState>? _navigatorKey;
+  late BuildContext context;
+  GlobalKey<NavigatorState>? _bodyNavigatorKey;
+
+  GlobalNavigationState({required this.context});
 
   int get page => _page;
 
@@ -12,12 +15,12 @@ class BottomNavBarState with ChangeNotifier {
   }
 
   set navigatorKey(GlobalKey<NavigatorState> newValue) {
-    _navigatorKey = newValue;
+    _bodyNavigatorKey = newValue;
   }
 
   void updateBasedOnRoute() {
     String? currentPath;
-    _navigatorKey!.currentState!.popUntil((route) {
+    _bodyNavigatorKey!.currentState!.popUntil((route) {
       currentPath = route.settings.name;
       return true;
     });
