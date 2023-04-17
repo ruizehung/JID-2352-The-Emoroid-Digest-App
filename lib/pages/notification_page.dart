@@ -3,6 +3,9 @@ import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_pa
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/models/message.dart';
+import 'package:provider/provider.dart';
+
+import 'global_navigation_state.dart';
 
 class NotificationPage extends StatefulWidget {
   const NotificationPage({super.key});
@@ -63,39 +66,37 @@ class _NotificationPageState extends State<NotificationPage> {
                 shrinkWrap: true,
                 itemCount: _messages.length,
                 itemBuilder: (context, index) {
-                  return ListTile(
-                    tileColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      side: const BorderSide(color: Colors.grey),
-                      borderRadius: BorderRadius.circular(1),
-                    ),
-                    title: Text(_messages[index].title,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                        )),
-                    subtitle: Text(_messages[index].body,
-                        style: const TextStyle(
-                          color: Colors.black,
-                        )),
+                  return InkWell(
                     onTap: () {
-                      Navigator.of(context).pop();
                       if (_messages[index].title.contains('Podcast')) {
                         () async {
+                          Provider.of<GlobalNavigationState>(context, listen: false).page = 2;
                           await Navigator.of(context).pushNamed(
                             "/podcast/detail",
                             arguments: PodcastDetailPageArguments(_messages[index].id),
                           );
+                          // ignore: use_build_context_synchronously
+                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                         }();
                       } else if (_messages[index].title.contains('Visual Summary')) {
                         () async {
+                          Provider.of<GlobalNavigationState>(context, listen: false).page = 0;
                           await Navigator.of(context).pushNamed(
                             "/visual-summary/detail",
                             arguments: VisualSummaryDetailPageArguments(_messages[index].id),
                           );
+                          // ignore: use_build_context_synchronously
+                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                         }();
                       }
                     },
+                    child: Card(
+                        child: Column(
+                      children: [
+                        Text(_messages[index].title),
+                        Text(_messages[index].body),
+                      ],
+                    )),
                   );
                 },
               )),
