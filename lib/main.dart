@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emoroid_digest_app/pages/feedback.dart';
 import 'package:emoroid_digest_app/pages/global_navigation_state.dart';
 import 'package:emoroid_digest_app/pages/drawer.dart';
 import 'package:emoroid_digest_app/pages/home.dart';
@@ -333,6 +334,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                     break;
                   case "/search":
                     page = const SearchPage();
+                    break;
+                  case "/feedbackPage()":
+                    page = const FeedBackPage();
                     break;
                   default:
                     page = const HomePage();
