@@ -63,6 +63,7 @@ dependencies:
   flutter_native_splash: ^2.2.18
   provider: ^5.0.0
   gsheets: ^0.4.2
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:

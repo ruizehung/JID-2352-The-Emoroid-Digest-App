@@ -1,7 +1,6 @@
-import 'package:emoroid_digest_app/utils/firebase.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import '../models/feedback_model.dart';
-import '../utils/google_sheet.dart';
+import 'package:http/http.dart' as http;
 
 class FeedBackPage extends StatefulWidget {
   const FeedBackPage({super.key});
@@ -14,6 +13,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
   final _formKey = GlobalKey<FormState>();
   String _feedbackOrBugs = 'Feedback';
   String _detailText = 'Please describe you feedback: ';
+  var isFeedback = 'true';
 
   /// Controllers
   TextEditingController nameController = TextEditingController();
@@ -212,6 +212,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
       _feedbackOrBugs = value as String;
       if (value == 'Bugs Report') {
         _detailText = 'Please describe your bugs: ';
+        isFeedback = 'false';
       } else {
         _detailText = 'Please describe your feedback: ';
       }
@@ -226,15 +227,20 @@ class _FeedBackPageState extends State<FeedBackPage> {
     String detail = detailController.text;
     String email = emailController.text;
     final feedback = {
-      FeedbackModel.date: date,
-      FeedbackModel.email: email,
-      FeedbackModel.name: name,
-      FeedbackModel.medical: medicalInsitution,
-      FeedbackModel.feedbackOrBugs: _feedbackOrBugs,
-      FeedbackModel.detail: detail,
+      "date": date,
+      "email": email,
+      "name": name,
+      "institution": medicalInsitution,
+      "isFeedback": isFeedback,
+      "detail": detail,
     };
-    testsFirestore();
-    //await GoogleSheet.insert([feedback]);
+    final url = Uri.parse("http://127.0.0.1:5001/the-emoroid-digest-app-882e5/us-central1/getFeedback/handleRequest");
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(feedback),
+    );
+
     _clear();
   }
 
