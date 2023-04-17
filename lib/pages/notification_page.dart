@@ -1,10 +1,10 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:emoroid_digest_app/utils/isar_service.dart';
 import 'package:emoroid_digest_app/models/message.dart';
 import 'package:provider/provider.dart';
-
 import 'global_navigation_state.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -16,6 +16,21 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   List<Message> _messages = IsarService().getMessages();
+  late StreamSubscription<int> notificationStream;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the list of messages from the database
+    _messages = IsarService().getMessages();
+    notificationStream = IsarService().getMessageCountStream().listen((count) {
+      if (mounted) {
+        setState(() {
+          _messages = IsarService().getMessages();
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,12 +106,21 @@ class _NotificationPageState extends State<NotificationPage> {
                       }
                     },
                     child: Card(
+                        elevation: 3,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Column(
-                      children: [
-                        Text(_messages[index].title),
-                        Text(_messages[index].body),
-                      ],
-                    )),
+                          children: [
+                            const Text(' '),
+                            Text(
+                              _messages[index].title,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            Text(_messages[index].body),
+                            const Text(' '),
+                          ],
+                        )),
                   );
                 },
               )),

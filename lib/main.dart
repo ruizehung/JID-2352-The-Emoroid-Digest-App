@@ -95,8 +95,10 @@ class TheEmoroidDigestApp extends StatefulWidget {
 }
 
 class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsBindingObserver {
+  
   // Notifications
   int notificationCount = IsarService().getMessages().length;
+  late StreamSubscription<int> notificationStream;
 
   int _pageIndex = 1;
   final navigatorKeyBody = GlobalKey<NavigatorState>();
@@ -108,6 +110,11 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
     // Notifications
     handleNotification();
+    notificationStream = IsarService().getMessageCountStream().listen((count) {
+      setState(() {
+        notificationCount = count;
+      });
+    });
 
     // Deep Links
     Uri? _currentURI;
@@ -172,7 +179,6 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           ..body = message.notification?.body ?? '';
         setState(() {
           IsarService().saveMessage(newMessage);
-          notificationCount = IsarService().getMessages().length;
         });
       });
     }

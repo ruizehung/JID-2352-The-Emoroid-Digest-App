@@ -236,8 +236,11 @@ class IsarService {
   }
 
   // ******************* Message *******************
+  StreamController<int> countController = StreamController<int>.broadcast();
+
   void saveMessage(Message message) {
     _db.writeTxnSync<int>(() => _db.messages.putSync(message));
+    countController.sink.add(getMessages().length);
   }
 
   List<Message> getMessages() {
@@ -246,6 +249,11 @@ class IsarService {
 
   void clearMessages() async {
     _db.writeTxnSync(() => _db.messages.clearSync());
+    countController.sink.add(0);
+  }
+
+  Stream<int> getMessageCountStream() {
+    return countController.stream;
   }
 
   // Last Update
