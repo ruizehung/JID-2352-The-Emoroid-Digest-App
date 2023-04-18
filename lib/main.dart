@@ -335,7 +335,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                   case "/search":
                     page = const SearchPage();
                     break;
-                  case "/feedbackPage()":
+                  case "/feedback":
                     page = const FeedBackPage();
                     break;
                   default:
@@ -430,7 +430,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           _onNavButtonTapped(val, bottomNavBarState);
         },
       ),
-      drawer: const HomePageDrawer(),
+      drawer: HomePageDrawer(
+        navigatorKeyBody: navigatorKeyBody,
+      ),
     );
   }
 }

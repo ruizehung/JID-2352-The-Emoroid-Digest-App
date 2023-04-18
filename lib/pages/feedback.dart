@@ -114,10 +114,6 @@ class _FeedBackPageState extends State<FeedBackPage> {
                   ],
                 ),
                 Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[
-                  const Text(
-                    'Do you want to give feedback or report bugs?',
-                    style: TextStyle(fontSize: 18),
-                  ),
                   Row(
                     children: [
                       Expanded(
@@ -211,7 +207,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
     setState(() {
       _feedbackOrBugs = value as String;
       if (value == 'Bugs Report') {
-        _detailText = 'Please describe your bugs: ';
+        _detailText = 'Please describe the bug: ';
         isFeedback = 'false';
       } else {
         _detailText = 'Please describe your feedback: ';

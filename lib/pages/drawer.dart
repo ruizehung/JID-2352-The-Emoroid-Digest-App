@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../utils/firebase.dart';
+import 'global_navigation_state.dart';
 
 class HomePageDrawer extends StatelessWidget {
-  const HomePageDrawer({
+  late GlobalKey<NavigatorState> navigatorKeyBody;
+  
+  HomePageDrawer({
     super.key,
+    required this.navigatorKeyBody
   });
 
   List<Widget> getAboutBoxChildren(BuildContext context) {
@@ -102,7 +107,12 @@ class HomePageDrawer extends StatelessWidget {
           //Need to add the Navigator function
           onTap: () {
             Navigator.of(context).pop();
-            rootNavigatorKey.currentState!.pushNamed("/feedback");
+            () async {
+              Provider.of<GlobalNavigationState>(context, listen: false).page = 1;
+              await navigatorKeyBody.currentState!.pushNamed("/feedback");
+              // ignore: use_build_context_synchronously
+              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
+            }();
           },
         ),
       ]),
