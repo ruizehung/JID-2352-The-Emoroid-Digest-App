@@ -14,7 +14,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
   final _formKey = GlobalKey<FormState>();
   String _feedbackOrBugs = 'Feedback';
   String _detailText = 'Please describe you feedback: ';
-  var isFeedback = 'true';
+  var isFeedback = "true";
 
   /// Controllers
   TextEditingController nameController = TextEditingController();
@@ -175,7 +175,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
                     if (_formKey.currentState!.validate()) {
                       _formKey.currentState!.save();
                       _submitForm();
-                      Navigator.of(context).pop();
+                      // Navigator.of(context).pop();
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
@@ -209,27 +209,21 @@ class _FeedBackPageState extends State<FeedBackPage> {
       _feedbackOrBugs = value as String;
       if (value == 'Bugs Report') {
         _detailText = 'Please describe the bug: ';
-        isFeedback = 'false';
+        isFeedback = "false";
       } else {
         _detailText = 'Please describe your feedback: ';
+        isFeedback = "true";
       }
     });
   }
 
   void _submitForm() async {
-    DateTime currentDate = DateTime.now();
-    String date = '${currentDate.year}-${currentDate.month}-${currentDate.day}';
-    String name = nameController.text;
-    String medicalInsitution = medicalController.text;
-    String detail = detailController.text;
-    String email = emailController.text;
     final feedback = {
-      "date": date,
-      "email": email,
-      "name": name,
-      "institution": medicalInsitution,
+      "email": emailController.text,
+      "name": nameController.text,
+      "institution": medicalController.text,
       "isFeedback": isFeedback,
-      "detail": detail,
+      "detail": detailController.text,
     };
     addFeedback(feedback);
     _clear();

@@ -69,6 +69,9 @@ Future<void> main() async {
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
+  // Initialize FirebaseFunctions client SDK
+  FirebaseFunctions.instance;
+
   IsarService.init();
   LocalFileSystem.init();
 
