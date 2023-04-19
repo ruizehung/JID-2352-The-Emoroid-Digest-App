@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:emoroid_digest_app/utils/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -230,14 +231,7 @@ class _FeedBackPageState extends State<FeedBackPage> {
       "isFeedback": isFeedback,
       "detail": detail,
     };
-    //add the url from backend when run
-    final url = Uri.parse("");
-    final response = await http.post(
-      url,
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(feedback),
-    );
-
+    addFeedback(feedback);
     _clear();
   }
 

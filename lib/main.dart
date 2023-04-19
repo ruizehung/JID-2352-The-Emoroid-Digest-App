@@ -24,10 +24,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:uni_links/uni_links.dart';
-
+import 'package:cloud_functions/cloud_functions.dart';
 import 'utils/local_file.dart';
 
 final firestore = FirebaseFirestore.instance;
+final functions = FirebaseFunctions.instance;
+
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 // Work in Progress - Notifications
