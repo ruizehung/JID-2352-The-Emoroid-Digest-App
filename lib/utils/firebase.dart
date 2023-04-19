@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -44,7 +45,7 @@ Future<void> syncPodcastsFromFirestore() async {
 
       IsarService().savePodcast(p);
     }));
-    
+
     // Delete podcasts that are no longer in the collection
     for (String id in localPodcastIDs) {
       IsarService().deletePodcast(id);
@@ -126,4 +127,17 @@ Future<List?> downloadFileFromStorage(String path) async {
 Future<String> getPrivacyPolicyURLFromFirestore() async {
   final privacyDoc = await FirebaseFirestore.instance.collection('Privacy Policy').doc("privacy_policy").get();
   return privacyDoc.get("url") as String;
+}
+
+Future<void> addFeedback(Map<String, String> feedback) async {
+  //delete this line when deploy - need this line to use the localhost
+  FirebaseFunctions.instance.useFunctionsEmulator('localhost', 5001);
+  try {
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable(
+      'addFeedback',
+    );
+    final res = await callable.call(feedback);
+  } on FirebaseFunctionsException catch (error) {
+    print(error.message);
+  }
 }
