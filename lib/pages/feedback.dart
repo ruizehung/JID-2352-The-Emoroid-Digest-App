@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:emoroid_digest_app/utils/firebase.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -24,6 +25,9 @@ class _FeedBackPageState extends State<FeedBackPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Initialize FirebaseFunctions client SDK
+    FirebaseFunctions.instance;
+    
     return SingleChildScrollView(
         child: Column(children: <Widget>[
       Container(

@@ -65,12 +65,8 @@ Future<void> main() async {
 
   await FirebaseAuth.instance.signInAnonymously();
 
-  // Work in Progress - Notifications
-  await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  // Initialize FirebaseFunctions client SDK
-  FirebaseFunctions.instance;
 
   IsarService.init();
   LocalFileSystem.init();
@@ -132,6 +128,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    // Work in Progress - Notifications
+    FirebaseMessaging.instance.getInitialMessage();
 
     // Work in Progress - Notifications
     initNotification();
