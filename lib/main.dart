@@ -89,6 +89,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
   await Firebase.initializeApp(
     name: 'Emroid-Digest-App',
     options: DefaultFirebaseOptions.currentPlatform,
@@ -97,11 +98,7 @@ Future<void> main() async {
   await FirebaseAuth.instance.signInAnonymously();
 
   // Notifications
-  await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
-
-  // Initialize FirebaseFunctions client SDK
-  FirebaseFunctions.instance;
 
   IsarService.init();
   LocalFileSystem.init();
@@ -166,6 +163,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    // Work in Progress - Notifications
+    FirebaseMessaging.instance.getInitialMessage();
 
     // Notifications
     handleNotification();

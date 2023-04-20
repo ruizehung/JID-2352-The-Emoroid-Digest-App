@@ -105,7 +105,6 @@ Future<void> syncVisualSummariesFromFirestore() async {
 
     lastUpdateLocal.visualSummaries = visualSummariesLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);
-    print("lastUpdateLocal.podcasts after syncVisualSummariesFromFirestore: ${lastUpdateLocal.podcasts}");
   }
 }
 
@@ -135,7 +134,6 @@ Future<String> getPrivacyPolicyURLFromFirestore() async {
 Future<void> addFeedback(Map<String, String> feedback) async {
   try {
     final result = await FirebaseFunctions.instanceFor(app: Firebase.app("Emroid-Digest-App"), region: "us-central1").httpsCallable('addFeedback').call(feedback);
-    print("addFeedback response: ${result.data as String}");
   } on FirebaseFunctionsException catch (error) {
     print("addFeedback error: ${error.message}");
   }

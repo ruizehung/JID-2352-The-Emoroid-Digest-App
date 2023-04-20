@@ -98,25 +98,25 @@ class IsarService {
   Future<List<SearchResultItem>> getSearchResultItems(String value) async {
     Set<SearchResultItem> msSet = {};
     if (value.isEmpty) {
-      await getPodcasts().then((podcasts) {
-        for (var p in podcasts) {
-          msSet.add(SearchResultItem()..podcast = p);
-        }
-      });
       await getVisualSummariesWithThumbnail().then((visualSummaries) {
         for (var vs in visualSummaries) {
           msSet.add(SearchResultItem()..visualSummary = vs);
         }
       });
-    } else {
-      await getPodcastsResultAfterSearch(value).then((podcasts) {
+      await getPodcasts().then((podcasts) {
         for (var p in podcasts) {
           msSet.add(SearchResultItem()..podcast = p);
         }
       });
+    } else {
       await getVisualSummariesResultAfterSearch(value).then((visualSummaries) {
         for (var vs in visualSummaries) {
           msSet.add(SearchResultItem()..visualSummary = vs);
+        }
+      });
+      await getPodcastsResultAfterSearch(value).then((podcasts) {
+        for (var p in podcasts) {
+          msSet.add(SearchResultItem()..podcast = p);
         }
       });
     }
