@@ -26,34 +26,65 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'utils/local_file.dart';
+import 'package:emoroid_digest_app/models/message.dart' as m;
 
 final firestore = FirebaseFirestore.instance;
 final functions = FirebaseFunctions.instance;
 
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
-// Work in Progress - Notifications
+// Notifications
 Future<void> backgroundHandler(RemoteMessage message) async {
-  print('Handling a background message ${message.messageId}');
+  final GlobalKey<_TheEmoroidDigestAppState> key = GlobalKey<_TheEmoroidDigestAppState>();
+  final _TheEmoroidDigestAppState EmoroidAppState = key.currentState!;
 
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  // Initialize FlutterLocalNotificationsPlugin instance
+  late FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
 
-  BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-    message.notification!.body.toString(),
-    htmlFormatBigText: true,
-    contentTitle: message.notification!.title.toString(),
-    htmlFormatContentTitle: true,
+  // Configure Android display details
+  AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    '0',
+    '0',
+    styleInformation: BigTextStyleInformation(
+      message.notification!.body.toString(),
+      htmlFormatBigText: true,
+      contentTitle: message.notification!.title.toString(),
+      htmlFormatContentTitle: true,
+    ),
+    importance: Importance.max,
+    priority: Priority.max,
+    playSound: true,
   );
 
-  AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('dbfood', 'dbfood',
-      importance: Importance.max, styleInformation: bigTextStyleInformation, priority: Priority.max, playSound: true);
+  // Configure iOS display details
+  DarwinNotificationDetails iosDetails =
+      const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
 
-  NotificationDetails platformChannelSpecifics =
-      NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
-
-  await flutterLocalNotificationsPlugin.show(
-      0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
+  // Display notification on device
+  await localNotifications.show(
+      message.data.hashCode,
+      message.notification?.title,
+      message.notification?.body,
+      NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      ),
       payload: message.data['body']);
+
+  String msgId = '';
+  if (message.data.containsKey('visualSummaryId')) {
+    msgId = 'visualSummaryId';
+  } else if (message.data.containsKey('podcastId')) {
+    msgId = 'podcastId';
+  }
+  m.Message newMessage = m.Message()
+    ..id = message.data[msgId] ?? ''
+    ..title = message.notification?.title ?? ''
+    ..body = message.notification?.body ?? '';
+
+  EmoroidAppState.setState(() {
+    IsarService().saveMessage(newMessage);
+  });
 }
 
 Future<void> main() async {
@@ -65,7 +96,7 @@ Future<void> main() async {
 
   await FirebaseAuth.instance.signInAnonymously();
 
-  // Work in Progress - Notifications
+  // Notifications
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
@@ -123,18 +154,26 @@ class TheEmoroidDigestApp extends StatefulWidget {
 }
 
 class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsBindingObserver {
+  // Notifications
+  int notificationCount = IsarService().getMessages().length;
+  late FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
+  late StreamSubscription<int> notificationStream;
+
   int _pageIndex = 1;
-  int notificationCount = 0;
   final navigatorKeyBody = GlobalKey<NavigatorState>();
-  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Work in Progress - Notifications
-    initNotification();
+    // Notifications
+    handleNotification();
+    notificationStream = IsarService().getMessageCountStream().listen((count) {
+      setState(() {
+        notificationCount = count;
+      });
+    });
 
     // Deep Links
     Uri? _currentURI;
@@ -168,71 +207,75 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     }
   }
 
-  // Work in Progress - Notifications
-  void initNotification() async {
+  // Notifications
+  void handleNotification() async {
+    // Get instance of FirebaseMessaging class which handles receiving push notifications
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
+    // Ask user permission to receive push notifications
+    NotificationSettings settings = await messaging.requestPermission();
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print('User granted permission');
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      print('User granted provisional permission');
-    } else {
-      print('User declined or has not accepted permission');
-    }
+      String? token = await messaging.getToken();
+      print(token);
 
-    await messaging.subscribeToTopic("NewVisualSummary");
-    await messaging.subscribeToTopic("NewPodcast");
+      // Subscribe device to "New Visual Summary" and "New Podcast" topics
+      await messaging.subscribeToTopic("NewVisualSummary");
+      await messaging.subscribeToTopic("NewPodcast");
 
-    var androidInitialize = const AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOSInitialize = const DarwinInitializationSettings();
-    var initializationSettings = InitializationSettings(android: androidInitialize, iOS: iOSInitialize);
+      const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const DarwinInitializationSettings iosSettings = DarwinInitializationSettings();
+      const InitializationSettings initializationSettings =
+          InitializationSettings(android: androidSettings, iOS: iosSettings);
+      await localNotifications.initialize(initializationSettings);
 
-    flutterLocalNotificationsPlugin.initialize(initializationSettings,
-        onDidReceiveNotificationResponse: (NotificationResponse payload) async {
-      try {
-        if (payload != null) {
-        } else {}
-      } catch (e) {}
-      return;
-    });
-
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
-      print('onMessage: ${message.notification?.title}/${message.notification?.body}');
-
-      BigTextStyleInformation bigTextStyleInformation = BigTextStyleInformation(
-        message.notification!.body.toString(),
-        htmlFormatBigText: true,
-        contentTitle: message.notification!.title.toString(),
-        htmlFormatContentTitle: true,
-      );
-
-      AndroidNotificationDetails androidPlatformChannelSpecifics = AndroidNotificationDetails('dbfood', 'dbfood',
+      // Handle incoming messages
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        // Configure Android display details
+        AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+          '0',
+          '0',
+          styleInformation: BigTextStyleInformation(
+            message.notification!.body.toString(),
+            htmlFormatBigText: true,
+            contentTitle: message.notification!.title.toString(),
+            htmlFormatContentTitle: true,
+          ),
           importance: Importance.max,
-          styleInformation: bigTextStyleInformation,
           priority: Priority.max,
-          playSound: true);
+          playSound: true,
+        );
 
-      NotificationDetails platformChannelSpecifics =
-          NotificationDetails(android: androidPlatformChannelSpecifics, iOS: const DarwinNotificationDetails());
+        // Configure iOS display details
+        DarwinNotificationDetails iosDetails =
+            const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
 
-      await flutterLocalNotificationsPlugin.show(
-          0, message.notification?.title, message.notification?.body, platformChannelSpecifics,
-          payload: message.data['body']);
+        // Display notification on device
+        await localNotifications.show(
+            message.data.hashCode,
+            message.notification?.title,
+            message.notification?.body,
+            NotificationDetails(
+              android: androidDetails,
+              iOS: iosDetails,
+            ),
+            payload: message.data['body']);
 
-      setState(() {
-        notificationCount++;
+        String msgId = '';
+        if (message.data.containsKey('visualSummaryId')) {
+          msgId = 'visualSummaryId';
+        } else if (message.data.containsKey('podcastId')) {
+          msgId = 'podcastId';
+        }
+        m.Message newMessage = m.Message()
+          ..id = message.data[msgId] ?? ''
+          ..title = message.notification?.title ?? ''
+          ..body = message.notification?.body ?? '';
+        setState(() {
+          IsarService().saveMessage(newMessage);
+        });
       });
-    });
+    }
   }
 
   @override
@@ -265,9 +308,6 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
       return true;
     });
     if (currentRoute == "/search") return;
-    setState(() {
-      notificationCount = 0;
-    });
     navigatorKeyBody.currentState!.pushNamed("/search");
   }
 
@@ -281,9 +321,6 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
       return true;
     });
     if (currentRoute == "/notification") return;
-    setState(() {
-      notificationCount = 0;
-    });
     navigatorKeyBody.currentState!.pushNamed("/notification");
   }
 

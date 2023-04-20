@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:emoroid_digest_app/models/last_update.dart';
 import 'package:emoroid_digest_app/models/search_result_item.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
+import 'package:emoroid_digest_app/models/message.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
 
@@ -232,6 +235,27 @@ class IsarService {
     return set;
   }
 
+  // ******************* Message *******************
+  StreamController<int> countController = StreamController<int>.broadcast();
+
+  void saveMessage(Message message) {
+    _db.writeTxnSync<int>(() => _db.messages.putSync(message));
+    countController.sink.add(getMessages().length);
+  }
+
+  List<Message> getMessages() {
+    return _db.messages.where().findAllSync();
+  }
+
+  void clearMessages() async {
+    _db.writeTxnSync(() => _db.messages.clearSync());
+    countController.sink.add(0);
+  }
+
+  Stream<int> getMessageCountStream() {
+    return countController.stream;
+  }
+
   // Last Update
   void saveLastUpdate(LastUpdate lastUpdate) {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
@@ -247,7 +271,7 @@ class IsarService {
   static Future<Isar> _openDB() async {
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
-        [VisualSummarySchema, PodcastSchema, LastUpdateSchema],
+        [VisualSummarySchema, PodcastSchema, LastUpdateSchema, MessageSchema],
         inspector: true,
       );
     }

@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:emoroid_digest_app/pages/podcast/podcast_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../utils/isar_service.dart';
 import '../../models/podcast.dart';
+import '../global_navigation_state.dart';
 import 'podcast_card.dart';
 import 'package:emoroid_digest_app/utils/firebase.dart';
 
@@ -39,7 +41,10 @@ class _PodcastListPageState extends State<PodcastListPage> {
       setState(() {
         isLoading = true;
       });
-
+      final connectivity = await (Connectivity().checkConnectivity());
+      setState(() {
+        connectivityStatus = connectivity;
+      });
       subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
         setState(() {
           connectivityStatus = result;
@@ -505,6 +510,8 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                 "/podcast/detail",
                                 arguments: PodcastDetailPageArguments(future.data![index].id!),
                               );
+                              // ignore: use_build_context_synchronously
+                              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                               setState(() {});
                             }();
                           },

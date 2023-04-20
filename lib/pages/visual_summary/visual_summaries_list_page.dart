@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:emoroid_digest_app/pages/visual_summary/visual_summary_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../utils/isar_service.dart';
 import '../../models/visual_summary.dart';
+import '../global_navigation_state.dart';
 import 'visual_summary_card.dart';
 import 'package:emoroid_digest_app/utils/firebase.dart';
 
@@ -500,6 +502,8 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                 "/visual-summary/detail",
                                 arguments: VisualSummaryDetailPageArguments(future.data![index].id!),
                               );
+                              // ignore: use_build_context_synchronously
+                              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
                               setState(() {});
                             }();
                           },
