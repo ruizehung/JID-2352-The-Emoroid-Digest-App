@@ -41,7 +41,10 @@ class _PodcastListPageState extends State<PodcastListPage> {
       setState(() {
         isLoading = true;
       });
-
+      final connectivity = await (Connectivity().checkConnectivity());
+      setState(() {
+        connectivityStatus = connectivity;
+      });
       subscription = Connectivity().onConnectivityChanged.listen((ConnectivityResult result) {
         setState(() {
           connectivityStatus = result;

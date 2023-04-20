@@ -25,6 +25,7 @@ Future<void> syncPodcastsFromFirestore() async {
     QuerySnapshot querySnapshot = await collection.get();
     await Future.wait(querySnapshot.docs.map((doc) async {
       final data = (doc.data() as Map<String, dynamic>);
+      localPodcastIDs.remove(doc.id);
       Podcast p = Podcast()
         ..id = doc.id
         ..title = data['title']
@@ -44,7 +45,7 @@ Future<void> syncPodcastsFromFirestore() async {
 
       IsarService().savePodcast(p);
     }));
-    
+
     // Delete podcasts that are no longer in the collection
     for (String id in localPodcastIDs) {
       IsarService().deletePodcast(id);
