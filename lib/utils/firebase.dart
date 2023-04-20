@@ -105,7 +105,6 @@ Future<void> syncVisualSummariesFromFirestore() async {
 
     lastUpdateLocal.visualSummaries = visualSummariesLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);
-    print("lastUpdateLocal.podcasts after syncVisualSummariesFromFirestore: ${lastUpdateLocal.podcasts}");
   }
 }
 
