@@ -30,7 +30,58 @@ final firestore = FirebaseFirestore.instance;
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 // Notifications
-Future<void> backgroundHandler(RemoteMessage message) async {}
+Future<void> backgroundHandler(RemoteMessage message) async {
+  final GlobalKey<_TheEmoroidDigestAppState> key = GlobalKey<_TheEmoroidDigestAppState>();
+  final _TheEmoroidDigestAppState EmoroidAppState = key.currentState!;
+
+  // Initialize FlutterLocalNotificationsPlugin instance
+  late FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
+
+  // Configure Android display details
+  AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+    '0',
+    '0',
+    styleInformation: BigTextStyleInformation(
+      message.notification!.body.toString(),
+      htmlFormatBigText: true,
+      contentTitle: message.notification!.title.toString(),
+      htmlFormatContentTitle: true,
+    ),
+    importance: Importance.max,
+    priority: Priority.max,
+    playSound: true,
+  );
+
+  // Configure iOS display details
+  DarwinNotificationDetails iosDetails =
+      const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
+
+  // Display notification on device
+  await localNotifications.show(
+      message.data.hashCode,
+      message.notification?.title,
+      message.notification?.body,
+      NotificationDetails(
+        android: androidDetails,
+        iOS: iosDetails,
+      ),
+      payload: message.data['body']);
+
+  String msgId = '';
+  if (message.data.containsKey('visualSummaryId')) {
+    msgId = 'visualSummaryId';
+  } else if (message.data.containsKey('podcastId')) {
+    msgId = 'podcastId';
+  }
+  m.Message newMessage = m.Message()
+    ..id = message.data[msgId] ?? ''
+    ..title = message.notification?.title ?? ''
+    ..body = message.notification?.body ?? '';
+
+  EmoroidAppState.setState(() {
+    IsarService().saveMessage(newMessage);
+  });
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +93,7 @@ Future<void> main() async {
   await FirebaseAuth.instance.signInAnonymously();
 
   // Notifications
+  await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
   IsarService.init();
@@ -95,9 +147,9 @@ class TheEmoroidDigestApp extends StatefulWidget {
 }
 
 class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsBindingObserver {
-  
   // Notifications
   int notificationCount = IsarService().getMessages().length;
+  late FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
   late StreamSubscription<int> notificationStream;
 
   int _pageIndex = 1;
@@ -155,6 +207,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
     // Ask user permission to receive push notifications
     NotificationSettings settings = await messaging.requestPermission();
+
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       String? token = await messaging.getToken();
       print(token);
@@ -163,9 +216,43 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
       await messaging.subscribeToTopic("NewVisualSummary");
       await messaging.subscribeToTopic("NewPodcast");
 
+      const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
+      const DarwinInitializationSettings iosSettings = DarwinInitializationSettings();
+      const InitializationSettings initializationSettings =
+          InitializationSettings(android: androidSettings, iOS: iosSettings);
+      await localNotifications.initialize(initializationSettings);
+
       // Handle incoming messages
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-        displayNotification(message);
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
+        // Configure Android display details
+        AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
+          '0',
+          '0',
+          styleInformation: BigTextStyleInformation(
+            message.notification!.body.toString(),
+            htmlFormatBigText: true,
+            contentTitle: message.notification!.title.toString(),
+            htmlFormatContentTitle: true,
+          ),
+          importance: Importance.max,
+          priority: Priority.max,
+          playSound: true,
+        );
+
+        // Configure iOS display details
+        DarwinNotificationDetails iosDetails =
+            const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
+
+        // Display notification on device
+        await localNotifications.show(
+            message.data.hashCode,
+            message.notification?.title,
+            message.notification?.body,
+            NotificationDetails(
+              android: androidDetails,
+              iOS: iosDetails,
+            ),
+            payload: message.data['body']);
 
         String msgId = '';
         if (message.data.containsKey('visualSummaryId')) {
@@ -182,48 +269,6 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
         });
       });
     }
-  }
-
-  // Notifications
-  void displayNotification(RemoteMessage message) async {
-    // Initialize FlutterLocalNotificationsPlugin instance
-    FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
-
-    // Configure notification settings
-    const AndroidInitializationSettings androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
-    const DarwinInitializationSettings iosSettings = DarwinInitializationSettings();
-    const InitializationSettings initializationSettings =
-        InitializationSettings(android: androidSettings, iOS: iosSettings);
-    await localNotifications.initialize(initializationSettings);
-
-    // Configure Android display details
-    AndroidNotificationDetails androidDetails = AndroidNotificationDetails(
-      '0',
-      '0',
-      styleInformation: BigTextStyleInformation(
-        message.notification!.body.toString(),
-        htmlFormatBigText: true,
-        contentTitle: message.notification!.title.toString(),
-        htmlFormatContentTitle: true,
-      ),
-      importance: Importance.max,
-      priority: Priority.max,
-      playSound: true,
-    );
-
-    // Configure iOS display details
-    DarwinNotificationDetails iosDetails =
-        const DarwinNotificationDetails(presentAlert: true, presentBadge: true, presentSound: true);
-
-    // Display notification on device
-    await localNotifications.show(
-        0,
-        message.notification?.title,
-        message.notification?.body,
-        NotificationDetails(
-          android: androidDetails,
-          iOS: iosDetails,
-        ));
   }
 
   @override
