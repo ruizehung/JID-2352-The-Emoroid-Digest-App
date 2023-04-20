@@ -114,6 +114,7 @@ class _HomePageState extends State<HomePage> {
                         "/visual-summary/detail",
                         arguments: VisualSummaryDetailPageArguments(future.data!.id!),
                       );
+                      bottomNavBarState.updateBasedOnRoute();
                       setState(() {});
                     }();
                   },
@@ -150,6 +151,7 @@ class _HomePageState extends State<HomePage> {
                         "/podcast/detail",
                         arguments: PodcastDetailPageArguments(future.data!.id!),
                       );
+                      bottomNavBarState.updateBasedOnRoute();
                       setState(() {});
                     }();
                   },
