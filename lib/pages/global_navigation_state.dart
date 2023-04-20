@@ -26,7 +26,7 @@ class GlobalNavigationState with ChangeNotifier {
     });
     if (currentPath!.startsWith("/visual-summary")) {
       _page = 0;
-    } else if (currentPath == "/home" || currentPath == "/search" || currentPath == "/notification") {
+    } else if (currentPath == "/home" || currentPath == "/search" || currentPath == "/notification" || currentPath == "/feedback") {
       _page = 1;
     } else if (currentPath!.startsWith("/podcast")) {
       _page = 2;

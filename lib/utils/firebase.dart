@@ -1,8 +1,10 @@
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:emoroid_digest_app/models/podcast.dart';
 import 'package:emoroid_digest_app/models/visual_summary.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:mime/mime.dart';
 
@@ -13,7 +15,7 @@ Future<void> syncPodcastsFromFirestore() async {
   final podcastsLastUpdateTime = (lastUpdateCloud.data()!["podcasts"] as Timestamp).toDate();
   var lastUpdateLocal = await IsarService().getLastUpdate();
 
-  if (lastUpdateLocal!.podcasts == null || lastUpdateLocal.podcasts!.compareTo(podcastsLastUpdateTime) < 0) {
+  if (lastUpdateLocal.podcasts == null || lastUpdateLocal.podcasts!.compareTo(podcastsLastUpdateTime) < 0) {
     CollectionReference collection = FirebaseFirestore.instance.collection('Podcasts');
     List<Podcast> localPodcasts = await IsarService().getAllPodcasts();
     Set<String> localPodcastIDs = <String>{};
@@ -103,6 +105,7 @@ Future<void> syncVisualSummariesFromFirestore() async {
 
     lastUpdateLocal.visualSummaries = visualSummariesLastUpdateTime;
     IsarService().saveLastUpdate(lastUpdateLocal);
+    print("lastUpdateLocal.podcasts after syncVisualSummariesFromFirestore: ${lastUpdateLocal.podcasts}");
   }
 }
 
@@ -127,4 +130,13 @@ Future<List?> downloadFileFromStorage(String path) async {
 Future<String> getPrivacyPolicyURLFromFirestore() async {
   final privacyDoc = await FirebaseFirestore.instance.collection('Privacy Policy').doc("privacy_policy").get();
   return privacyDoc.get("url") as String;
+}
+
+Future<void> addFeedback(Map<String, String> feedback) async {
+  try {
+    final result = await FirebaseFunctions.instanceFor(app: Firebase.app("Emroid-Digest-App"), region: "us-central1").httpsCallable('addFeedback').call(feedback);
+    print("addFeedback response: ${result.data as String}");
+  } on FirebaseFunctionsException catch (error) {
+    print("addFeedback error: ${error.message}");
+  }
 }

@@ -261,11 +261,11 @@ class IsarService {
     _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(lastUpdate));
   }
 
-  Future<LastUpdate?> getLastUpdate() async {
+  Future<LastUpdate> getLastUpdate() async {
     if (await _db.lastUpdates.filter().idEqualTo(0).findFirst() == null) {
       _db.writeTxnSync<int>(() => _db.lastUpdates.putSync(LastUpdate()));
     }
-    return await _db.lastUpdates.filter().idEqualTo(0).findFirst();
+    return (await _db.lastUpdates.filter().idEqualTo(0).findFirst())!;
   }
 
   static Future<Isar> _openDB() async {

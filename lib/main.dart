@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:emoroid_digest_app/pages/feedback.dart';
 import 'package:emoroid_digest_app/pages/global_navigation_state.dart';
 import 'package:emoroid_digest_app/pages/drawer.dart';
 import 'package:emoroid_digest_app/pages/home.dart';
@@ -23,10 +24,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:uni_links/uni_links.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'utils/local_file.dart';
 import 'package:emoroid_digest_app/models/message.dart' as m;
 
 final firestore = FirebaseFirestore.instance;
+final functions = FirebaseFunctions.instance;
+
 FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 // Notifications
@@ -95,6 +99,9 @@ Future<void> main() async {
   // Notifications
   await FirebaseMessaging.instance.getInitialMessage();
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
+
+  // Initialize FirebaseFunctions client SDK
+  FirebaseFunctions.instance;
 
   IsarService.init();
   LocalFileSystem.init();
@@ -370,6 +377,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                   case "/search":
                     page = const SearchPage();
                     break;
+                  case "/feedback":
+                    page = const FeedBackPage();
+                    break;
                   default:
                     page = const HomePage();
                     print('Unknown page: ${settings.name!}');
@@ -462,7 +472,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           _onNavButtonTapped(val, bottomNavBarState);
         },
       ),
-      drawer: const HomePageDrawer(),
+      drawer: HomePageDrawer(
+        navigatorKeyBody: navigatorKeyBody,
+      ),
     );
   }
 }
