@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -7,11 +8,19 @@ import 'global_navigation_state.dart';
 
 class HomePageDrawer extends StatelessWidget {
   late GlobalKey<NavigatorState> navigatorKeyBody;
-  
-  HomePageDrawer({
-    super.key,
-    required this.navigatorKeyBody
-  });
+
+  HomePageDrawer({super.key, required this.navigatorKeyBody});
+
+  final EmoroidDigestSiteURL = "https://med.emory.edu/departments/medicine/divisions/digestive-diseases/education/emoroid-digest.html";
+
+  _launchURL(String url) async {
+  Uri url0 = Uri.parse(url);
+  if (await launchUrl(url0)) {
+    await launchUrl(url0);
+  } else {
+    throw 'Could not launch $url0';
+  }
+}
 
   List<Widget> getAboutBoxChildren(BuildContext context) {
     final ThemeData theme = Theme.of(context);
@@ -25,12 +34,7 @@ class HomePageDrawer extends StatelessWidget {
                 style: textStyle,
                 text: "The Emoroid Digest App is a mobile app available on both iOS and Android platforms that allow"
                     "users to access the visual summaries and podcasts released by The Emoroid Digest. "
-                    "Users are able to view and download visual summaries and listen to podcasts. See "),
-            TextSpan(
-                style: textStyle.copyWith(color: theme.colorScheme.primary),
-                text:
-                    'https://med.emory.edu/departments/medicine/divisions/digestive-diseases/education/emoroid-digest.html'),
-            TextSpan(style: textStyle, text: ' for more info.'),
+                    "Users are able to view and download visual summaries and listen to podcasts."),
           ],
         ),
       ),
@@ -85,12 +89,7 @@ class HomePageDrawer extends StatelessWidget {
           onTap: () async {
             Navigator.of(context).pop();
             final urlString = await getPrivacyPolicyURLFromFirestore();
-            final uri = Uri.parse(urlString);
-            if (await canLaunchUrl(uri)) {
-              await launchUrl(uri);
-            } else {
-              throw 'Could not launch $urlString';
-            }
+            _launchURL(urlString);
           },
         ),
         ListTile(
