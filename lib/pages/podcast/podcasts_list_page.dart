@@ -54,7 +54,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
         await syncPodcastsFromFirestore();
       }
       setState(() {
-        selectedKeywords = IsarService().getUniquePodcastsKeywords();
+        selectedKeywords = IsarService.instance.getUniquePodcastsKeywords();
         isLoading = false;
       });
     });
@@ -70,7 +70,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
     List<Podcast> sourceList;
     List<Podcast> toRender = [];
 
-    sourceList = await IsarService().getPodcasts();
+    sourceList = await IsarService.instance.getPodcasts();
 
     for (var p in sourceList) {
       if (selectedOrganSystem != null && !p.organSystems.contains(selectedOrganSystem)) {
@@ -155,7 +155,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                   getModalBottomSheetTitle("Organ Systems"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final organSystems = IsarService().getUniqueOrganSystems().toList();
+                                      final organSystems = IsarService.instance.getUniqueOrganSystems().toList();
                                       organSystems.sort();
                                       organSystems.insert(0, showAll);
                                       return ListView.builder(
@@ -190,7 +190,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
                             child: StatefulBuilder(builder: (context, setListState) {
-                              final keywords = IsarService().getUniquePodcastsKeywords().toList();
+                              final keywords = IsarService.instance.getUniquePodcastsKeywords().toList();
                               keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
                               return Column(
                                 children: [
@@ -202,7 +202,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                         child: OutlinedButton(
                                           onPressed: () {
                                             setState(() => setListState(() {
-                                                  selectedKeywords.addAll(IsarService().getUniquePodcastsKeywords());
+                                                  selectedKeywords.addAll(IsarService.instance.getUniquePodcastsKeywords());
                                                 }));
                                           },
                                           child: const Text(showAll),
@@ -259,7 +259,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                   getModalBottomSheetTitle("GI Society"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService().getUniquePodcastsGISocietyJournal().toList();
+                                      final societies = IsarService.instance.getUniquePodcastsGISocietyJournal().toList();
                                       societies.sort();
                                       societies.insert(0, showAll);
                                       return ListView.builder(
@@ -298,7 +298,7 @@ class _PodcastListPageState extends State<PodcastListPage> {
                                   getModalBottomSheetTitle("Year Guideline Published"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService()
+                                      final societies = IsarService.instance
                                           .getUniquePodcastsYearGuidelinePublished()
                                           .map((e) => e.toString())
                                           .toList();

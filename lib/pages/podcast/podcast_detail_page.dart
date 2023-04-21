@@ -36,7 +36,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
   PageManager? _pageManager;
   late AudioHandler _audioHandler;
   late PodcastDetailPageArguments args;
-  late Podcast? podcastArgs = IsarService().getPodcast(args.podcastID);
+  late Podcast? podcastArgs = IsarService.instance.getPodcast(args.podcastID);
   Duration newDuration = Duration.zero;
 
   @override
@@ -123,7 +123,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
   }
 
   Widget visualSummaryDetailField(String fieldTitle, String podcastTitile, BuildContext context) {
-    List<VisualSummary> visualSummaries = IsarService().getVisualSummaryWithPodcastTitle(podcastTitile);
+    List<VisualSummary> visualSummaries = IsarService.instance.getVisualSummaryWithPodcastTitle(podcastTitile);
     List<Widget> columnChildren = [
       detailFieldTitle(fieldTitle),
       const SizedBox(
@@ -223,7 +223,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
 
   @override
   Widget build(BuildContext context) {
-    final podcast = IsarService().getPodcast(args.podcastID);
+    final podcast = IsarService.instance.getPodcast(args.podcastID);
 
     return podcast == null
         ? Center(child: Text("Unknown podcast ID: ${args.podcastID}"))
@@ -375,7 +375,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 setState(() {
                                   podcast.hasListened = !podcast.hasListened;
                                 });
-                                IsarService().savePodcast(podcast);
+                                IsarService.instance.savePodcast(podcast);
                               },
                               icon: Icon(
                                 CupertinoIcons.ear,
@@ -390,7 +390,7 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                                 setState(() {
                                   podcast.isFavorite = !podcast.isFavorite;
                                 });
-                                IsarService().savePodcast(podcast);
+                                IsarService.instance.savePodcast(podcast);
                               },
                               icon: Icon(
                                 podcast.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,

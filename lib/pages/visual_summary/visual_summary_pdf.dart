@@ -15,7 +15,7 @@ class VisualSummaryPDFPage extends StatelessWidget with LocalFileSystem {
 
   @override
   Widget build(BuildContext context) {
-    final visualSummary = IsarService().getVisualSummary(visualSummaryID);
+    final visualSummary = IsarService.instance.getVisualSummary(visualSummaryID);
     if (visualSummary == null) {
       return Text("Unknown visual summary ID: $visualSummaryID");
     }

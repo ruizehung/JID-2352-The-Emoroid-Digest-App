@@ -15,18 +15,18 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
-  List<Message> _messages = IsarService().getMessages();
+  List<Message> _messages = IsarService.instance.getMessages();
   late StreamSubscription<int> notificationStream;
 
   @override
   void initState() {
     super.initState();
     // Initialize the list of messages from the database
-    _messages = IsarService().getMessages();
-    notificationStream = IsarService().getMessageCountStream().listen((count) {
+    _messages = IsarService.instance.getMessages();
+    notificationStream = IsarService.instance.getMessageCountStream().listen((count) {
       if (mounted) {
         setState(() {
-          _messages = IsarService().getMessages();
+          _messages = IsarService.instance.getMessages();
         });
       }
     });
@@ -62,8 +62,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 IconButton(
                     onPressed: () {
                       setState(() {
-                        IsarService().clearMessages();
-                        _messages = IsarService().getMessages();
+                        IsarService.instance.clearMessages();
+                        _messages = IsarService.instance.getMessages();
                       });
                     },
                     icon: const Icon(Icons.delete)),

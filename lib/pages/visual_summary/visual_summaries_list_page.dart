@@ -56,7 +56,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
       }
       
       setState(() {
-        selectedKeywords = IsarService().getUniqueVisualSummariesKeywords();
+        selectedKeywords = IsarService.instance.getUniqueVisualSummariesKeywords();
         isLoading = false;
       });
     });
@@ -72,9 +72,9 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
     List<VisualSummary> sourceList;
     List<VisualSummary> toRender = [];
     if (connectivityStatus == ConnectivityResult.none) {
-      sourceList = await IsarService().getDownloadedVisualSummaries();
+      sourceList = await IsarService.instance.getDownloadedVisualSummaries();
     } else {
-      sourceList = await IsarService().getVisualSummariesWithThumbnail();
+      sourceList = await IsarService.instance.getVisualSummariesWithThumbnail();
     }
 
     for (var vs in sourceList) {
@@ -162,7 +162,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   getModalBottomSheetTitle("Organ Systems"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final organSystems = IsarService().getUniqueOrganSystems().toList();
+                                      final organSystems = IsarService.instance.getUniqueOrganSystems().toList();
                                       organSystems.sort();
                                       organSystems.insert(0, showAll);
                                       return ListView.builder(
@@ -197,7 +197,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                       builder: ((context) => FractionallySizedBox(
                             heightFactor: 1,
                             child: StatefulBuilder(builder: (context, setListState) {
-                              final keywords = IsarService().getUniqueVisualSummariesKeywords().toList();
+                              final keywords = IsarService.instance.getUniqueVisualSummariesKeywords().toList();
                               keywords.sort(((a, b) => a.toLowerCase().compareTo(b.toLowerCase())));
                               return Column(
                                 children: [
@@ -210,7 +210,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                           onPressed: () {
                                             setState(() => setListState(() {
                                                   selectedKeywords
-                                                      .addAll(IsarService().getUniqueVisualSummariesKeywords());
+                                                      .addAll(IsarService.instance.getUniqueVisualSummariesKeywords());
                                                 }));
                                           },
                                           child: const Text(showAll),
@@ -268,7 +268,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
                                       final societies =
-                                          IsarService().getUniqueVisualSummariesGISocietyJournal().toList();
+                                          IsarService.instance.getUniqueVisualSummariesGISocietyJournal().toList();
                                       societies.sort();
                                       societies.insert(0, showAll);
                                       return ListView.builder(
@@ -307,7 +307,7 @@ class _VisualSummaryListPageState extends State<VisualSummaryListPage> {
                                   getModalBottomSheetTitle("Year Guideline Published"),
                                   Expanded(
                                     child: StatefulBuilder(builder: (context, setListState) {
-                                      final societies = IsarService()
+                                      final societies = IsarService.instance
                                           .getUniqueVisualSummariesYearGuidelinePublished()
                                           .map((e) => e.toString())
                                           .toList();

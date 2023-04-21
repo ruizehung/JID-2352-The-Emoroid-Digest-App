@@ -83,24 +83,22 @@ Future<void> backgroundHandler(RemoteMessage message) async {
     ..body = message.notification?.body ?? '';
 
   EmoroidAppState.setState(() {
-    IsarService().saveMessage(newMessage);
+    IsarService.instance.saveMessage(newMessage);
   });
 }
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  await Firebase.initializeApp(
-    name: 'Emroid-Digest-App',
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await FirebaseAuth.instance.signInAnonymously();
 
+  FirebaseMessaging.instance;
   // Notifications
   FirebaseMessaging.onBackgroundMessage(backgroundHandler);
 
-  IsarService.init();
+  await IsarService.instance.init();
   LocalFileSystem.init();
 
   await setupServiceLocator();
@@ -152,8 +150,8 @@ class TheEmoroidDigestApp extends StatefulWidget {
 
 class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsBindingObserver {
   // Notifications
-  int notificationCount = IsarService().getMessages().length;
-  late FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
+  int notificationCount = IsarService.instance.getMessages().length;
+  final FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
   late StreamSubscription<int> notificationStream;
 
   int _pageIndex = 1;
@@ -164,16 +162,8 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Work in Progress - Notifications
-    FirebaseMessaging.instance.getInitialMessage();
-
     // Notifications
     handleNotification();
-    notificationStream = IsarService().getMessageCountStream().listen((count) {
-      setState(() {
-        notificationCount = count;
-      });
-    });
 
     // Deep Links
     Uri? _currentURI;
@@ -229,6 +219,14 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           InitializationSettings(android: androidSettings, iOS: iosSettings);
       await localNotifications.initialize(initializationSettings);
 
+      // Work in Progress - Notifications
+      FirebaseMessaging.instance.getInitialMessage();
+      notificationStream = IsarService.instance.getMessageCountStream().listen((count) {
+        setState(() {
+          notificationCount = count;
+        });
+      });
+
       // Handle incoming messages
       FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         // Configure Android display details
@@ -272,9 +270,11 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           ..title = message.notification?.title ?? ''
           ..body = message.notification?.body ?? '';
         setState(() {
-          IsarService().saveMessage(newMessage);
+          IsarService.instance.saveMessage(newMessage);
         });
       });
+
+      
     }
   }
 
@@ -357,6 +357,9 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
                 Widget page;
                 switch (settings.name) {
                   case "/home":
+                    page = const HomePage();
+                    break;
+                  case "/":
                     page = const HomePage();
                     break;
                   case "/visual-summary":

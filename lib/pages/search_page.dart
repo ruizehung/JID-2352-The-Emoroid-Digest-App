@@ -19,7 +19,7 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   final searchList = <String>{};
   final TextEditingController _searchController = TextEditingController();
-  Future<List<SearchResultItem>> result = IsarService().getSearchResultItems("");
+  Future<List<SearchResultItem>> result = IsarService.instance.getSearchResultItems("");
   String query = "";
 
   @override
@@ -48,7 +48,7 @@ class _SearchPageState extends State<SearchPage> {
                       onChanged: (query) {
                         setState(() {
                           this.query = query;
-                          result = IsarService().getSearchResultItems(query);
+                          result = IsarService.instance.getSearchResultItems(query);
                         });
                       },
                       controller: _searchController,
@@ -93,7 +93,7 @@ class _SearchPageState extends State<SearchPage> {
                                           VisualSummaryDetailPageArguments(future.data![index].visualSummary!.id!),
                                     );
                                     setState(() {
-                                      result = IsarService().getSearchResultItems(query);
+                                      result = IsarService.instance.getSearchResultItems(query);
                                     });
                                   }();
                                 },
@@ -108,7 +108,7 @@ class _SearchPageState extends State<SearchPage> {
                                       arguments: PodcastDetailPageArguments(future.data![index].podcast!.id!),
                                     );
                                     setState(() {
-                                      result = IsarService().getSearchResultItems(query);
+                                      result = IsarService.instance.getSearchResultItems(query);
                                     });
                                   }();
                                 },

@@ -8,19 +8,17 @@ import 'package:emoroid_digest_app/models/visual_summary.dart';
 import 'package:isar/isar.dart';
 
 class IsarService {
-  static late IsarService _instance;
-  static late Isar _db;
+  // static final IsarService _instance = IsarService._internal();
+  late Isar _db;
 
-  static void init() async {
+  init() async {
     _db = await _openDB();
-    _instance = IsarService._internal();
   }
 
-  factory IsarService() {
-    return _instance;
-  }
+  IsarService._();
+  static IsarService? _instance;
+  static IsarService get instance => _instance ??= IsarService._();
 
-  IsarService._internal();
 
   // ******************* Search *******************
 
