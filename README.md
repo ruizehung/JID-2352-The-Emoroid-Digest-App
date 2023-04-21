@@ -9,7 +9,7 @@ content released by [The Emoroid Digest](https://med.emory.edu/departments/medic
 
 ### Pre-requisites
 
-You need an iOS or Android device. The iOS version must be >= `13.0`.
+You need an iOS or Android device. The iOS version must be `>= 13.0`. The Andorid device must have Android SDK `>= 21`.
 
 ### Download and install
 
