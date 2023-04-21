@@ -414,10 +414,13 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
         actions: [
           // Work in Progress - Notifications
           Stack(children: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              tooltip: 'Notifications',
-              onPressed: _onNotificationTapped,
+            Padding(
+              padding: const EdgeInsets.only(top: 4),
+              child: IconButton(
+                icon: const Icon(Icons.notifications),
+                tooltip: 'Notifications',
+                onPressed: _onNotificationTapped,
+              ),
             ),
             notificationCount != 0
                 ? Positioned(
