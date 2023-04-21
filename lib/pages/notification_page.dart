@@ -61,8 +61,8 @@ class _NotificationPageState extends State<NotificationPage> {
                 ),
                 IconButton(
                     onPressed: () {
+                      IsarService.instance.clearMessages();
                       setState(() {
-                        IsarService.instance.clearMessages();
                         _messages = IsarService.instance.getMessages();
                       });
                     },
@@ -71,60 +71,66 @@ class _NotificationPageState extends State<NotificationPage> {
             )
           ],
         ),
-        Expanded(
-            child: Padding(
-          padding: const EdgeInsets.only(left: 25, right: 25),
-          child: Align(
-              alignment: Alignment.topCenter,
-              child: ListView.builder(
-                reverse: true,
-                shrinkWrap: true,
-                itemCount: _messages.length,
-                itemBuilder: (context, index) {
-                  return InkWell(
-                    onTap: () {
-                      if (_messages[index].title.contains('Podcast')) {
-                        () async {
-                          Provider.of<GlobalNavigationState>(context, listen: false).page = 2;
-                          await Navigator.of(context).pushNamed(
-                            "/podcast/detail",
-                            arguments: PodcastDetailPageArguments(_messages[index].id),
-                          );
-                          // ignore: use_build_context_synchronously
-                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
-                        }();
-                      } else if (_messages[index].title.contains('Visual Summary')) {
-                        () async {
-                          Provider.of<GlobalNavigationState>(context, listen: false).page = 0;
-                          await Navigator.of(context).pushNamed(
-                            "/visual-summary/detail",
-                            arguments: VisualSummaryDetailPageArguments(_messages[index].id),
-                          );
-                          // ignore: use_build_context_synchronously
-                          Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
-                        }();
-                      }
-                    },
-                    child: Card(
-                        elevation: 3,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        child: Column(
-                          children: [
-                            const Text(' '),
-                            Text(
-                              _messages[index].title,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
+        Flexible(
+          fit: FlexFit.loose,
+          child: _messages.isEmpty
+              ? const Center(
+                  child: Text('You are up to date!'),
+                )
+              : Padding(
+              padding: const EdgeInsets.only(left: 25, right: 25),
+              child: Align(
+                  alignment: Alignment.topCenter,
+                  child: ListView.builder(
+                    reverse: true,
+                    shrinkWrap: true,
+                    itemCount: _messages.length,
+                    itemBuilder: (context, index) {
+                      return InkWell(
+                        onTap: () {
+                          if (_messages[index].title.contains('Podcast')) {
+                            () async {
+                              Provider.of<GlobalNavigationState>(context, listen: false).page = 2;
+                              await Navigator.of(context).pushNamed(
+                                "/podcast/detail",
+                                arguments: PodcastDetailPageArguments(_messages[index].id),
+                              );
+                              // ignore: use_build_context_synchronously
+                              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
+                            }();
+                          } else if (_messages[index].title.contains('Visual Summary')) {
+                            () async {
+                              Provider.of<GlobalNavigationState>(context, listen: false).page = 0;
+                              await Navigator.of(context).pushNamed(
+                                "/visual-summary/detail",
+                                arguments: VisualSummaryDetailPageArguments(_messages[index].id),
+                              );
+                              // ignore: use_build_context_synchronously
+                              Provider.of<GlobalNavigationState>(context, listen: false).updateBasedOnRoute();
+                            }();
+                          }
+                        },
+                        child: Card(
+                            elevation: 3,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            Text(_messages[index].body),
-                            const Text(' '),
-                          ],
-                        )),
-                  );
-                },
-              )),
-        ))
+                            child: Column(
+                              children: [
+                                const Text(' '),
+                                Text(
+                                  _messages[index].title,
+                                  style: const TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Text(_messages[index].body),
+                                const Text(' '),
+                              ],
+                            )),
+                      );
+                    },
+                  )),
+                ),
+        )
       ],
     );
   }
