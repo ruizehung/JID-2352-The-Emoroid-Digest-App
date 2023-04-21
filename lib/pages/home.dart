@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<VisualSummary> _getLatestVisualSummary() async {
-    List<VisualSummary> list = await IsarService().getVisualSummariesWithThumbnail();
+    List<VisualSummary> list = await IsarService.instance.getVisualSummariesWithThumbnail();
     VisualSummary vs = list[0];
     for (int i = 1; i < list.length; i++) {
       if (list[i].dateReleased.compareTo(vs.dateReleased) > 0) {
@@ -67,7 +67,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Future<Podcast> _getLatestPodcast() async {
-    List<Podcast> list = await IsarService().getPodcasts();
+    List<Podcast> list = await IsarService.instance.getPodcasts();
     Podcast p = list[0];
     for (int i = 1; i < list.length; i++) {
       if (list[i].dateReleased.compareTo(p.dateReleased) > 0) {

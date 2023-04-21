@@ -49,7 +49,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
       setState(() {
         visualSummary.isDownloaded = true;
       });
-      IsarService().saveVisualSummary(visualSummary);
+      IsarService.instance.saveVisualSummary(visualSummary);
       print("Successfully downloaded visual summary ${visualSummary.title}.");
     } catch (e) {
       print("Error downloading visual summary.\n\n" + e.toString());
@@ -71,7 +71,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
     setState(() {
       visualSummary.isDownloaded = false;
     });
-    IsarService().saveVisualSummary(visualSummary);
+    IsarService.instance.saveVisualSummary(visualSummary);
     List<File> filesToDelete = [];
     filesToDelete.add(File(getFilePath(visualSummary.linkVisualSummaryStorage!)));
     filesToDelete.add(File(getFilePath(visualSummary.linkVisualSummaryThumbnailStorage!)));
@@ -131,7 +131,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
   Widget podcastDetailField(String fieldTitle, String? podcastTitile, BuildContext context) {
     String podcastID = "N/A";
     if (podcastTitile != null) {
-      podcastID = IsarService().getPodcastByTitle(podcastTitile)!.id!;
+      podcastID = IsarService.instance.getPodcastByTitle(podcastTitile)!.id!;
     }
 
     return Column(
@@ -176,7 +176,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
   @override
   Widget build(BuildContext context) {
     final args = ModalRoute.of(context)!.settings.arguments as VisualSummaryDetailPageArguments;
-    final visualSummary = IsarService().getVisualSummary(args.visualSummaryID);
+    final visualSummary = IsarService.instance.getVisualSummary(args.visualSummaryID);
     if (visualSummary == null) {
       return Center(child: Text("Unknown visual summary ID: ${args.visualSummaryID}"));
     }
@@ -233,7 +233,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             setState(() {
                               visualSummary.hasRead = !visualSummary.hasRead;
                             });
-                            IsarService().saveVisualSummary(visualSummary);
+                            IsarService.instance.saveVisualSummary(visualSummary);
                           },
                           icon: Icon(
                             CupertinoIcons.eye,
@@ -255,7 +255,7 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                             setState(() {
                               visualSummary.isFavorite = !visualSummary.isFavorite;
                             });
-                            IsarService().saveVisualSummary(visualSummary);
+                            IsarService.instance.saveVisualSummary(visualSummary);
                           },
                           icon: Icon(
                             visualSummary.isFavorite ? CupertinoIcons.heart_fill : CupertinoIcons.heart,
