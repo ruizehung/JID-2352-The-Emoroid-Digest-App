@@ -9,13 +9,13 @@ content released by [The Emoroid Digest](https://med.emory.edu/departments/medic
 
 ### Pre-requisites
 
-You need an iOS or Android device. 
+You need an iOS or Android device. The iOS version must be >= `13.0`.
 
 ### Download and install
 
 The app is still in beta testing. Will update the instuctions here once the app is available on App Store and Play Store.
 
-### Run 
+### Run the app
 
 First, locate the app icon on your device. For iOS users, you can swipe through your home screen pages or use the App Library to find the app. For Android users, you can browse the app drawer or home screen. Once you find the app icon, simply tap on it to open and launch the app. 
 
@@ -75,7 +75,7 @@ samples, guidance on mobile development, and a full API reference.
 * Fix podcast detail page back button navigation failure
 
 ### Known Issues 
-* The screen greys out the first launch in release mode
+* The screen greys out on when launching the first time in release mode
 
 ---
 
@@ -113,6 +113,3 @@ N/A
 N/A
 
 ---
-
-
-
