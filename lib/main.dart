@@ -164,7 +164,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     super.initState();
     WidgetsBinding.instance.addObserver(this);
 
-    // Notifications
+    // Notifications set up
     handleNotification();
 
     // Deep Links set up
