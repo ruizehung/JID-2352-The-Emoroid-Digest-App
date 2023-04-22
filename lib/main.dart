@@ -35,6 +35,8 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 // Notifications
 Future<void> backgroundHandler(RemoteMessage message) async {
+
+  // Allow background Handler to use EmoroidAppState methods
   final GlobalKey<_TheEmoroidDigestAppState> key = GlobalKey<_TheEmoroidDigestAppState>();
   final _TheEmoroidDigestAppState EmoroidAppState = key.currentState!;
 
@@ -199,6 +201,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
   // Notifications
   void handleNotification() async {
+
     // Get instance of FirebaseMessaging class which handles receiving push notifications
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
@@ -273,8 +276,6 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
           IsarService.instance.saveMessage(newMessage);
         });
       });
-
-      
     }
   }
 
