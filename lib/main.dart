@@ -167,7 +167,7 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
     // Notifications
     handleNotification();
 
-    // Deep Links
+    // Deep Links set up
     Uri? _currentURI;
     StreamSubscription? _streamSubscription;
 
