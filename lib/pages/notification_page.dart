@@ -15,7 +15,11 @@ class NotificationPage extends StatefulWidget {
 }
 
 class _NotificationPageState extends State<NotificationPage> {
+
+  // Update message list based on ISAR
   List<Message> _messages = IsarService.instance.getMessages();
+
+  // Listen for notifications
   late StreamSubscription<int> notificationStream;
 
   @override
