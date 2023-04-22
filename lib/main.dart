@@ -38,7 +38,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 
   // Allow background Handler to use EmoroidAppState methods
   final GlobalKey<_TheEmoroidDigestAppState> key = GlobalKey<_TheEmoroidDigestAppState>();
-  final _TheEmoroidDigestAppState EmoroidAppState = key.currentState!;
+  final _TheEmoroidDigestAppState emoroidAppState = key.currentState!;
 
   // Initialize FlutterLocalNotificationsPlugin instance
   late FlutterLocalNotificationsPlugin localNotifications = FlutterLocalNotificationsPlugin();
@@ -84,7 +84,7 @@ Future<void> backgroundHandler(RemoteMessage message) async {
     ..title = message.notification?.title ?? ''
     ..body = message.notification?.body ?? '';
 
-  EmoroidAppState.setState(() {
+  emoroidAppState.setState(() {
     IsarService.instance.saveMessage(newMessage);
   });
 }
