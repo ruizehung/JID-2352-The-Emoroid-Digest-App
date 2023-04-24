@@ -35,7 +35,6 @@ FirebaseAnalytics analytics = FirebaseAnalytics.instance;
 
 // Notifications
 Future<void> backgroundHandler(RemoteMessage message) async {
-
   // Allow background Handler to use EmoroidAppState methods
   final GlobalKey<_TheEmoroidDigestAppState> key = GlobalKey<_TheEmoroidDigestAppState>();
   final _TheEmoroidDigestAppState emoroidAppState = key.currentState!;
@@ -92,7 +91,10 @@ Future<void> backgroundHandler(RemoteMessage message) async {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp(
+    name: "Emroid-Digest-App",
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   await FirebaseAuth.instance.signInAnonymously();
 
@@ -201,7 +203,6 @@ class _TheEmoroidDigestAppState extends State<TheEmoroidDigestApp> with WidgetsB
 
   // Notifications
   void handleNotification() async {
-
     // Get instance of FirebaseMessaging class which handles receiving push notifications
     FirebaseMessaging messaging = FirebaseMessaging.instance;
 
