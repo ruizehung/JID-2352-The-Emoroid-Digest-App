@@ -1,6 +1,6 @@
 <manifest
 	xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.emoroid_digest_app">
+    package="com.emory.theEmoroidDigestApp">
 	<uses-permission android:name="android.permission.WAKE_LOCK"/>
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 	<queries>
@@ -13,7 +13,7 @@
 	<application
         android:label="emoroid_digest_app"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher_round">
 		<activity
             android:name="com.ryanheise.audioservice.AudioServiceActivity"
             android:exported="true"
