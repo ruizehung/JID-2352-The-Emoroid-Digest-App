@@ -70,7 +70,7 @@ class HomePageDrawer extends StatelessWidget {
                   ),
                   applicationName: 'Emoroid Digest App',
                   applicationVersion: 'April 2023',
-                  applicationLegalese: '\u{a9} 2023 The Emoroid Digest Team',
+                  applicationLegalese: '\u{a9} Emory 2023',
                   children: getAboutBoxChildren(context),
                 );
               },
