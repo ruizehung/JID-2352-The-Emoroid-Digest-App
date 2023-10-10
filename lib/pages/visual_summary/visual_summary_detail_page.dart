@@ -311,8 +311,15 @@ class _VisualSummaryDetailPageState extends State<VisualSummaryDetailPage> with 
                         const SizedBox(width: 8),
                         IconButton(
                           onPressed: () {
+                            final screenSize = MediaQuery.of(context).size;
+                            final center = Offset(screenSize.width / 2, screenSize.height / 2);
+                            const rectSize = 10.0; // adjust this for your desired size
+                            final sharePositionOrigin =
+                                Rect.fromCenter(center: center, width: rectSize, height: rectSize);
                             Share.share(
-                                'Check out this Visual Summary emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}');
+                              'Check out this Visual Summary "${visualSummary.title}" at emoroiddigestapp://host/visualSummary/detail?id=${args.visualSummaryID}',
+                              sharePositionOrigin: sharePositionOrigin,
+                            );
                           },
                           icon: const Icon(Icons.share_outlined),
                           iconSize: iconSize,

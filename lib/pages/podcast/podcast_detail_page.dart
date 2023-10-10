@@ -402,8 +402,14 @@ class _PodcastDetailPageState extends State<PodcastDetailPage> with LocalFileSys
                             const SizedBox(width: 8),
                             IconButton(
                               onPressed: () {
+                                final screenSize = MediaQuery.of(context).size;
+                                final center = Offset(screenSize.width / 2, screenSize.height / 2);
+                                const rectSize = 10.0; // adjust this for your desired size
+                                final sharePositionOrigin =
+                                    Rect.fromCenter(center: center, width: rectSize, height: rectSize);
                                 Share.share(
-                                    'Check out this Podcast emoroiddigestapp://host/podcast/detail?id=${args.podcastID}');
+                                    'Check out this Podcast "${podcast.title}" at emoroiddigestapp://host/podcast/detail?id=${args.podcastID}',
+                                    sharePositionOrigin: sharePositionOrigin);
                               },
                               icon: const Icon(Icons.share_outlined),
                               iconSize: iconSize,
