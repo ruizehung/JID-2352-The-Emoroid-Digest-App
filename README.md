@@ -2,6 +2,9 @@
 
 # The Emoroid Digest App
 
+<a href='https://play.google.com/store/apps/details?id=com.emory.theEmoroidDigestApp'><img alt='Get it on Google Play' src='https://i.imgur.com/nqDY3fd.png' height="64"/></a>
+<a href='https://apps.apple.com/us/app/emoroid-digest-app/id6448295797'><img alt='Get it on Google Play' src='https://i.imgur.com/OdHCgWO.png' height="64"/></a>
+
 The Emoroid Digest App is a mobile app available on both iOS and Android that users can use to access the
 content released by [The Emoroid Digest](https://med.emory.edu/departments/medicine/divisions/digestive-diseases/education/emoroid-digest.html), including both the visual summaries and podcasts.
 
